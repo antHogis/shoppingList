@@ -22,7 +22,7 @@
             <artifactId>exec-maven-plugin</artifactId>
             <version>1.5.0</version>
             <configuration>
-                <mainClass>fi.tamk.tiko.olioohjelmointi.Main</mainClass>
+                <mainClass>com.github.anthogis.shoppinglist.App</mainClass>
             </configuration>
         </plugin>
 
@@ -33,7 +33,7 @@
             <configuration>
                 <archive>
                     <manifest>
-                        <mainClass>fi.tamk.tiko.olioohjelmointi.Main</mainClass>
+                        <mainClass>com.github.anthogis.shoppinglist.App</mainClass>
                     </manifest>
                 </archive>
             </configuration>
