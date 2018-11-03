@@ -11,41 +11,39 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.github.anthogis.shoppinglist.gui.MainWindowController">
   <top>
-      <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-                <Menu mnemonicParsing="false" text="File">
-                    <items>
-                        <MenuItem fx:id="saveToJSON" mnemonicParsing="false" text="Save To JSON" />
-                        <MenuItem fx:id="saveToDropBox" mnemonicParsing="false" text="Save To DropBox" />
-                        <MenuItem fx:id="saveToH2" mnemonicParsing="false" text="Save To H2" />
-                        <MenuItem fx:id="closeMainWindow" mnemonicParsing="false" text="Close" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Log in to DropBox" />
-                        <MenuItem mnemonicParsing="false" text="Clear Table" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
-    </top>
-    <center>
-        <TableView fx:id="shoppingListTable" editable="true" prefHeight="470.0" prefWidth="758.0">
-            <columns>
-                <TableColumn editable="true" prefWidth="500" minWidth="150" text="Item" />
-                <TableColumn editable="true" prefWidth="258" minWidth="150" text="Amount" />
-            </columns>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-
-        </TableView>
-    </center>
-
+    <MenuBar BorderPane.alignment="CENTER">
+      <menus>
+        <Menu mnemonicParsing="false" text="File">
+          <items>
+            <MenuItem fx:id="saveToJSON" mnemonicParsing="false" text="Save To JSON" />
+            <MenuItem fx:id="saveToDropBox" mnemonicParsing="false" text="Save To DropBox" />
+            <MenuItem fx:id="saveToH2" mnemonicParsing="false" text="Save To H2" />
+            <MenuItem fx:id="closeMainWindow" mnemonicParsing="false" text="Close" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Edit">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Log in to DropBox" />
+              <MenuItem mnemonicParsing="false" text="Clear Table" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+          <items>
+            <MenuItem mnemonicParsing="false" text="About" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+  </top>
+  <center>
+    <TableView fx:id="shoppingListTable" editable="true" prefHeight="470.0" prefWidth="758.0">
+      <columns>
+        <TableColumn editable="true" prefWidth="500" minWidth="150" text="Item" />
+        <TableColumn editable="true" prefWidth="258" minWidth="150" text="Amount" />
+      </columns>
+      <columnResizePolicy>
+        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+      </columnResizePolicy>
+    </TableView>
+  </center>
 </BorderPane>
