@@ -1,7 +1,7 @@
 package com.github.anthogis.shoppinglist.gui;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
 
 public class MainWindowController {
@@ -9,11 +9,15 @@ public class MainWindowController {
     private TableView shoppingListTable;
 
     @FXML
-    private Button saveToJSON;
+    private MenuItem saveToJSON;
 
     @FXML
-    private Button saveToDropBox;
+    private MenuItem saveToDropBox;
 
     @FXML
-    private Button saveToH2;
+    private MenuItem saveToH2;
+
+    public void initialize() {
+        System.out.println("Initalizing " + getClass().toString());
+    }
 }

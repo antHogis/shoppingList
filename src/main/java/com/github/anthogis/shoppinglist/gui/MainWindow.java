@@ -15,15 +15,10 @@ public class MainWindow extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = null;
+        Parent root = FXMLLoader.load(getClass().getResource("mainwindow.fxml"));
 
-        try {
-            root = FXMLLoader.load(getClass().getResource("mainwindow.fxml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
+        stage.setMinHeight(600);
+        stage.setMinWidth(800);
         stage.setTitle(WINDOW_TITLE);
         stage.initStyle(StageStyle.DECORATED);
         stage.setScene(new Scene(root, 640, 480));
