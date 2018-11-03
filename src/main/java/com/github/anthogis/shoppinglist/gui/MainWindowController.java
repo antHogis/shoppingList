@@ -17,7 +17,26 @@ public class MainWindowController {
     @FXML
     private MenuItem saveToH2;
 
+    @FXML
+    private MenuItem closeMainWindow;
+
     public void initialize() {
         System.out.println("Initalizing " + getClass().toString());
+    }
+
+    public void saveToJSONAction() {
+        System.out.println("json");
+    }
+
+    public void saveToDropBoxAction() {
+        System.out.println("droppis");
+    }
+
+    public void saveToH2Action() {
+        System.out.println("hoo kakkone");
+    }
+
+    public void closeMainWindowAction() {
+        
     }
 }

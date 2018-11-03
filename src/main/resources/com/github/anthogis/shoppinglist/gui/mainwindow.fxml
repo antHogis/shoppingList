@@ -7,18 +7,16 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.121"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.github.anthogis.shoppinglist.gui.MainWindowController">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.anthogis.shoppinglist.gui.MainWindowController">
   <top>
     <MenuBar BorderPane.alignment="CENTER">
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
-            <MenuItem fx:id="saveToJSON" mnemonicParsing="false" text="Save To JSON" />
-            <MenuItem fx:id="saveToDropBox" mnemonicParsing="false" text="Save To DropBox" />
-            <MenuItem fx:id="saveToH2" mnemonicParsing="false" text="Save To H2" />
-            <MenuItem fx:id="closeMainWindow" mnemonicParsing="false" text="Close" />
+            <MenuItem fx:id="saveToJSON" mnemonicParsing="false" onAction="#saveToJSONAction" text="Save To JSON" />
+            <MenuItem fx:id="saveToDropBox" mnemonicParsing="false" onAction="#saveToDropBoxAction" text="Save To DropBox" />
+            <MenuItem fx:id="saveToH2" mnemonicParsing="false" onAction="#saveToH2Action" text="Save To H2" />
+            <MenuItem fx:id="closeMainWindow" mnemonicParsing="false" onAction="#closeMainWindowAction" text="Close" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Edit">
@@ -38,8 +36,8 @@
   <center>
     <TableView fx:id="shoppingListTable" editable="true" prefHeight="470.0" prefWidth="758.0">
       <columns>
-        <TableColumn editable="true" prefWidth="500" minWidth="150" text="Item" />
-        <TableColumn editable="true" prefWidth="258" minWidth="150" text="Amount" />
+        <TableColumn editable="true" minWidth="150" prefWidth="500" text="Item" />
+        <TableColumn editable="true" minWidth="150" prefWidth="258" text="Amount" />
       </columns>
       <columnResizePolicy>
         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
