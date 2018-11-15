@@ -10,6 +10,7 @@ public class JSONFormatter {
     public JSONFormatter(String jsonData) {
         this.jsonData = jsonData;
         this.jsonDataLines = new ArrayList<>();
+        formatData();
     }
 
     public void formatData() {
