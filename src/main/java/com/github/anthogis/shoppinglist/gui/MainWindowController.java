@@ -28,12 +28,6 @@ public class MainWindowController {
     private MenuItem saveToH2;
 
     @FXML
-    private MenuItem closeMainWindow;
-
-    @FXML
-    private Button addToList;
-
-    @FXML
     private TextField itemField;
 
     @FXML
@@ -78,6 +72,11 @@ public class MainWindowController {
         } else {
             closeAlert.close();
         }
+    }
+
+    public void clearTableAction() {
+        shoppingListTable.getItems().clear();
+        parserInterface.clearShoppingList();
     }
 
     public void addToListAction() {

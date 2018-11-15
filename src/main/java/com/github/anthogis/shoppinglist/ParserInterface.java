@@ -17,6 +17,10 @@ public class ParserInterface {
         shoppingList.addAttribute(item, amount);
     }
 
+    public void clearShoppingList() {
+        shoppingList = new JSONObject();
+    }
+
     public boolean writeToJSON() {
         boolean writeSuccessful = false;
         shoppingList.formatObject();
