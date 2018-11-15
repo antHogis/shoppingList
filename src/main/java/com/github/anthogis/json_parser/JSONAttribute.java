@@ -23,13 +23,16 @@ public class JSONAttribute<T> {
             notation += "[";
             Iterator iterator = ((Collection) value).iterator();
             while(iterator.hasNext()) {
-                notation += iterator.next().toString();
+                notation += iterator.next().toString() + ",";
             }
             notation += "]";
+        } else if (value instanceof JSONObject) {
+            ((JSONObject) value).formatObject();
+            notation += ((JSONObject) value).getNotation();
         } else if (value == null) {
             notation += "null";
         } else if (value instanceof Number || value instanceof Boolean) {
-            notation += "no quotes";
+            notation += value.toString();
         } else {
             notation += "\"" + value.toString() + "\"";
         }
