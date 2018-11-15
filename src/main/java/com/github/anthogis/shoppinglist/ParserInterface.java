@@ -23,12 +23,12 @@ public class ParserInterface {
         shoppingList = new JSONObject();
     }
 
-    public boolean writeToJSON() {
+    public boolean writeToJSON(String fileName) {
         boolean writeSuccessful = false;
         shoppingList.formatObject();
 
         try {
-            jsonWriter = new JSONWriter(shoppingList.getNotation(), "test");
+            jsonWriter = new JSONWriter(shoppingList.getNotation(), fileName);
             writeSuccessful = jsonWriter.writeFile();
         } catch (IOException e) {
             e.printStackTrace();

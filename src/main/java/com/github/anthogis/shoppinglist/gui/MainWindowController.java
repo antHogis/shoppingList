@@ -11,21 +11,13 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 
 import java.util.Optional;
 
 public class MainWindowController {
     @FXML
     private TableView<ShoppingListItem> shoppingListTable;
-
-    @FXML
-    private MenuItem saveToJSON;
-
-    @FXML
-    private MenuItem saveToDropBox;
-
-    @FXML
-    private MenuItem saveToH2;
 
     @FXML
     private TextField itemField;
@@ -41,15 +33,23 @@ public class MainWindowController {
     }
 
     public void saveToJSONAction() {
-        for (ShoppingListItem item : shoppingListTable.getItems()) {
-            parserInterface.addShoppingItem(item);
-        }
+        if (shoppingListTable.getItems().size() > 0) {
+            for (ShoppingListItem item : shoppingListTable.getItems()) {
+                parserInterface.addShoppingItem(item);
+            }
+            TextInputDialog fileNameInputDialog = new TextInputDialog("shopping-list");
+            Optional<String> fileNameInput = fileNameInputDialog.showAndWait();
 
-        if (shoppingListTable.getItems().size() > 0 && parserInterface.writeToJSON()) {
+            if (fileNameInput.isPresent()) {
+                fileNameInput.ifPresent(fileName -> {
+                    if (parserInterface.writeToJSON(fileName)) System.out.println("Write successful");
+                    else System.out.println("Write failed");
+                });
+            } else {
+                System.out.println("Write cancelled");
+            }
             parserInterface.clearShoppingList();
-            System.out.println("Write successful");
-        } else {
-            System.out.println("Write failed");
+
         }
     }
 
