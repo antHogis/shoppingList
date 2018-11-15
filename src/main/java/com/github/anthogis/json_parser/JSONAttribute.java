@@ -3,8 +3,6 @@ package com.github.anthogis.json_parser;
 import java.util.Collection;
 import java.util.Iterator;
 
-import static com.github.anthogis.json_parser.JSONWriter.indent;
-
 public class JSONAttribute<T> {
     private String keyWord;
     private T value;

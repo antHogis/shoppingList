@@ -1,5 +1,4 @@
 package com.github.anthogis.json_parser;
 
-public class JSONWriter {
-
+public class JSONFormatter {
 }
