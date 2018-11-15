@@ -24,6 +24,10 @@ public class JSONObject {
         attributes.add(new JSONAttribute<T>(keyWord, value));
     }
 
+    public void addAttribute(JSONAttribute attribute) {
+        attributes.add(attribute);
+    }
+
 
     public void formatObject() {
         if (keyWord != null) {

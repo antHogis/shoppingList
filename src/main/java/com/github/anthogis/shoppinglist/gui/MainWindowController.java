@@ -41,8 +41,12 @@ public class MainWindowController {
     }
 
     public void saveToJSONAction() {
-        System.out.println("json");
-        if (parserInterface.writeToJSON()) {
+        for (ShoppingListItem item : shoppingListTable.getItems()) {
+            parserInterface.addShoppingItem(item);
+        }
+
+        if (shoppingListTable.getItems().size() > 0 && parserInterface.writeToJSON()) {
+            parserInterface.clearShoppingList();
             System.out.println("Write successful");
         } else {
             System.out.println("Write failed");
@@ -86,11 +90,9 @@ public class MainWindowController {
         if (validItemInput(itemText, amountText)) {
             itemField.setText("");
             amountField.setText("");
-            int amount = Integer.parseInt(amountText);
 
-            ObservableList<ShoppingListItem> shoppingListItems = shoppingListTable.getItems();
-            shoppingListItems.add(new ShoppingListItem(itemText, amountText));
-            parserInterface.addShoppingItem(itemText, amount);
+            ShoppingListItem shoppingListItem = new ShoppingListItem(itemText, amountText);
+            shoppingListTable.getItems().add(shoppingListItem);
         }
     }
 

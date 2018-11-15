@@ -1,5 +1,6 @@
 package com.github.anthogis.shoppinglist;
 
+import com.github.anthogis.json_parser.JSONAttribute;
 import com.github.anthogis.json_parser.JSONObject;
 import com.github.anthogis.json_parser.JSONWriter;
 
@@ -13,8 +14,9 @@ public class ParserInterface {
         shoppingList = new JSONObject();
     }
 
-    public void addShoppingItem(String item, int amount) {
-        shoppingList.addAttribute(item, amount);
+    public void addShoppingItem(ShoppingListItem item) {
+        int itemAmount = Integer.parseInt(item.getItemAmount());
+        shoppingList.addAttribute(new JSONAttribute<Integer>(item.getItemName(), itemAmount));
     }
 
     public void clearShoppingList() {
