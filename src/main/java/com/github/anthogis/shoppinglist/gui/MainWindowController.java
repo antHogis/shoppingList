@@ -1,5 +1,6 @@
 package com.github.anthogis.shoppinglist.gui;
 
+import com.github.anthogis.shoppinglist.ParserInterface;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -36,14 +37,20 @@ public class MainWindowController {
     @FXML
     private TextField amountField;
 
-
+    private ParserInterface parserInterface;
 
     public void initialize() {
         System.out.println("Initalizing " + getClass().toString());
+        parserInterface = new ParserInterface();
     }
 
     public void saveToJSONAction() {
         System.out.println("json");
+        if (parserInterface.writeToJSON()) {
+            System.out.println("Write successful");
+        } else {
+            System.out.println("Write failed");
+        }
     }
 
     public void saveToDropBoxAction() {
@@ -79,7 +86,8 @@ public class MainWindowController {
             itemField.setText("");
             amountField.setText("");
 
-
+            int amount = Integer.parseInt(amountText);
+            parserInterface.addShoppingItem(itemText, amount);
         }
     }
 
