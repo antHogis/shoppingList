@@ -18,13 +18,17 @@ public class JSONAttribute<T> {
         notation = '\"' + keyWord + "\" : ";
 
         if (value instanceof Collection) {
-            notation += "[";
-            Iterator iterator = ((Collection) value).iterator();
-            while(iterator.hasNext()) {
-                notation += iterator.next().toString() + ",";
+            notation += '[';
+            if (((Collection) value).isEmpty()) {
+                notation += ' ';
+            } else {
+                Iterator iterator = ((Collection) value).iterator();
+                while(iterator.hasNext()) {
+                    notation += formatByType(iterator.next()) + ",";
+                }
+                notation = notation.substring(0, notation.length() - 1);
             }
-            notation = notation.substring(0, notation.length() - 1);
-            notation += "]";
+            notation += ']';
         } else if (value instanceof JSONObject) {
             ((JSONObject) value).formatObject();
             notation += ((JSONObject) value).getNotation();
@@ -35,6 +39,20 @@ public class JSONAttribute<T> {
         } else {
             notation += "\"" + value.toString() + "\"";
         }
+    }
+
+    private String formatByType(Object value) {
+        String formatted;
+
+        if (value == null) {
+            formatted = "null";
+        } else if (value instanceof Number || value instanceof Boolean) {
+            formatted = value.toString();
+        } else {
+            formatted = "\"" + value.toString() + "\"";
+        }
+
+        return formatted;
     }
 
     public String getNotation() {

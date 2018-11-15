@@ -28,12 +28,13 @@ public class JSONFormatter {
             if (currentChar == '{' || currentChar == '[') {
                 indents++;
                 createNewLine = true;
-            } else if (currentChar == '}' || currentChar == ']') {
-                indents--;
+            } else if (currentChar == '}') {
                 createNewLine = true;
             } else if (currentChar == ',') {
                 createNewLine = true;
-            } else if (i < jsonData.length() - 1) {
+            }
+
+            if (i < jsonData.length() - 1) {
                 if (jsonData.charAt(i + 1) == '}' || jsonData.charAt(i + 1) == ']') {
                     indents--;
                     createNewLine = true;
@@ -48,8 +49,6 @@ public class JSONFormatter {
                 }
             }
         }
-
-
     }
 
     public List<String> getJsonDataLines() {
