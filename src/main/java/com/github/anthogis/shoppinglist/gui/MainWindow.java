@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -21,6 +22,7 @@ public class MainWindow extends Application {
         stage.setMinWidth(800);
         stage.setTitle(WINDOW_TITLE);
         stage.initStyle(StageStyle.DECORATED);
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("icon-shopping-cart.png")));
         stage.setScene(new Scene(root, 640, 480));
         stage.setResizable(false);
         stage.show();
