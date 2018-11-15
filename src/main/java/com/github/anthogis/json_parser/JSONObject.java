@@ -20,6 +20,10 @@ public class JSONObject {
         this.notation = "";
     }
 
+    public <T> void addAttribute(String keyWord, T value) {
+        attributes.add(new JSONAttribute<T>(keyWord, value));
+    }
+
 
     public void formatObject() {
         if (keyWord != null) {
