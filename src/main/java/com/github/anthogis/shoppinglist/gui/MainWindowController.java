@@ -3,6 +3,7 @@ package com.github.anthogis.shoppinglist.gui;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
@@ -24,6 +25,9 @@ public class MainWindowController {
 
     @FXML
     private MenuItem closeMainWindow;
+
+    @FXML
+    private Button addToList;
 
     public void initialize() {
         System.out.println("Initalizing " + getClass().toString());
@@ -56,5 +60,9 @@ public class MainWindowController {
         } else {
             closeAlert.close();
         }
+    }
+
+    public void addToListAction() {
+
     }
 }
