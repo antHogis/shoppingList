@@ -23,6 +23,7 @@ public class JSONAttribute<T> {
             while(iterator.hasNext()) {
                 notation += iterator.next().toString() + ",";
             }
+            notation = notation.substring(0, notation.length() - 1);
             notation += "]";
         } else if (value instanceof JSONObject) {
             ((JSONObject) value).formatObject();
