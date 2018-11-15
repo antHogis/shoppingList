@@ -5,15 +5,15 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class ShoppingListItem {
     private final SimpleStringProperty itemName = new SimpleStringProperty("");
-    private final SimpleIntegerProperty itemAmount = new SimpleIntegerProperty(0);
+    private final SimpleStringProperty itemAmount = new SimpleStringProperty("");
 
-    public ShoppingListItem(String itemName, int itemAmount) {
+    public ShoppingListItem(String itemName, String itemAmount) {
         setItemName(itemName);
         setItemAmount(itemAmount);
     }
 
     public ShoppingListItem() {
-        this("",0);
+        this("","");
     }
 
     public String getItemName() {
@@ -24,11 +24,11 @@ public class ShoppingListItem {
         this.itemName.set(itemName);
     }
 
-    public int getItemAmount() {
+    public String getItemAmount() {
         return itemAmount.get();
     }
 
-    public void setItemAmount(int itemAmount) {
+    public void setItemAmount(String itemAmount) {
         this.itemAmount.set(itemAmount);
     }
 }

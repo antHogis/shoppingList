@@ -44,7 +44,7 @@
       <columns>
         <TableColumn editable="true" minWidth="150" prefWidth="500" text="Item">
           <cellValueFactory>
-            <PropertyValueFactory property="stepName" />
+            <PropertyValueFactory property="itemName" />
           </cellValueFactory>
           <cellFactory>
             <TextFieldTableCell fx:factory="forTableColumn" />
@@ -52,7 +52,7 @@
         </TableColumn>
         <TableColumn editable="true" minWidth="150" prefWidth="258" text="Amount">
           <cellValueFactory>
-            <PropertyValueFactory property="stepName" />
+            <PropertyValueFactory property="itemAmount" />
           </cellValueFactory>
           <cellFactory>
             <TextFieldTableCell fx:factory="forTableColumn" />

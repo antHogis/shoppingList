@@ -1,7 +1,9 @@
 package com.github.anthogis.shoppinglist.gui;
 
 import com.github.anthogis.shoppinglist.ParserInterface;
+import com.github.anthogis.shoppinglist.ShoppingListItem;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -14,7 +16,7 @@ import java.util.Optional;
 
 public class MainWindowController {
     @FXML
-    private TableView shoppingListTable;
+    private TableView<ShoppingListItem> shoppingListTable;
 
     @FXML
     private MenuItem saveToJSON;
@@ -85,8 +87,10 @@ public class MainWindowController {
         if (validItemInput(itemText, amountText)) {
             itemField.setText("");
             amountField.setText("");
-
             int amount = Integer.parseInt(amountText);
+
+            ObservableList<ShoppingListItem> shoppingListItems = shoppingListTable.getItems();
+            shoppingListItems.add(new ShoppingListItem(itemText, amountText));
             parserInterface.addShoppingItem(itemText, amount);
         }
     }
