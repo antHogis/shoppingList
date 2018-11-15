@@ -26,10 +26,12 @@ public class JSONAttribute<T> {
                 notation += iterator.next().toString();
             }
             notation += "]";
-        } else if (value instanceof Number || value instanceof Boolean || value == null) {
-            notation = "no quotes";
+        } else if (value == null) {
+            notation += "null";
+        } else if (value instanceof Number || value instanceof Boolean) {
+            notation += "no quotes";
         } else {
-            notation = "as string";
+            notation += "\"" + value.toString() + "\"";
         }
     }
 
