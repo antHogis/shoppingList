@@ -1,6 +1,9 @@
 package com.github.anthogis.json_parser;
 
 import java.util.Collection;
+import java.util.Iterator;
+
+import static com.github.anthogis.json_parser.JSONWriter.indent;
 
 public class JSONAttribute<T> {
     private String keyWord;
@@ -14,10 +17,15 @@ public class JSONAttribute<T> {
     }
 
     public void formatAttribute() {
-        //notation = '\"' + keyWord + "\": ";
+        notation = '\"' + keyWord + "\" : ";
 
         if (value instanceof Collection) {
-            notation = "array";
+            notation += "[";
+            Iterator iterator = ((Collection) value).iterator();
+            while(iterator.hasNext()) {
+                notation += iterator.next().toString();
+            }
+            notation += "]";
         } else if (value instanceof Number || value instanceof Boolean || value == null) {
             notation = "no quotes";
         } else {
@@ -25,4 +33,12 @@ public class JSONAttribute<T> {
         }
     }
 
+    public String getNotation() {
+        return notation;
+    }
+
+    @Override
+    public String toString() {
+        return notation;
+    }
 }
