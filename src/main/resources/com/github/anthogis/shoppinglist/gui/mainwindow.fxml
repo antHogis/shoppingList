@@ -67,8 +67,8 @@
    <bottom>
       <HBox alignment="CENTER" prefHeight="27.0" prefWidth="758.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField prefHeight="25.0" prefWidth="209.0" promptText="Item" />
-            <TextField prefHeight="25.0" prefWidth="71.0" promptText="Amount" />
+            <TextField fx:id="itemField" prefHeight="25.0" prefWidth="209.0" promptText="Item" />
+            <TextField fx:id="amountField" prefHeight="25.0" prefWidth="71.0" promptText="Amount" />
             <Button fx:id="addToList" alignment="CENTER" mnemonicParsing="false" onAction="#addToListAction" text="Add" />
          </children>
          <padding>

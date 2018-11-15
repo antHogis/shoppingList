@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 
 import java.util.Optional;
 
@@ -28,6 +29,14 @@ public class MainWindowController {
 
     @FXML
     private Button addToList;
+
+    @FXML
+    private TextField itemField;
+
+    @FXML
+    private TextField amountField;
+
+
 
     public void initialize() {
         System.out.println("Initalizing " + getClass().toString());
@@ -63,6 +72,26 @@ public class MainWindowController {
     }
 
     public void addToListAction() {
+        String itemText = itemField.getText();
+        String amountText = amountField.getText();
 
+        if (validItemInput(itemText, amountText)) {
+            itemField.setText("");
+            amountField.setText("");
+
+
+        }
+    }
+
+    private boolean validItemInput(String itemText, String amountText) {
+        boolean validItemInput = !itemText.equals("");
+
+        try {
+            Integer.parseInt(amountText);
+        } catch (NumberFormatException e) {
+            validItemInput = false;
+        }
+
+        return validItemInput;
     }
 }

@@ -22,7 +22,7 @@ public class MainWindow extends Application {
         stage.setTitle(WINDOW_TITLE);
         stage.initStyle(StageStyle.DECORATED);
         stage.setScene(new Scene(root, 640, 480));
-        //stage.setResizable(false);
+        stage.setResizable(false);
         stage.show();
 
     }
