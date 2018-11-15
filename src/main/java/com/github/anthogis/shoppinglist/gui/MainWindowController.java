@@ -1,6 +1,5 @@
 package com.github.anthogis.shoppinglist.gui;
 
-import com.sun.org.apache.xerces.internal.xs.datatypes.ByteList;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
