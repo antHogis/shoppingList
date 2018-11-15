@@ -5,6 +5,8 @@ import com.github.anthogis.json_parser.JSONAttribute;
 import static org.junit.Assert.*;
 
 import com.github.anthogis.json_parser.JSONObject;
+import com.github.anthogis.json_parser.JSONWriter;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -12,6 +14,8 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import java.io.IOException;
 
 @RunWith(JUnit4.class)
 public class JSONObjectTest {
@@ -29,5 +33,12 @@ public class JSONObjectTest {
     public void testNotation() {
         System.out.println(testObjectOne.getNotation());
         assertTrue(testObjectOne.getNotation().equals("{\"fsds\" : 12,\"very gay\" : true}"));
+    }
+
+
+    @Test
+    public void testWriter() throws IOException {
+        JSONWriter jsonWriter = new JSONWriter(testObjectOne.getNotation(), "test");
+        assertTrue(jsonWriter.writeFile());
     }
 }
