@@ -3,12 +3,10 @@ package com.github.anthogis.shoppinglist.gui;
 import com.github.anthogis.shoppinglist.ParserInterface;
 import com.github.anthogis.shoppinglist.ShoppingListItem;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
@@ -25,11 +23,15 @@ public class MainWindowController {
     @FXML
     private TextField amountField;
 
+    @FXML
+    private Label activityLabel;
+
     private ParserInterface parserInterface;
 
     public void initialize() {
         System.out.println("Initalizing " + getClass().toString());
         parserInterface = new ParserInterface();
+        activityLabel.setText("Welcome!");
     }
 
     public void saveToJSONAction() {
@@ -42,7 +44,7 @@ public class MainWindowController {
 
             if (fileNameInput.isPresent()) {
                 fileNameInput.ifPresent(fileName -> {
-                    if (parserInterface.writeToJSON(fileName)) System.out.println("Write successful");
+                    if (parserInterface.writeToJSON(fileName)) activityLabel.setText("Write successful!");
                     else System.out.println("Write failed");
                 });
             } else {

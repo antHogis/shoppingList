@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -12,6 +13,7 @@
 <?import javafx.scene.control.cell.TextFieldTableCell?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.anthogis.shoppinglist.gui.MainWindowController">
   <top>
@@ -70,6 +72,14 @@
             <TextField fx:id="itemField" prefHeight="25.0" prefWidth="209.0" promptText="Item" />
             <TextField fx:id="amountField" prefHeight="25.0" prefWidth="71.0" promptText="Amount" />
             <Button fx:id="addToList" alignment="CENTER" mnemonicParsing="false" onAction="#addToListAction" text="Add" />
+            <Label fx:id="activityLabel" alignment="CENTER_RIGHT" minWidth="-Infinity" text="Label" textAlignment="RIGHT">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
          </children>
          <padding>
             <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
