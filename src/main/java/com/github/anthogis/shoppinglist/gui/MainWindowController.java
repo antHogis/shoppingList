@@ -31,7 +31,7 @@ public class MainWindowController {
     public void initialize() {
         System.out.println("Initalizing " + getClass().toString());
         parserInterface = new ParserInterface();
-        activityLabel.setText("Welcome!");
+        activityLabel.setText(ActivityText.WELCOME.message);
     }
 
     public void saveToJSONAction() {
@@ -44,11 +44,14 @@ public class MainWindowController {
 
             if (fileNameInput.isPresent()) {
                 fileNameInput.ifPresent(fileName -> {
-                    if (parserInterface.writeToJSON(fileName)) activityLabel.setText("Write successful!");
-                    else System.out.println("Write failed");
+                    if (parserInterface.writeToJSON(fileName)) {
+                        activityLabel.setText(ActivityText.SAVE_SUCCESSFUL.message);
+                    } else {
+                        activityLabel.setText(ActivityText.SAVE_FAILED.message);
+                    }
                 });
             } else {
-                System.out.println("Write cancelled");
+                activityLabel.setText(ActivityText.SAVE_CANCELLED.message);
             }
             parserInterface.clearShoppingList();
 
