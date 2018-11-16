@@ -67,6 +67,8 @@ public class MainWindowController {
             }
             parserInterface.clearShoppingList();
 
+        } else {
+            showMessage(ActivityText.NOTHING_TO_SAVE);
         }
     }
 
