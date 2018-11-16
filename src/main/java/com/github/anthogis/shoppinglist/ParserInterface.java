@@ -57,7 +57,7 @@ public class ParserInterface {
         shoppingList.formatObject();
 
         try {
-            jsonWriter = new JSONWriter(shoppingList.getNotation(), fileName);
+            jsonWriter = new JSONWriter(shoppingList, fileName);
             writeSuccessful = jsonWriter.writeFile();
         } catch (IOException e) {
             e.printStackTrace();

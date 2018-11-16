@@ -16,8 +16,8 @@ public class JSONWriter {
     private Writer writer;
     private List<String> jsonLines;
 
-    public JSONWriter(String jsonData, String fileName) throws IOException {
-        JSONFormatter jsonFormatter = new JSONFormatter(jsonData);
+    public JSONWriter(JSONObject jsonObject, String fileName) throws IOException {
+        JSONFormatter jsonFormatter = new JSONFormatter(jsonObject);
         jsonLines = jsonFormatter.getJsonDataLines();
 
         writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(

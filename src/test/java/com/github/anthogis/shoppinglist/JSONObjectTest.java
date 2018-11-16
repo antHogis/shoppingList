@@ -57,7 +57,7 @@ public class JSONObjectTest {
 
     @Test
     public void testWriter() throws IOException {
-        JSONWriter jsonWriter = new JSONWriter(testObjectOne.getNotation(), "test");
+        JSONWriter jsonWriter = new JSONWriter(testObjectOne, "test");
         assertTrue(jsonWriter.writeFile());
     }
 }

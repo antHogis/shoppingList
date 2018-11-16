@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * JSONFormatter formats single-line JSON data into proper form.
  *
- * <p>JSONFormatter takes a String of JSON data, and separates it into a List of lines with proper indentation.</p>
+ * <p>JSONFormatter takes the json data from a JSONObject, and separates it into a List of lines with proper indentation.</p>
  *
  * @author antHogis
  * @version 1.0
@@ -25,11 +25,11 @@ class JSONFormatter {
     private List<String> jsonDataLines;
 
     /**
-     * The constructor for JSONFormatter, also formats the given jsonData.
-     * @param jsonData the jsonData given
+     * The constructor for JSONFormatter, also formats the notation of the given jsonObject.
+     * @param jsonObject the jsonObject.
      */
-    public JSONFormatter(String jsonData) {
-        this.jsonData = jsonData;
+    public JSONFormatter(JSONObject jsonObject) {
+        this.jsonData = jsonObject.getNotation();
         formatData();
     }
 
