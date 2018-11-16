@@ -45,7 +45,6 @@ public class MainWindowController {
     /**
      * The text field for giving input for the amount of an item for the shopping list. Reference to FXML Node defined in <code>mainwindow.fxml</code>.
      */
-
     @FXML
     private TextField amountField;
 
