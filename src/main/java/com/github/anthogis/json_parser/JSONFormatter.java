@@ -4,16 +4,39 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class JSONFormatter {
+/**
+ * JSONFormatter formats single-line JSON data into proper form.
+ *
+ * <p>JSONFormatter takes a String of JSON data, and separates it into a List of lines with proper indentation.</p>
+ *
+ * @author antHogis
+ * @version 1.0
+ * @since 1.0
+ */
+class JSONFormatter {
+    /**
+     * The JSON data given to JSONFormatter.
+     */
     private String jsonData;
+
+    /**
+     * The formatted JSON data.
+     */
     private List<String> jsonDataLines;
 
+    /**
+     * The constructor for JSONFormatter, also formats the given jsonData.
+     * @param jsonData the jsonData given
+     */
     public JSONFormatter(String jsonData) {
         this.jsonData = jsonData;
         formatData();
     }
 
-    public void formatData() {
+    /**
+     * Formats jsonData, so that it has proper line breaks and indentation.
+     */
+    private void formatData() {
         this.jsonDataLines = new ArrayList<>();
         String indent = "    ";
         String line = "";
@@ -51,6 +74,10 @@ public class JSONFormatter {
         }
     }
 
+    /**
+     * Returns the formatted jsonData.
+     * @return the formatted jsonData.
+     */
     public List<String> getJsonDataLines() {
         return jsonDataLines;
     }
