@@ -11,9 +11,23 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
+/**
+ * The main window of the application's GUI.
+ *
+ * <p>The main window of the application's GUI. Utilizes an FXML file for defining the Nodes in the Stage of
+ * the application. The FXML file defines the class <code>MainWindowController</code> to handle the events of MainWindow</p>
+ */
 public class MainWindow extends Application {
     private static final String WINDOW_TITLE = "Shopping List";
 
+    /**
+     * Life cycle method, called when the application starts.
+     *
+     * <p>Life cycle method, called when the application starts. Loads the FXML file, initializes basic attributes of stage.</p>
+     *
+     * @param stage the Stage for the application
+     * @throws IOException if the FXML file cannot be loaded
+     */
     @Override
     public void start(Stage stage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("mainwindow.fxml"));
