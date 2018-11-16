@@ -2,6 +2,7 @@ package com.github.anthogis.shoppinglist.gui;
 
 import com.github.anthogis.shoppinglist.ParserInterface;
 import com.github.anthogis.shoppinglist.ShoppingListItem;
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -10,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.util.Duration;
 
 import java.util.Optional;
 
@@ -26,12 +28,22 @@ public class MainWindowController {
     @FXML
     private Label activityLabel;
 
+    private FadeTransition fadeOutLabel;
+
     private ParserInterface parserInterface;
 
     public void initialize() {
         System.out.println("Initalizing " + getClass().toString());
         parserInterface = new ParserInterface();
-        activityLabel.setText(ActivityText.WELCOME.message);
+
+        fadeOutLabel = new FadeTransition(Duration.millis(1500));
+        fadeOutLabel.setNode(activityLabel);
+        fadeOutLabel.setFromValue(0.0);
+        fadeOutLabel.setToValue(1.0);
+        fadeOutLabel.setCycleCount(2);
+        fadeOutLabel.setAutoReverse(true);
+
+        showMessage(ActivityText.WELCOME);
     }
 
     public void saveToJSONAction() {
@@ -45,13 +57,13 @@ public class MainWindowController {
             if (fileNameInput.isPresent()) {
                 fileNameInput.ifPresent(fileName -> {
                     if (parserInterface.writeToJSON(fileName)) {
-                        activityLabel.setText(ActivityText.SAVE_SUCCESSFUL.message);
+                        showMessage(ActivityText.SAVE_SUCCESSFUL);
                     } else {
-                        activityLabel.setText(ActivityText.SAVE_FAILED.message);
+                        showMessage(ActivityText.SAVE_FAILED);
                     }
                 });
             } else {
-                activityLabel.setText(ActivityText.SAVE_CANCELLED.message);
+                showMessage(ActivityText.SAVE_CANCELLED);
             }
             parserInterface.clearShoppingList();
 
@@ -93,11 +105,14 @@ public class MainWindowController {
         String amountText = amountField.getText();
 
         if (validItemInput(itemText, amountText)) {
+            showMessage(ActivityText.ITEM_ADDED);
             itemField.setText("");
             amountField.setText("");
 
             ShoppingListItem shoppingListItem = new ShoppingListItem(itemText, amountText);
             shoppingListTable.getItems().add(shoppingListItem);
+        } else {
+            showMessage(ActivityText.INVALID_INPUT);
         }
     }
 
@@ -111,5 +126,11 @@ public class MainWindowController {
         }
 
         return validItemInput;
+    }
+
+    private void showMessage(ActivityText message) {
+        activityLabel.setText(message.message);
+        activityLabel.setVisible(true);
+        fadeOutLabel.playFromStart();
     }
 }

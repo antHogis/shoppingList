@@ -22,10 +22,9 @@ public class MainWindow extends Application {
         stage.setMinWidth(800);
         stage.setTitle(WINDOW_TITLE);
         stage.initStyle(StageStyle.DECORATED);
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("icon-shopping-cart.png")));
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("icon-shop.png")));
         stage.setScene(new Scene(root, 640, 480));
         stage.setResizable(false);
         stage.show();
-
     }
 }
