@@ -30,17 +30,20 @@ public class JSONObject {
 
 
     public void formatObject() {
+        StringBuilder builder = new StringBuilder();
         if (keyWord != null) {
-            notation += "\"" + keyWord + "\" : ";
+            builder.append("\"" + keyWord + "\" : ");
         }
 
-        notation += '{';
+        builder.append('{');
         for (JSONAttribute attribute : attributes) {
-            notation += attribute.getNotation() + ',';
+            builder.append(attribute.getNotation() + ',');
         }
 
-        notation = notation.substring(0, notation.length() - 1);
-        notation += '}';
+        builder.deleteCharAt(builder.length() - 1);
+        builder.append('}');
+
+        notation = builder.toString();
     }
 
     public String getKeyWord() {
