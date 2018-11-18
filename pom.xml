@@ -3,9 +3,12 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.anthogis.shoppinglist</groupId>
   <artifactId>ShoppingList</artifactId>
-  <packaging>jar</packaging>
+  <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>ShoppingList</name>
+    <modules>
+        <module>ShoppingListApp</module>
+    </modules>
+    <name>ShoppingList</name>
   <url>https://github.com/antHogis/shoppingList</url>
 
   <properties>
