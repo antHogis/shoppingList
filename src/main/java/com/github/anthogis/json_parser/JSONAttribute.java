@@ -1,7 +1,6 @@
 package com.github.anthogis.json_parser;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * An attribute of a JSONObject.
@@ -17,14 +16,9 @@ import java.util.Iterator;
  */
 public class JSONAttribute<T> {
     /**
-     * The key of the attribute.
-     */
-    private String keyWord;
-
-    /**
      * The value of the attribute.
      */
-    private T value;
+    private final T value;
 
     /**
      * The <i>JS Object Notation</i> of the attribute.
@@ -36,66 +30,43 @@ public class JSONAttribute<T> {
      *
      * <p>The constructor for JSONAttributes assigns the parameter values to the attributes of the class, and
      * calls for construction of the notation of the attribute.</p>
-     * @param keyWord
-     * @param value
+     * @param keyWord the key of the JSONAttribute.
+     * @param value the value of the JSONAttribute.
      */
     public JSONAttribute(String keyWord, T value) {
-        this.keyWord = keyWord;
         this.value = value;
-        constructNotation();
+        notation = '"' + keyWord + "\" : " + constructNotation(value);
     }
 
     /**
      * Constructs the notation of JSONAttribute according to the data type of <code>value</code>.
      */
-    public void constructNotation() {
-        notation = '\"' + keyWord + "\" : ";
+    private String constructNotation(Object value) {
+        StringBuilder notationBuilder = new StringBuilder();
 
         if (value instanceof Collection) {
-            notation += '[';
+            notationBuilder.append('[');
             if (((Collection) value).isEmpty()) {
-                notation += ' ';
+                notationBuilder.append(' ');
             } else {
-                Iterator iterator = ((Collection) value).iterator();
-                while(iterator.hasNext()) {
-                    notation += formatByType(iterator.next()) + ",";
+                for (Object o : ((Collection) value)) {
+                    notationBuilder.append(constructNotation(o)).append(',');
                 }
-                notation = notation.substring(0, notation.length() - 1);
+                notationBuilder.deleteCharAt(notationBuilder.length() - 1);
             }
-            notation += ']';
+            notationBuilder.append(']');
         } else if (value instanceof JSONObject) {
             ((JSONObject) value).formatObject();
-            notation += ((JSONObject) value).getNotation();
+            notationBuilder.append(((JSONObject) value).getNotation());
         } else if (value == null) {
-            notation += "null";
+            notationBuilder.append("null");
         } else if (value instanceof Number || value instanceof Boolean) {
-            notation += value.toString();
+            notationBuilder.append(value.toString());
         } else {
-            notation += "\"" + value.toString() + "\"";
-        }
-    }
-
-
-    /**
-     * Formats an Object as JSON notation.
-     *
-     * <p>Formats an Object as JSON notation. It only deals with values, and not key/value pairs. Meant to be used
-     * as a helper method for constructNotation when dealing with Collections.</p>
-     * @param value the value to format.
-     * @return the value formatted.
-     */
-    private String formatByType(Object value) {
-        String formatted;
-
-        if (value == null) {
-            formatted = "null";
-        } else if (value instanceof Number || value instanceof Boolean) {
-            formatted = value.toString();
-        } else {
-            formatted = "\"" + value.toString() + "\"";
+            notationBuilder.append('"').append(value.toString()).append('"');
         }
 
-        return formatted;
+        return notationBuilder.toString();
     }
 
     /**
@@ -112,7 +83,7 @@ public class JSONAttribute<T> {
      */
     @Override
     public String toString() {
-        this.constructNotation();
+        notation = constructNotation(value);
         return notation;
     }
 }
