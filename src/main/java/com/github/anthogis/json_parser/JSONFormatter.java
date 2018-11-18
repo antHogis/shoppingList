@@ -1,7 +1,6 @@
 package com.github.anthogis.json_parser;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,7 +16,7 @@ class JSONFormatter {
     /**
      * The JSON data given to JSONFormatter.
      */
-    private String jsonData;
+    private final String jsonData;
 
     /**
      * The formatted JSON data.
@@ -38,15 +37,15 @@ class JSONFormatter {
      */
     private void formatData() {
         this.jsonDataLines = new ArrayList<>();
-        String indent = "    ";
-        String line = "";
+        final String indent = "    ";
+        StringBuilder line = new StringBuilder();
         int indents = 0;
 
         for (int i = 0; i < jsonData.length(); i++) {
             char currentChar = jsonData.charAt(i);
             boolean createNewLine = false;
 
-            line += currentChar;
+            line.append(currentChar);
 
             if (currentChar == '{' || currentChar == '[') {
                 indents++;
@@ -65,10 +64,10 @@ class JSONFormatter {
             }
 
             if (createNewLine) {
-                jsonDataLines.add(line);
-                line = "";
+                jsonDataLines.add(line.toString());
+                line = new StringBuilder();
                 for (int j = 0; j < indents; j++) {
-                    line += indent;
+                    line.append(indent);
                 }
             }
         }
