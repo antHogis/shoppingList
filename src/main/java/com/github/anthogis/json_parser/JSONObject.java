@@ -2,7 +2,6 @@ package com.github.anthogis.json_parser;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * An object that can be passed to JSONWriter to create a JSON file.
@@ -19,7 +18,7 @@ public class JSONObject {
     /**
      * List of the attributes of this object.
      */
-    private List<JSONAttribute> attributes;
+    private final List<JSONAttribute> attributes;
 
     /**
      * The JSON notation of this object.
@@ -50,7 +49,7 @@ public class JSONObject {
 
         builder.append('{');
         for (JSONAttribute attribute : attributes) {
-            builder.append(attribute.getNotation() + ',');
+            builder.append(attribute.getNotation()).append(',');
         }
 
         builder.deleteCharAt(builder.length() - 1);
