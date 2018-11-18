@@ -34,15 +34,17 @@ public class JSONObject {
         this.notation = "";
     }
 
-    public <T> void addAttribute(String keyWord, T value) {
-        attributes.add(new JSONAttribute<T>(keyWord, value));
-    }
-
+    /**
+     * Adds a JSONAttribute to JSONObject's list of JSONAttributes.
+     * @param attribute the JSONAttribute to be added.
+     */
     public void addAttribute(JSONAttribute attribute) {
         attributes.add(attribute);
     }
 
-
+    /**
+     * Creates the JSON notation for this JSONObject.
+     */
     public void formatObject() {
         StringBuilder builder = new StringBuilder();
 
@@ -57,10 +59,18 @@ public class JSONObject {
         notation = builder.toString();
     }
 
+    /**
+     * Returns the list of JSONAttributes.
+     * @return the list of JSONAttributes.
+     */
     public List<JSONAttribute> getAttributes() {
         return attributes;
     }
 
+    /**
+     * Returns the JSON notation of this JSONObject.
+     * @return the JSON notation.
+     */
     public String getNotation() {
         return notation;
     }
