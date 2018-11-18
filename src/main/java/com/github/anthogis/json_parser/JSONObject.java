@@ -15,10 +15,6 @@ import java.util.Optional;
  * @since 1.0
  */
 public class JSONObject {
-    /**
-     * Keyword of the object. Should be present if this object is the JSONAttribute of another JSONObject.
-     */
-    private Optional<String> keyWord;
 
     /**
      * List of the attributes of this object.
@@ -34,13 +30,6 @@ public class JSONObject {
      * The constructor for JSONObject.
      */
     public JSONObject() {
-        this.keyWord = Optional.empty();
-        this.attributes = new ArrayList<>();
-        this.notation = "";
-    }
-
-    public JSONObject(String keyWord) {
-        this.keyWord = Optional.of(keyWord);
         this.attributes = new ArrayList<>();
         this.notation = "";
     }
@@ -56,8 +45,6 @@ public class JSONObject {
 
     public void formatObject() {
         StringBuilder builder = new StringBuilder();
-
-        keyWord.ifPresent(key -> builder.append('"' + key + "\" : "));
 
         builder.append('{');
         for (JSONAttribute attribute : attributes) {
