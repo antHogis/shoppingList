@@ -4,11 +4,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * An object that can be passed to JSONWriter to create a JSON file.
+ *
+ * <p>An object that can be passed to JSONWriter to create a JSON file. Contains a list of JSONAttributes, and
+ * can form the JSON notation for the object on a single line.</p>
+ *
+ * @author antHogis
+ * @version 1.0
+ * @since 1.0
+ */
 public class JSONObject {
+    /**
+     * Keyword of the object. Should be present if this object is the JSONAttribute of another JSONObject.
+     */
     private Optional<String> keyWord;
+
+    /**
+     * List of the attributes of this object.
+     */
     private List<JSONAttribute> attributes;
+
+    /**
+     * The JSON notation of this object.
+     */
     private String notation;
 
+    /**
+     * The constructor for JSONObject.
+     */
     public JSONObject() {
         this.keyWord = Optional.empty();
         this.attributes = new ArrayList<>();
