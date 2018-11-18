@@ -2,20 +2,21 @@ package com.github.anthogis.json_parser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class JSONObject {
-    private String keyWord;
+    private Optional<String> keyWord;
     private List<JSONAttribute> attributes;
     private String notation;
 
     public JSONObject() {
-        this.keyWord = null;
+        this.keyWord = Optional.empty();
         this.attributes = new ArrayList<>();
         this.notation = "";
     }
 
     public JSONObject(String keyWord) {
-        this.keyWord = keyWord;
+        this.keyWord = Optional.of(keyWord);
         this.attributes = new ArrayList<>();
         this.notation = "";
     }
@@ -31,9 +32,8 @@ public class JSONObject {
 
     public void formatObject() {
         StringBuilder builder = new StringBuilder();
-        if (keyWord != null) {
-            builder.append("\"" + keyWord + "\" : ");
-        }
+
+        keyWord.ifPresent(key -> builder.append('"' + key + "\" : "));
 
         builder.append('{');
         for (JSONAttribute attribute : attributes) {
@@ -44,14 +44,6 @@ public class JSONObject {
         builder.append('}');
 
         notation = builder.toString();
-    }
-
-    public String getKeyWord() {
-        return keyWord;
-    }
-
-    public void setKeyWord(String keyWord) {
-        this.keyWord = keyWord;
     }
 
     public List<JSONAttribute> getAttributes() {
