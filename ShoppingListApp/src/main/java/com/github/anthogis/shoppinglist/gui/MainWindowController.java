@@ -1,0 +1,221 @@
+package com.github.anthogis.shoppinglist.gui;
+
+import com.github.anthogis.shoppinglist.ParserInterface;
+import com.github.anthogis.shoppinglist.ShoppingListItem;
+import javafx.animation.FadeTransition;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
+import javafx.util.Duration;
+
+import java.util.Optional;
+
+/**
+ * Event handler for <code>MainWindow</code>.
+ *
+ * <p>MainWindowController handles events of MainWindow. This class is notated as the controller for <code>MainWindow</code>
+ * in <code>mainwindow.fxml</code>. Public methods within this class are notated as "onAction"
+ * methods for Nodes in the <code>mainwindow.fxml</code> document, except for <code>void initialize()</code>.</p>
+ * <p>Events that this class handles consists of adding items to the shopping list, calling a <code>ParserInterface</code>
+ * to save the shopping list, and informing the user of events occurring.</p>
+ *
+ * @author antHogis
+ * @version 1.0
+ * @since 1.0
+ */
+public class MainWindowController {
+
+    /**
+     * The table which displays the shopping list. Reference to FXML Node defined in <code>mainwindow.fxml</code>.
+     */
+    @FXML
+    private TableView<ShoppingListItem> shoppingListTable;
+
+    /**
+     * The text field for giving input for the name of an item for the shopping list. Reference to FXML Node defined in <code>mainwindow.fxml</code>.
+     */
+    @FXML
+    private TextField itemField;
+
+    /**
+     * The text field for giving input for the amount of an item for the shopping list. Reference to FXML Node defined in <code>mainwindow.fxml</code>.
+     */
+    @FXML
+    private TextField amountField;
+
+    /**
+     * Informs the user messages of activities, like confirmation for successful saving of a file. Reference to FXML Node defined in <code>mainwindow.fxml</code>.
+     */
+    @FXML
+    private Label activityLabel;
+
+    /**
+     * The transition which fades <code>activityLabel</code> in and out.
+     */
+    private FadeTransition fadeOutLabel;
+
+    /**
+     * The interface between this class and a JSONWriter
+     */
+    private ParserInterface parserInterface;
+
+    /**
+     * Lifecycle method. Called after @FXML annotated fields are populated.
+     *
+     * <p>Lifecycle method. Called after @FXML annotated fields are populated. Initializes <code>parserInterface</code>
+     * and the <code>fadeOutLabel</code> transition.</p>
+     */
+    public void initialize() {
+        System.out.println("Initalizing " + getClass().toString());
+        parserInterface = new ParserInterface();
+
+        fadeOutLabel = new FadeTransition(Duration.millis(1500));
+        fadeOutLabel.setNode(activityLabel);
+        fadeOutLabel.setFromValue(0.0);
+        fadeOutLabel.setToValue(1.0);
+        fadeOutLabel.setCycleCount(2);
+        fadeOutLabel.setAutoReverse(true);
+
+        showMessage(ActivityText.WELCOME);
+    }
+
+    /**
+     * Event called when <code>MenuItem saveToJSON</code> is clicked.
+     *
+     * <p>Event called when <code>MenuItem saveToJSON</code> is clicked. Calls <code>parserInterface</code> to save
+     * the shopping list to JSON if it contains data. Calls method <code>showMessage</code> with different
+     * <code>ActivityText</code> according to success of saving the JSON file.</p>
+     */
+    public void saveToJSONAction() {
+        if (shoppingListTable.getItems().size() > 0) {
+            for (ShoppingListItem item : shoppingListTable.getItems()) {
+                parserInterface.addShoppingItem(item);
+            }
+            TextInputDialog fileNameInputDialog = new TextInputDialog("shopping-list");
+            Optional<String> fileNameInput = fileNameInputDialog.showAndWait();
+
+            if (fileNameInput.isPresent()) {
+                fileNameInput.ifPresent(fileName -> {
+                    if (parserInterface.writeToJSON(fileName)) {
+                        showMessage(ActivityText.SAVE_SUCCESSFUL);
+                    } else {
+                        showMessage(ActivityText.SAVE_FAILED);
+                    }
+                });
+            } else {
+                showMessage(ActivityText.SAVE_CANCELLED);
+            }
+            parserInterface.clearShoppingList();
+
+        } else {
+            showMessage(ActivityText.NOTHING_TO_SAVE);
+        }
+    }
+
+    /**
+     * Event called when <code>MenuItem saveToDropBox</code> is clicked.
+     */
+    public void saveToDropBoxAction() {
+        System.out.println("droppis");
+    }
+
+    /**
+     * Event called when <code>MenuItem saveToH2</code> is clicked.
+     */
+    public void saveToH2Action() {
+        System.out.println("hoo kakkone");
+    }
+
+    /**
+     * Event called when <code>MenuItem closeMainWindow</code> is clicked.
+     *
+     * <p>Event called when <code>MenuItem closeMainWindow</code> is clicked. Displays a confirmation alert to ensure
+     * that the player wants to close the application.</p>
+     */
+    public void closeMainWindowAction() {
+        Alert closeAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        closeAlert.setTitle("Warning!");
+        closeAlert.setHeaderText("You are discarding unsaved changes");
+        closeAlert.setContentText("If you close now, all unsaved changed will be discarded.\n" +
+                "Close anyway?");
+
+        closeAlert.getButtonTypes().setAll(ButtonType.CLOSE, ButtonType.CANCEL);
+
+        Optional<ButtonType> result = closeAlert.showAndWait();
+        if (result.get() == ButtonType.CLOSE) {
+            Platform.exit();
+        } else {
+            closeAlert.close();
+        }
+    }
+
+    /**
+     * Event called when <code>MenuItem clearTable</code> is clicked.
+     *
+     * <p>Event called when <code>MenuItem clearTable</code> is clicked. Deletes all items in the
+     * <code>shoppingListTable</code> and <code>parserInterface</code>.</p>
+     */
+    public void clearTableAction() {
+        shoppingListTable.getItems().clear();
+        parserInterface.clearShoppingList();
+    }
+
+    /**
+     * Event called when <code>Button addToList</code> is clicked.
+     *
+     * <p>Event called when <code>Button addToList</code> is clicked. Adds user input to shopping list if it is valid.</p>
+     */
+    public void addToListAction() {
+        String itemText = itemField.getText();
+        String amountText = amountField.getText();
+
+        if (validItemInput(itemText, amountText)) {
+            showMessage(ActivityText.ITEM_ADDED);
+            itemField.setText("");
+            amountField.setText("");
+
+            ShoppingListItem shoppingListItem = new ShoppingListItem(itemText, amountText);
+            shoppingListTable.getItems().add(shoppingListItem);
+        } else {
+            showMessage(ActivityText.INVALID_INPUT);
+        }
+    }
+
+    /**
+     * Verifies that one String is not empty, and that that the other can be parsed to an integer.
+     *
+     * @param itemText the String that should not be empty.
+     * @param amountText the String that should be parsable to an integer.
+     * @return true if the conditions are met.
+     */
+    private boolean validItemInput(String itemText, String amountText) {
+        boolean validItemInput = !itemText.equals("");
+
+        try {
+            Integer.parseInt(amountText);
+        } catch (NumberFormatException e) {
+            validItemInput = false;
+        }
+
+        return validItemInput;
+    }
+
+    /**
+     * Manipulates <code>activityLabel</code> to show message.
+     *
+     * <p>Changes the text of <code>activityLabel</code> to a pre-defined message from an <code>ActivityText</code>.</p>
+     * Starts a transition on <code>activityLabel</code> through <code>fadeOutLabel</code>.
+     *
+     * @param message the pre-defined message.
+     */
+    private void showMessage(ActivityText message) {
+        activityLabel.setText(message.message);
+        activityLabel.setVisible(true);
+        fadeOutLabel.playFromStart();
+    }
+}
