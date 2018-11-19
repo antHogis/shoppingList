@@ -20,6 +20,7 @@ public class App {
      * @param args command line parameters, passed to javafx.application.Application.launch().
      */
     public static void main( String[] args ) {
+        System.out.printf("Author: %s\n", "Anton Höglund");
         Application.launch(MainWindow.class, args);
     }
 }
