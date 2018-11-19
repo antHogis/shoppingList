@@ -1,4 +1,4 @@
-package com.github.anthogis.shoppinglist;
+package com.github.anthogis.json_parser;
 
 import com.github.anthogis.json_parser.JSONAttribute;
 
