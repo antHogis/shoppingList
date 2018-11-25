@@ -5,6 +5,8 @@ import com.github.anthogis.json_parser.JSONObject;
 import com.github.anthogis.json_parser.JSONWriter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ParserInterface establishes connectivity between <code>MainWindowController</code> and the JSON parser.
@@ -22,42 +24,51 @@ public class ParserInterface {
     /**
      * The JSONObject which contains data received from <code>MainWindowController</code>.
      */
-    private JSONObject shoppingList;
+    private JSONObject shoppingListObject;
+
+    private List<JSONObject> shoppingList;
 
     /**
      * The constructor for ParserInterface.
      */
     public ParserInterface() {
-        shoppingList = new JSONObject();
+        shoppingListObject = new JSONObject();
+        shoppingList = new ArrayList();
     }
 
     /**
-     * Adds a JSONAttribute (with data from a ShoppingListItem) to <code>shoppingList</code>.
+     * Adds a JSONAttribute (with data from a ShoppingListItem) to <code>shoppingListObject</code>.
      * @param item the ShoppingListItem containing the data.
      */
     public void addShoppingItem(ShoppingListItem item) {
         int itemAmount = Integer.parseInt(item.getItemAmount());
-        shoppingList.addAttribute(new JSONAttribute<Integer>(item.getItemName(), itemAmount));
+        JSONObject itemObject = new JSONObject();
+        itemObject.addAttribute(new JSONAttribute("productName", item.getItemName()));
+        itemObject.addAttribute(new JSONAttribute("productAmount", itemAmount));
+        shoppingList.add(itemObject);
+        //shoppingListObject.addAttribute(new JSONAttribute<Integer>(item.getItemName(), itemAmount));
     }
 
     /**
-     * Re-instantiates shoppingList.
+     * Re-instantiates shoppingListObject.
      */
     public void clearShoppingList() {
-        shoppingList = new JSONObject();
+        shoppingListObject = new JSONObject();
+        shoppingList = new ArrayList<>();
     }
 
     /**
-     * Writes shoppingList to a .json file using JSONWriter.
+     * Writes shoppingListObject to a .json file using JSONWriter.
      * @param fileName the name of the .json file.
      * @return true if the write was successful.
      */
     public boolean writeToJSON(String fileName) {
         boolean writeSuccessful = false;
-        shoppingList.formatObject();
+        shoppingListObject.addAttribute(new JSONAttribute("list", shoppingList));
+        shoppingListObject.formatObject();
 
         try {
-            jsonWriter = new JSONWriter(shoppingList, fileName);
+            jsonWriter = new JSONWriter(shoppingListObject, fileName);
             writeSuccessful = jsonWriter.writeFile();
         } catch (IOException e) {
             e.printStackTrace();
