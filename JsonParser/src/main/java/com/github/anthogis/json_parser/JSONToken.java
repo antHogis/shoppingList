@@ -1,11 +1,12 @@
 package com.github.anthogis.json_parser;
 
 public enum JSONToken {
-    OBJECT_OPEN,
-    OBJECT_CLOSE,
-    ARRAY_OPEN,
-    ARRAY_CLOSE,
+    OBJECT_BEGIN,
+    OBJECT_END,
+    ARRAY_BEGIN,
+    ARRAY_END,
     ASSIGN,
+    KEY,
     DELIMITER,
     STRING,
     NUMBER,

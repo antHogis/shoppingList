@@ -1,15 +1,15 @@
 package com.github.anthogis.json_parser;
 
-import java.util.Hashtable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JSONTokenizer {
     List<String> data;
-    Hashtable<JSONToken, String> tokens;
+    ArrayList<Pair<JSONToken, String>> tokens;
 
     public JSONTokenizer(List<String> data) {
         this.data = data;
-        tokens = new Hashtable<>();
+        tokens = new ArrayList<>();
     }
 
     public void tokenize() throws JSONParseException {
@@ -29,14 +29,14 @@ public class JSONTokenizer {
             String currentLine = data.get(i);
             for (int j = 0; j < currentLine.length(); j++) {
                 char currentChar = currentLine.charAt(j);
-
+                System.out.print(currentChar);
 
                 if (currentChar == '{' && !storeString) {
-                    tokens.put(JSONToken.OBJECT_OPEN, "");
+                    tokens.add(new Pair(JSONToken.OBJECT_BEGIN, ""));
                 } else if (currentChar == ':' && !storeString) {
-                    tokens.put(JSONToken.ASSIGN, "");
+                    tokens.add(new Pair(JSONToken.ASSIGN, ""));
                 } else if (currentChar >= zeroChar && currentChar <= nineChar) {
-                    if (!storeString)  {
+                    if (!storeString) {
                         storeNumber = true;
                     }
                     value.append(currentChar);
@@ -65,8 +65,12 @@ public class JSONTokenizer {
                             throw new JSONParseException(i, j);
                         }
                     }
-                } else if (currentChar == ',' && currentChar == '}') {
-
+                } else if (currentChar == ',') {
+                    putValue = true;
+                    delimiterFound = true;
+                } else if (currentChar == '}') {
+                    putValue = true;
+                    objectCloseFound = true;
                 } else if (!isIgnorableChar(currentChar)) {
                     throw new JSONParseException(i, j);
                 }
@@ -76,35 +80,42 @@ public class JSONTokenizer {
 
                     if (storeString) {
                         storeString = false;
-                        tokens.put(JSONToken.STRING, value.toString());
+                        tokens.add(new Pair(JSONToken.STRING, value.toString()));
                     } else if (storeNumber) {
                         storeNumber = false;
-                        tokens.put(JSONToken.NUMBER, value.toString());
+                        tokens.add(new Pair(JSONToken.NUMBER, value.toString()));
                     } else if (storeBoolean) {
                         storeBoolean = false;
-                        tokens.put(JSONToken.BOOLEAN, value.toString());
+                        tokens.add(new Pair(JSONToken.BOOLEAN, value.toString()));
                     } else if (storeNull) {
                         storeNull = false;
-                        tokens.put(JSONToken.NULL, value.toString());
+                        tokens.add(new Pair(JSONToken.NULL, value.toString()));
                     }
+
+
 
                     if (delimiterFound) {
                         delimiterFound = false;
-                        tokens.put(JSONToken.DELIMITER, "");
+                        tokens.add(new Pair(JSONToken.DELIMITER, ""));
                     } else if (objectCloseFound) {
                         objectCloseFound = false;
-                        tokens.put(JSONToken.OBJECT_CLOSE, "");
+                        tokens.add(new Pair(JSONToken.OBJECT_END, ""));
                     }
 
                     value = new StringBuilder();
                 }
 
             }
+            System.out.println();
         }
     }
 
     boolean isIgnorableChar(char c) {
         return c == '\b' || c == '\f' || c == '\n' || c == '\r'
                 || c == '\t' || c == ' ';
+    }
+
+    public ArrayList<Pair<JSONToken, String>> getTokens() {
+        return tokens;
     }
 }
