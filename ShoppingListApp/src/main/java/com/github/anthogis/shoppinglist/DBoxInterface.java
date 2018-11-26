@@ -13,31 +13,25 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class DBoxInterface {
-    public void test(String ACCESS_TOKEN) throws DbxException {
+    private DbxClientV2 client;
+
+    public void connectWith(String ACCESS_TOKEN) throws DbxException {
         DbxRequestConfig config = DbxRequestConfig.newBuilder("ShoppingListApp").build();
-        DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
-        FullAccount account = client.users().getCurrentAccount();
-        System.out.println(account.getName().getDisplayName());
+        this.client = new DbxClientV2(config, ACCESS_TOKEN);
+    }
 
-        ListFolderResult result = client.files().listFolder("");
-        while (true) {
-            for (Metadata metadata : result.getEntries()) {
-                System.out.println(metadata.getPathLower());
-            }
-
-            if (!result.getHasMore()) {
-                break;
-            }
-
-            result = client.files().listFolderContinue(result.getCursor());
-        }
+    public boolean saveAs(String fileName, ParserInterface parserInterface) {
+        boolean successful = false;
 
         try (InputStream in = new FileInputStream("test.json")) {
-            FileMetadata metadata = client.files().uploadBuilder("/test.txt")
+            FileMetadata metadata = client.files().uploadBuilder("/test.json")
                     .uploadAndFinish(in);
-        } catch (IOException e) {
+            successful = true;
+        } catch (IOException | DbxException e) {
             e.printStackTrace();
             System.out.println("Whoopsiee!");
         }
+
+        return successful;
     }
 }
