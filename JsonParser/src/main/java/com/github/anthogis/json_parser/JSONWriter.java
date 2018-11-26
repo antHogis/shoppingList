@@ -45,7 +45,7 @@ public class JSONWriter {
         jsonLines = new JSONFormatter(jsonObject).getJsonDataLines();
 
         writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
-                fileName + ".json"), StandardCharsets.UTF_8));
+                fileName), StandardCharsets.UTF_8));
     }
 
     /**
