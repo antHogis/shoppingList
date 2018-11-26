@@ -17,7 +17,9 @@ public enum ActivityText {
     SAVE_CANCELLED("Save cancelled!"),
     NOTHING_TO_SAVE("Nothing to save!"),
     ITEM_ADDED("Item added!"),
-    INVALID_INPUT("Invalid input!");
+    INVALID_INPUT("Invalid input!"),
+    LOGIN_SUCCESS("Log in successful!"),
+    LOGIN_FAIL("Log in failed!");
 
     String message;
 

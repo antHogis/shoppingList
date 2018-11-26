@@ -1,5 +1,6 @@
 package com.github.anthogis.shoppinglist.gui;
 
+import com.dropbox.core.DbxException;
 import com.github.anthogis.shoppinglist.DBoxInterface;
 import com.github.anthogis.shoppinglist.ParserInterface;
 import com.github.anthogis.shoppinglist.ShoppingListItem;
@@ -158,7 +159,19 @@ public class MainWindowController {
     }
 
     public void logInToDropBoxAction() {
+        TextInputDialog accessTokenInputDialog = new TextInputDialog(null);
+        Optional<String> accessTokenInput = accessTokenInputDialog.showAndWait();
 
+        if (accessTokenInput.isPresent()) {
+            accessTokenInput.ifPresent(accessToken -> {
+                try {
+                    dBoxInterface.connectWith(accessToken);
+                    showMessage(ActivityText.LOGIN_SUCCESS);
+                } catch (DbxException e) {
+                    showMessage(ActivityText.LOGIN_FAIL);
+                }
+            });
+        }
     }
 
     /**
