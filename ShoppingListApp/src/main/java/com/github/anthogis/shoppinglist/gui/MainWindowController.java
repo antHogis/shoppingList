@@ -1,5 +1,6 @@
 package com.github.anthogis.shoppinglist.gui;
 
+import com.github.anthogis.shoppinglist.DBoxInterface;
 import com.github.anthogis.shoppinglist.ParserInterface;
 import com.github.anthogis.shoppinglist.ShoppingListItem;
 import javafx.animation.FadeTransition;
@@ -65,6 +66,11 @@ public class MainWindowController {
     private ParserInterface parserInterface;
 
     /**
+     * The interface to Dropbox.
+     */
+    private DBoxInterface dBoxInterface;
+
+    /**
      * Lifecycle method. Called after @FXML annotated fields are populated.
      *
      * <p>Lifecycle method. Called after @FXML annotated fields are populated. Initializes <code>parserInterface</code>
@@ -73,6 +79,7 @@ public class MainWindowController {
     public void initialize() {
         System.out.println("Initalizing " + getClass().toString());
         parserInterface = new ParserInterface();
+        dBoxInterface = new DBoxInterface();
 
         fadeOutLabel = new FadeTransition(Duration.millis(1500));
         fadeOutLabel.setNode(activityLabel);
@@ -93,15 +100,13 @@ public class MainWindowController {
      */
     public void saveToJSONAction() {
         if (shoppingListTable.getItems().size() > 0) {
-            for (ShoppingListItem item : shoppingListTable.getItems()) {
-                parserInterface.addShoppingItem(item);
-            }
+            updateParserInterface();
             TextInputDialog fileNameInputDialog = new TextInputDialog("shopping-list");
             Optional<String> fileNameInput = fileNameInputDialog.showAndWait();
 
             if (fileNameInput.isPresent()) {
                 fileNameInput.ifPresent(fileName -> {
-                    if (parserInterface.writeToJSON(fileName)) {
+                    if (parserInterface.writeToJSON(fileName +  ".json")) {
                         showMessage(ActivityText.SAVE_SUCCESSFUL);
                     } else {
                         showMessage(ActivityText.SAVE_FAILED);
@@ -110,8 +115,6 @@ public class MainWindowController {
             } else {
                 showMessage(ActivityText.SAVE_CANCELLED);
             }
-            parserInterface.clearShoppingList();
-
         } else {
             showMessage(ActivityText.NOTHING_TO_SAVE);
         }
@@ -121,7 +124,7 @@ public class MainWindowController {
      * Event called when <code>MenuItem saveToDropBox</code> is clicked.
      */
     public void saveToDropBoxAction() {
-        System.out.println("droppis");
+
     }
 
     /**
@@ -152,6 +155,10 @@ public class MainWindowController {
         } else {
             closeAlert.close();
         }
+    }
+
+    public void logInToDropBoxAction() {
+
     }
 
     /**
@@ -217,5 +224,12 @@ public class MainWindowController {
         activityLabel.setText(message.message);
         activityLabel.setVisible(true);
         fadeOutLabel.playFromStart();
+    }
+
+    private void updateParserInterface() {
+        parserInterface.clearShoppingList();
+        for (ShoppingListItem item : shoppingListTable.getItems()) {
+            parserInterface.addShoppingItem(item);
+        }
     }
 }
