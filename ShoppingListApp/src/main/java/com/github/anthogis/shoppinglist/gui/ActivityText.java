@@ -19,7 +19,9 @@ public enum ActivityText {
     ITEM_ADDED("Item added!"),
     INVALID_INPUT("Invalid input!"),
     LOGIN_SUCCESS("Log in successful!"),
-    LOGIN_FAIL("Log in failed!");
+    LOGIN_FAIL("Log in failed!"),
+    NO_LOGIN("Please login to Dropbox.");
+
 
     String message;
 

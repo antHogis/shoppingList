@@ -111,15 +111,20 @@ public class MainWindowController {
 
     /**
      * <p>Event called when <code>MenuItem saveToJSON</code> is clicked. Uses method {@link #saveJson(Consumer)}
-     * to save the shopping list to json to DropBox by calling {@link com.github.anthogis.shoppinglist.DBoxInterface#saveAs(String, ParserInterface)}.
+     * to save the shopping list to json to DropBox by calling {@link com.github.anthogis.shoppinglist.DBoxInterface#saveAndUpload(String, ParserInterface)}.
      */
     public void saveToDropBoxAction() {
         saveJson(fileName -> {
-            if (dBoxInterface.saveAs(fileName, parserInterface)) {
-                showMessage(ActivityText.SAVE_SUCCESSFUL);
-            } else {
-                showMessage(ActivityText.SAVE_FAILED);
+            try {
+                if (dBoxInterface.saveAndUpload(fileName, parserInterface)) {
+                    showMessage(ActivityText.SAVE_SUCCESSFUL);
+                } else {
+                    showMessage(ActivityText.SAVE_FAILED);
+                }
+            } catch (DBoxInterface.DBoxBadLoginException e) {
+                showMessage(ActivityText.NO_LOGIN);
             }
+
         });
     }
 
@@ -160,11 +165,12 @@ public class MainWindowController {
         if (accessTokenInput.isPresent()) {
             accessTokenInput.ifPresent(accessToken -> {
                 try {
-                    dBoxInterface.connectWith(accessToken);
+                    dBoxInterface.login(accessToken);
                     showMessage(ActivityText.LOGIN_SUCCESS);
                 } catch (DbxException e) {
                     showMessage(ActivityText.LOGIN_FAIL);
                 }
+
             });
         }
     }
@@ -204,7 +210,7 @@ public class MainWindowController {
     /**
      * Helper method for saving JSON files.
      */
-    private void saveJson(Consumer<String> action) {
+    private void saveJson(Consumer<String> consumer) {
         if (shoppingListTable.getItems().size() > 0) {
             parserInterface.clearShoppingList();
             for (ShoppingListItem item : shoppingListTable.getItems()) {
@@ -214,7 +220,7 @@ public class MainWindowController {
             Optional<String> fileNameInput = fileNameInputDialog.showAndWait();
 
             if (fileNameInput.isPresent()) {
-                fileNameInput.ifPresent(action);
+                fileNameInput.ifPresent(consumer);
             } else {
                 showMessage(ActivityText.SAVE_CANCELLED);
             }
