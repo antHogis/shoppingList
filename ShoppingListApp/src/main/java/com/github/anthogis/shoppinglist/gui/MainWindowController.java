@@ -158,8 +158,13 @@ public class MainWindowController {
         }
     }
 
+    /**
+     *
+     */
     public void logInToDropBoxAction() {
         TextInputDialog accessTokenInputDialog = new TextInputDialog(null);
+        accessTokenInputDialog.setTitle("Enter login details");
+        accessTokenInputDialog.setHeaderText("Please enter Dropbox OAuth 2 access token");
         Optional<String> accessTokenInput = accessTokenInputDialog.showAndWait();
 
         if (accessTokenInput.isPresent()) {
@@ -217,6 +222,8 @@ public class MainWindowController {
                 parserInterface.addShoppingItem(item);
             }
             TextInputDialog fileNameInputDialog = new TextInputDialog("shopping-list");
+            fileNameInputDialog.setHeaderText("Enter file name");
+            fileNameInputDialog.setTitle("Please enter file name");
             Optional<String> fileNameInput = fileNameInputDialog.showAndWait();
 
             if (fileNameInput.isPresent()) {
