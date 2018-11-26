@@ -16,6 +16,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.util.Duration;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * Event handler for <code>MainWindow</code>.
@@ -95,37 +96,31 @@ public class MainWindowController {
     /**
      * Event called when <code>MenuItem saveToJSON</code> is clicked.
      *
-     * <p>Event called when <code>MenuItem saveToJSON</code> is clicked. Calls <code>parserInterface</code> to save
-     * the shopping list to JSON if it contains data. Calls method <code>showMessage</code> with different
-     * <code>ActivityText</code> according to success of saving the JSON file.</p>
+     * <p>Event called when <code>MenuItem saveToJSON</code> is clicked. Uses method {@link #saveJson(Consumer)}
+     * to save the shopping list to json locally with <code>parserInterface</code>.
      */
     public void saveToJSONAction() {
-        if (shoppingListTable.getItems().size() > 0) {
-            updateParserInterface();
-            TextInputDialog fileNameInputDialog = new TextInputDialog("shopping-list");
-            Optional<String> fileNameInput = fileNameInputDialog.showAndWait();
-
-            if (fileNameInput.isPresent()) {
-                fileNameInput.ifPresent(fileName -> {
-                    if (parserInterface.writeToJSON(fileName +  ".json")) {
-                        showMessage(ActivityText.SAVE_SUCCESSFUL);
-                    } else {
-                        showMessage(ActivityText.SAVE_FAILED);
-                    }
-                });
+        saveJson(fileName -> {
+            if (parserInterface.writeToJSON(fileName, true)) {
+                showMessage(ActivityText.SAVE_SUCCESSFUL);
             } else {
-                showMessage(ActivityText.SAVE_CANCELLED);
+                showMessage(ActivityText.SAVE_FAILED);
             }
-        } else {
-            showMessage(ActivityText.NOTHING_TO_SAVE);
-        }
+        });
     }
 
     /**
-     * Event called when <code>MenuItem saveToDropBox</code> is clicked.
+     * <p>Event called when <code>MenuItem saveToJSON</code> is clicked. Uses method {@link #saveJson(Consumer)}
+     * to save the shopping list to json to DropBox by calling {@link com.github.anthogis.shoppinglist.DBoxInterface#saveAs(String, ParserInterface)}.
      */
     public void saveToDropBoxAction() {
-
+        saveJson(fileName -> {
+            if (dBoxInterface.saveAs(fileName, parserInterface)) {
+                showMessage(ActivityText.SAVE_SUCCESSFUL);
+            } else {
+                showMessage(ActivityText.SAVE_FAILED);
+            }
+        });
     }
 
     /**
@@ -207,6 +202,28 @@ public class MainWindowController {
     }
 
     /**
+     * Helper method for saving JSON files.
+     */
+    private void saveJson(Consumer<String> action) {
+        if (shoppingListTable.getItems().size() > 0) {
+            parserInterface.clearShoppingList();
+            for (ShoppingListItem item : shoppingListTable.getItems()) {
+                parserInterface.addShoppingItem(item);
+            }
+            TextInputDialog fileNameInputDialog = new TextInputDialog("shopping-list");
+            Optional<String> fileNameInput = fileNameInputDialog.showAndWait();
+
+            if (fileNameInput.isPresent()) {
+                fileNameInput.ifPresent(action);
+            } else {
+                showMessage(ActivityText.SAVE_CANCELLED);
+            }
+        } else {
+            showMessage(ActivityText.NOTHING_TO_SAVE);
+        }
+    }
+
+    /**
      * Verifies that one String is not empty, and that that the other can be parsed to an integer.
      *
      * @param itemText the String that should not be empty.
@@ -239,10 +256,4 @@ public class MainWindowController {
         fadeOutLabel.playFromStart();
     }
 
-    private void updateParserInterface() {
-        parserInterface.clearShoppingList();
-        for (ShoppingListItem item : shoppingListTable.getItems()) {
-            parserInterface.addShoppingItem(item);
-        }
-    }
 }

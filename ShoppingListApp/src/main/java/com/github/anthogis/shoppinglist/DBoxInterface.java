@@ -19,22 +19,35 @@ public class DBoxInterface {
         this.client = new DbxClientV2(config, ACCESS_TOKEN);
     }
 
-    public void saveAs(String fileName, ParserInterface parserInterface) throws IOException {
-        Path tempFilePath = Files.createTempFile(null,null);
-        System.out.println(tempFilePath.toString());
-        System.out.println(tempFilePath.getFileName().toString());
-        /*
-        parserInterface.writeToJSON(tempFilePath.getFileName().toString());
+    public boolean saveAs(String fileName, ParserInterface parserInterface) {
+        boolean successful = false;
+        Path tempFilePath = null;
+        fileName = fileName.endsWith(".json") ? '/' + fileName : '/' + fileName + ".json";
 
-        try (InputStream in = new FileInputStream("test.json")) {
-            FileMetadata metadata = client.files().uploadBuilder("/test.json")
-                    .uploadAndFinish(in);
-        } catch (IOException | DbxException e) {
+        try {
+            tempFilePath = Files.createTempFile(null,null);
+            System.out.println(tempFilePath.toString());
+            parserInterface.writeToJSON(tempFilePath.getFileName().toString(), false);
+
+            try (InputStream in = new FileInputStream(tempFilePath.toString())) {
+                client.files().uploadBuilder(fileName).uploadAndFinish(in);
+            } catch (IOException | DbxException e) {
+                e.printStackTrace();
+            }
+
+            successful = true;
+        } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Whoopsiee!");
+        } finally {
+            if (tempFilePath != null) {
+                try {
+                    Files.delete(tempFilePath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        */
-        Files.delete(tempFilePath);
 
+        return successful;
     }
 }

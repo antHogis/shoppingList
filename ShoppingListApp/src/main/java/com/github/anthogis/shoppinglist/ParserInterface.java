@@ -62,13 +62,13 @@ public class ParserInterface {
      * @param fileName the name of the .json file.
      * @return true if the write was successful.
      */
-    public boolean writeToJSON(String fileName) {
+    public boolean writeToJSON(String fileName, boolean addSuffix) {
         boolean writeSuccessful = false;
         shoppingListObject.addAttribute(new JSONAttribute("list", shoppingList));
         shoppingListObject.formatObject();
 
         try {
-            jsonWriter = new JSONWriter(shoppingListObject, fileName);
+            jsonWriter = new JSONWriter(shoppingListObject, fileName, addSuffix);
             writeSuccessful = jsonWriter.writeFile();
         } catch (IOException e) {
             e.printStackTrace();

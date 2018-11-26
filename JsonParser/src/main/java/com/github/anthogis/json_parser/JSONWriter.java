@@ -41,8 +41,10 @@ public class JSONWriter {
      * @param fileName the name of the JSON file.
      * @throws IOException if writer's construction fails
      */
-    public JSONWriter(JSONObject jsonObject, String fileName) throws IOException {
+    public JSONWriter(JSONObject jsonObject, String fileName, boolean addSuffix) throws IOException {
         jsonLines = new JSONFormatter(jsonObject).getJsonDataLines();
+
+        fileName = addSuffix && !fileName.endsWith(".json") ? fileName + ".json" : fileName;
 
         writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
                 fileName), StandardCharsets.UTF_8));
