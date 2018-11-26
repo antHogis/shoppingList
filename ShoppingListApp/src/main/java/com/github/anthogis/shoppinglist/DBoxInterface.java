@@ -10,11 +10,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
 
 public class DBoxInterface {
     private DbxClientV2 client;
-    private Optional<Path> lastTempFile;
 
     public DBoxInterface() {
         client = null;
@@ -40,7 +38,6 @@ public class DBoxInterface {
 
             fileName = fileName.endsWith(".json") ? '/' + fileName : '/' + fileName + ".json";
 
-
             try (InputStream in = new FileInputStream(tempFilePath.toString())) {
                 client.files().uploadBuilder(fileName).withMode(WriteMode.OVERWRITE).uploadAndFinish(in);
             } catch (IOException | DbxException e) {
@@ -52,9 +49,9 @@ public class DBoxInterface {
             e.printStackTrace();
         }
 
-
         return successful;
     }
+
 
     public class DBoxBadLoginException extends RuntimeException {
         public DBoxBadLoginException() {
@@ -62,8 +59,4 @@ public class DBoxInterface {
         }
     }
 
-    public void test() {
-        DbxRequestConfig config = DbxRequestConfig.newBuilder("ShoppingListApp").build();
-
-    }
 }
