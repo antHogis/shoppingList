@@ -20,12 +20,14 @@ public enum ActivityText {
     INVALID_INPUT("Invalid input!"),
     LOGIN_SUCCESS("Log in successful!"),
     LOGIN_FAIL("Log in failed!"),
-    NO_LOGIN("Please login to Dropbox.");
+    NO_LOGIN("Please login to Dropbox."),
+    FILE_FAIL("File couldn't be opened"),
+    FILE_MALFORM("File is malformed");
 
 
     String message;
 
-    private ActivityText(String message) {
+    ActivityText(String message) {
         this.message = message;
     }
 }
