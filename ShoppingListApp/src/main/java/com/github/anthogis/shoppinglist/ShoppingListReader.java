@@ -1,6 +1,7 @@
 package com.github.anthogis.shoppinglist;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,8 +12,8 @@ public class ShoppingListReader {
     private List<ShoppingListItem> shoppingList;
     private List<String> fileLines;
 
-    public ShoppingListReader(String filePath) throws IOException, ShoppingListMalformedException {
-        BufferedReader reader = new BufferedReader(new FileReader(filePath));
+    public ShoppingListReader(File file) throws IOException, ShoppingListMalformedException {
+        BufferedReader reader = new BufferedReader(new FileReader(file));
         fileLines = reader.lines().collect(Collectors.toList());
         reader.close();
 
