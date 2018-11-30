@@ -104,7 +104,11 @@ public class MainWindowController {
     }
 
     /**
-     * TODO Write DOC!
+     * Event called when <code>MenuItem openFile</code> is clicked, loads a JSON file to shoppingListTable.
+     *
+     * <p>Event called when <code>MenuItem openFile</code> is clicked. Loads a JSON file to the TableView. Allows the
+     * user to choose a file with FileChooser, which is passed to a ShoppingListReader. If the file is in the the same
+     * format as the app outputs through ParserInterface, then the contents are added to shoppingListTable</p>
      */
     public void openFileAction() {
         FileChooser fileChooser = new FileChooser();
@@ -145,7 +149,7 @@ public class MainWindowController {
     }
 
     /**
-     * <p>Event called when <code>MenuItem saveToJSON</code> is clicked. Uses method {@link #saveJson(Consumer)}
+     * Event called when <code>MenuItem saveToJSON</code> is clicked. Uses method {@link #saveJson(Consumer)}
      * to save the shopping list to json to DropBox by calling {@link com.github.anthogis.shoppinglist.DBoxInterface#saveAndUpload(String, ParserInterface)}.
      */
     public void saveToDropBoxAction() {
@@ -194,7 +198,7 @@ public class MainWindowController {
     }
 
     /**
-     * TODO Write DOC!
+     * Event called when <code>logInToDropBox</code> is called Establishes connection to DropBox.
      */
     public void logInToDropBoxAction() {
         TextInputDialog accessTokenInputDialog = new TextInputDialog(null);
@@ -290,6 +294,16 @@ public class MainWindowController {
         return validItemInput;
     }
 
+    /**
+     * Removes selected row from <code>shoppingListTable</code> when called if delete is pressed.
+     *
+     * <p>Helper method for method setOnKeyPressed of object shoppingListTable, meant to be used as a method
+     * reference implementation of EventHandler<KeyEvent>. If shoppingListTable has input
+     * focus, a row in the table is selected, and the delete key is pressed, then the selected row of
+     * shoppingListTable is deleted.</p>
+     *
+     * @param event the KeyEvent that ocurred
+     */
     private void tableKeyEventHandler(KeyEvent event) {
         if (event.getCode() == KeyCode.DELETE) {
             shoppingListTable.getItems().remove(
