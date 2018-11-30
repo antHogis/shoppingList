@@ -15,6 +15,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
@@ -95,6 +97,8 @@ public class MainWindowController {
         fadeOutLabel.setToValue(1.0);
         fadeOutLabel.setCycleCount(2);
         fadeOutLabel.setAutoReverse(true);
+
+        shoppingListTable.setOnKeyPressed(this::tableKeyEventHandler);
 
         showMessage(ActivityText.WELCOME);
     }
@@ -284,6 +288,13 @@ public class MainWindowController {
         }
 
         return validItemInput;
+    }
+
+    private void tableKeyEventHandler(KeyEvent event) {
+        if (event.getCode() == KeyCode.DELETE) {
+            shoppingListTable.getItems().remove(
+                    shoppingListTable.getSelectionModel().getSelectedItem());
+        }
     }
 
     /**

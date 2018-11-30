@@ -45,7 +45,7 @@
   <center>
     <TableView fx:id="shoppingListTable" editable="true" prefHeight="465.0" prefWidth="758.0">
       <columns>
-        <TableColumn editable="true" minWidth="150" prefWidth="500" text="Item">
+        <TableColumn editable="false" minWidth="150" prefWidth="500" text="Item">
           <cellValueFactory>
             <PropertyValueFactory property="itemName" />
           </cellValueFactory>
@@ -53,7 +53,7 @@
             <TextFieldTableCell fx:factory="forTableColumn" />
           </cellFactory>
         </TableColumn>
-        <TableColumn editable="true" minWidth="150" prefWidth="258" text="Amount">
+        <TableColumn editable="false" minWidth="150" prefWidth="258" text="Amount">
           <cellValueFactory>
             <PropertyValueFactory property="itemAmount" />
           </cellValueFactory>
