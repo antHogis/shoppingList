@@ -36,10 +36,11 @@ public class ShoppingListReader {
                     String productName = line.substring(1, line.length() - 2);
 
                     line = fileLines.get(i + 1);
+                    System.out.println(line);
 
                     if (line.matches(productAmountRegex + ".*")) {
-                        line = line.split(productNameRegex)[1];
-                        String productAmount = line.substring(1, line.length() - 1);
+                        line = line.split(productAmountRegex)[1];
+                        String productAmount = line;
                         shoppingList.add(new ShoppingListItem(productName, productAmount));
                         i += 2;
                     } else {
@@ -48,6 +49,7 @@ public class ShoppingListReader {
                 }
             }
         } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
             throw new ShoppingListMalformedException();
         }
     }
