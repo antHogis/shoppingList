@@ -1,15 +1,19 @@
 package com.github.anthogis.shoppinglist;
 
+import com.dropbox.core.DbxAppInfo;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
+import com.dropbox.core.DbxWebAuthNoRedirect;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.WriteMode;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
 
 public class DBoxInterface {
     private DbxClientV2 client;
@@ -18,15 +22,22 @@ public class DBoxInterface {
         client = null;
     }
 
+    public URI getAuthorizationLink() {
+
+        return null;
+    }
+
     public void login(String ACCESS_TOKEN) throws DbxException {
         DbxRequestConfig config = DbxRequestConfig.newBuilder("ShoppingListApp").build();
         DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
+        //The method below throws a DbxException if the access toke is invalid
         client.users().getCurrentAccount();
         this.client = client;
 
     }
 
-    public boolean saveAndUpload(String fileName, ParserInterface parserInterface) throws DBoxBadLoginException {
+    public boolean saveAndUpload(String fileName, ParserInterface parserInterface)
+            throws DBoxBadLoginException {
         boolean successful = false;
 
         if (client == null) throw new DBoxBadLoginException();
