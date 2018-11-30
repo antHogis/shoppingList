@@ -4,6 +4,8 @@ import com.dropbox.core.DbxException;
 import com.github.anthogis.shoppinglist.DBoxInterface;
 import com.github.anthogis.shoppinglist.ParserInterface;
 import com.github.anthogis.shoppinglist.ShoppingListItem;
+import com.github.anthogis.shoppinglist.ShoppingListMalformedException;
+import com.github.anthogis.shoppinglist.ShoppingListReader;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -13,8 +15,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -94,6 +100,31 @@ public class MainWindowController {
     }
 
     /**
+     * TODO Write DOC!
+     */
+    public void openFileAction() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setSelectedExtensionFilter(
+                new FileChooser.ExtensionFilter("JSON", "*.json"));
+
+        File shoppingListFile = fileChooser.showOpenDialog(shoppingListTable.getScene().getWindow());
+        if (shoppingListFile != null) {
+            clearTableAction();
+
+            try {
+                List<ShoppingListItem> shoppingList
+                        = new ShoppingListReader(shoppingListFile).getShoppingList();
+                shoppingListTable.getItems().addAll(shoppingList);
+            } catch (IOException e) {
+                showMessage(ActivityText.FILE_FAIL);
+            } catch (ShoppingListMalformedException e) {
+                showMessage(ActivityText.FILE_MALFORM);
+            }
+        }
+
+    }
+
+    /**
      * Event called when <code>MenuItem saveToJSON</code> is clicked.
      *
      * <p>Event called when <code>MenuItem saveToJSON</code> is clicked. Uses method {@link #saveJson(Consumer)}
@@ -159,7 +190,7 @@ public class MainWindowController {
     }
 
     /**
-     *
+     * TODO Write DOC!
      */
     public void logInToDropBoxAction() {
         TextInputDialog accessTokenInputDialog = new TextInputDialog(null);
