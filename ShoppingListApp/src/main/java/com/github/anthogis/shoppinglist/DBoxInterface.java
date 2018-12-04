@@ -1,6 +1,7 @@
 package com.github.anthogis.shoppinglist;
 
 import com.dropbox.core.DbxAppInfo;
+import com.dropbox.core.DbxAuthFinish;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.DbxWebAuth;
@@ -8,9 +9,7 @@ import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.WriteMode;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,9 +22,24 @@ import java.util.stream.Collectors;
 
 public class DBoxInterface {
     private DbxClientV2 client;
+    private DbxWebAuth authorizer;
+    private DbxRequestConfig requestConfig;
 
+    /**
+     * TODO Write JavaDoc
+     */
     public DBoxInterface() {
         client = null;
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(
+                getClass().getResourceAsStream("super-secret-dropbox-key")));
+        List<String> authInfo = reader.lines().collect(Collectors.toList());
+        final String APP_KEY = authInfo.get(0);
+        final String APP_SECRET = authInfo.get(1);
+
+        DbxAppInfo appInfo = new DbxAppInfo(APP_KEY, APP_SECRET);
+        requestConfig = new DbxRequestConfig("antHogisShoppingList");
+        authorizer = new DbxWebAuth(requestConfig, appInfo);
     }
 
     /**
@@ -37,34 +51,24 @@ public class DBoxInterface {
      * @throws IndexOutOfBoundsException
      */
     public URI getAuthorizationLink()
-            throws URISyntaxException, IOException, IndexOutOfBoundsException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(
-                getClass().getResourceAsStream("super-secret-dropbox-key")));
-        List<String> authInfo = reader.lines().collect(Collectors.toList());
-        final String APP_KEY = authInfo.get(0);
-        final String APP_SECRET = authInfo.get(1);
-
-        DbxRequestConfig requestConfig = new DbxRequestConfig("antHogisShoppingList");
-        DbxAppInfo appInfo = new DbxAppInfo(APP_KEY, APP_SECRET);
-        DbxWebAuth auth = new DbxWebAuth(requestConfig, appInfo);
+            throws URISyntaxException, IndexOutOfBoundsException {
         DbxWebAuth.Request authRequest = DbxWebAuth.newRequestBuilder().withNoRedirect().build();
 
-        return new URI(auth.authorize(authRequest));
+        return new URI(authorizer.authorize(authRequest));
     }
 
     /**
      * TODO Write JavaDoc
      *
-     * @param ACCESS_TOKEN
+     * @param authorizationCode
      * @throws DbxException
      */
-    public void login(String ACCESS_TOKEN) throws DbxException {
-        DbxRequestConfig config = DbxRequestConfig.newBuilder("ShoppingListApp").build();
-        DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
+    public void login(String authorizationCode) throws DbxException {
+        DbxAuthFinish authFinish = authorizer.finishFromCode(authorizationCode);
+        DbxClientV2 client = new DbxClientV2(requestConfig, authFinish.getAccessToken());
         //The method below throws a DbxException if the access toke is invalid
         client.users().getCurrentAccount();
         this.client = client;
-
     }
 
     /**
