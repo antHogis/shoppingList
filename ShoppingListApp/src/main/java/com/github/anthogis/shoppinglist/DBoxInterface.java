@@ -28,7 +28,7 @@ public class DBoxInterface {
     /**
      * TODO Write JavaDoc
      */
-    public DBoxInterface() {
+    public DBoxInterface() throws InternalFailiureException {
         client = null;
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -40,6 +40,7 @@ public class DBoxInterface {
         DbxAppInfo appInfo = new DbxAppInfo(APP_KEY, APP_SECRET);
         requestConfig = new DbxRequestConfig("antHogisShoppingList");
         authorizer = new DbxWebAuth(requestConfig, appInfo);
+
     }
 
     /**
@@ -51,7 +52,7 @@ public class DBoxInterface {
      * @throws IndexOutOfBoundsException
      */
     public URI getAuthorizationLink()
-            throws URISyntaxException, IndexOutOfBoundsException {
+            throws URISyntaxException, NullPointerException {
         DbxWebAuth.Request authRequest = DbxWebAuth.newRequestBuilder().withNoRedirect().build();
 
         return new URI(authorizer.authorize(authRequest));
@@ -63,7 +64,7 @@ public class DBoxInterface {
      * @param authorizationCode
      * @throws DbxException
      */
-    public void login(String authorizationCode) throws DbxException {
+    public void login(String authorizationCode) throws DbxException, NullPointerException {
         DbxAuthFinish authFinish = authorizer.finishFromCode(authorizationCode);
         DbxClientV2 client = new DbxClientV2(requestConfig, authFinish.getAccessToken());
         //The method below throws a DbxException if the access toke is invalid
@@ -112,6 +113,15 @@ public class DBoxInterface {
     public class DBoxBadLoginException extends RuntimeException {
         public DBoxBadLoginException() {
             super("DbxClientV2 not established");
+        }
+    }
+
+    /**
+     * TODO Write JavaDoc
+     */
+    public class InternalFailiureException extends RuntimeException {
+        public InternalFailiureException() {
+            super("App key and secret could not be accessed");
         }
     }
 
