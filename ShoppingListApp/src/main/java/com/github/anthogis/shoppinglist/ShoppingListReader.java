@@ -8,10 +8,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * TODO add javadoc
+ */
 public class ShoppingListReader {
+    /**
+     * TODO add javadoc
+     */
     private List<ShoppingListItem> shoppingList;
+
+    /**
+     * TODO add javadoc
+     */
     private List<String> fileLines;
 
+    /**
+     * TODO add javadoc
+     */
     public ShoppingListReader(File file) throws IOException, ShoppingListMalformedException {
         BufferedReader reader = new BufferedReader(new FileReader(file));
         fileLines = reader.lines().collect(Collectors.toList());
@@ -21,6 +34,9 @@ public class ShoppingListReader {
         parseLines();
     }
 
+    /**
+     * TODO add javadoc
+     */
     private void parseLines() throws ShoppingListMalformedException {
         String productNameRegex = "\\s*\"productName\" : ";
         String productAmountRegex = "\\s*\"productAmount\" : ";
@@ -36,7 +52,6 @@ public class ShoppingListReader {
                     String productName = line.substring(1, line.length() - 2);
 
                     line = fileLines.get(i + 1);
-                    System.out.println(line);
 
                     if (line.matches(productAmountRegex + ".*")) {
                         line = line.split(productAmountRegex)[1];
@@ -48,12 +63,19 @@ public class ShoppingListReader {
                     }
                 }
             }
+
+            if (shoppingList.isEmpty()) {
+                throw new ShoppingListMalformedException();
+            }
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
             throw new ShoppingListMalformedException();
         }
     }
 
+    /**
+     * TODO add javadoc
+     */
     public List<ShoppingListItem> getShoppingList() {
         return shoppingList;
     }
