@@ -11,6 +11,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -23,6 +24,8 @@ import javafx.util.Duration;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -127,7 +130,7 @@ public class MainWindowController {
             } catch (IOException e) {
                 showMessage(ActivityText.FILE_FAIL);
             } catch (ShoppingListMalformedException e) {
-                showMessage(ActivityText.FILE_MALFORM);
+                showMessage(ActivityText.FILE_MALFORMED);
             }
         }
 
@@ -235,14 +238,22 @@ public class MainWindowController {
      * TODO write JAVADOC
      */
     public void dropboxTokenAction() {
-        try {
-            if (Desktop.isDesktopSupported()) {
-                Desktop desktop = Desktop.getDesktop();
-                desktop.browse(dBoxInterface.getAuthorizationLink());
-            }
+        URI authorizationLink = null;
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        try {
+            authorizationLink = dBoxInterface.getAuthorizationLink();
+            Desktop desktop = Desktop.getDesktop();
+            desktop.browse(authorizationLink);
+
+        } catch (IndexOutOfBoundsException | URISyntaxException e) {
+            showMessage(ActivityText.DB_AUTH_ERROR);
+
+        } catch (UnsupportedOperationException | IOException | SecurityException |
+                IllegalArgumentException e) {
+            Alert linkInfo = new Alert(Alert.AlertType.INFORMATION);
+            linkInfo.setTitle("Authorization link");
+            linkInfo.setHeaderText("Use link below to get authorize this app in Dropbox:");
+            linkInfo.setContentText(authorizationLink.toString());
         }
     }
 
