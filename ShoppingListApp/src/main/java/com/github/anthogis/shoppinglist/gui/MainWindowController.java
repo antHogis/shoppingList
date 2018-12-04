@@ -215,7 +215,8 @@ public class MainWindowController {
                 try {
                     dBoxInterface.login(accessToken);
                     showMessage(ActivityText.LOGIN_SUCCESS);
-                } catch (DbxException e) {
+                } catch (DbxException | NullPointerException e) {
+                    e.printStackTrace();
                     showMessage(ActivityText.LOGIN_FAIL);
                 }
 
@@ -245,7 +246,7 @@ public class MainWindowController {
             Desktop desktop = Desktop.getDesktop();
             desktop.browse(authorizationLink);
 
-        } catch (IndexOutOfBoundsException | URISyntaxException e) {
+        } catch (NullPointerException | URISyntaxException e) {
             showMessage(ActivityText.DB_AUTH_ERROR);
 
         } catch (UnsupportedOperationException | IOException | SecurityException |
@@ -254,6 +255,8 @@ public class MainWindowController {
             linkInfo.setTitle("Authorization link");
             linkInfo.setHeaderText("Use link below to get authorize this app in Dropbox:");
             linkInfo.setContentText(authorizationLink.toString());
+
+            linkInfo.show();
         }
     }
 
