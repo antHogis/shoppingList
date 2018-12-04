@@ -231,6 +231,13 @@ public class MainWindowController {
     }
 
     /**
+     * TODO write JAVADOC
+     */
+    public void dropboxTokenAction() {
+
+    }
+
+    /**
      * Event called when <code>Button addToList</code> is clicked.
      *
      * <p>Event called when <code>Button addToList</code> is clicked. Adds user input to shopping list if it is valid.</p>
