@@ -20,6 +20,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -234,7 +235,15 @@ public class MainWindowController {
      * TODO write JAVADOC
      */
     public void dropboxTokenAction() {
+        try {
+            if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+                desktop.browse(dBoxInterface.getAuthorizationLink());
+            }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
