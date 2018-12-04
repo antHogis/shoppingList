@@ -17,11 +17,18 @@ public enum ActivityText {
     SAVE_CANCELLED("Save cancelled!"),
     NOTHING_TO_SAVE("Nothing to save!"),
     ITEM_ADDED("Item added!"),
-    INVALID_INPUT("Invalid input!");
+    INVALID_INPUT("Invalid input!"),
+    LOGIN_SUCCESS("Log in successful!"),
+    LOGIN_FAIL("Log in failed!"),
+    NO_LOGIN("Please login to Dropbox."),
+    FILE_FAIL("File couldn't be opened"),
+    FILE_MALFORMED("File is malformed"),
+    DB_AUTH_ERROR("Could not get link.");
+
 
     String message;
 
-    private ActivityText(String message) {
+    ActivityText(String message) {
         this.message = message;
     }
 }

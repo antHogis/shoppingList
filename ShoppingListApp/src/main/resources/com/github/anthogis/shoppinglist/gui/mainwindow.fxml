@@ -21,6 +21,7 @@
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
+                  <MenuItem fx:id="openFile" mnemonicParsing="false" onAction="#openFileAction" text="Open File" />
             <MenuItem fx:id="saveToJSON" mnemonicParsing="false" onAction="#saveToJSONAction" text="Save To JSON" />
             <MenuItem fx:id="saveToDropBox" mnemonicParsing="false" onAction="#saveToDropBoxAction" text="Save To DropBox" />
             <MenuItem fx:id="saveToH2" mnemonicParsing="false" onAction="#saveToH2Action" text="Save To H2" />
@@ -29,13 +30,14 @@
         </Menu>
         <Menu mnemonicParsing="false" text="Edit">
           <items>
-            <MenuItem mnemonicParsing="false" text="Log in to DropBox" />
+            <MenuItem mnemonicParsing="false" onAction="#logInToDropBoxAction" text="Log in to DropBox" />
             <MenuItem mnemonicParsing="false" onAction="#clearTableAction" text="Clear Table" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
           <items>
             <MenuItem mnemonicParsing="false" text="About" />
+                  <MenuItem mnemonicParsing="false" onAction="#dropboxTokenAction" text="Get Dropbox Token" />
           </items>
         </Menu>
       </menus>
@@ -44,7 +46,7 @@
   <center>
     <TableView fx:id="shoppingListTable" editable="true" prefHeight="465.0" prefWidth="758.0">
       <columns>
-        <TableColumn editable="true" minWidth="150" prefWidth="500" text="Item">
+        <TableColumn editable="false" minWidth="150" prefWidth="500" text="Item">
           <cellValueFactory>
             <PropertyValueFactory property="itemName" />
           </cellValueFactory>
@@ -52,7 +54,7 @@
             <TextFieldTableCell fx:factory="forTableColumn" />
           </cellFactory>
         </TableColumn>
-        <TableColumn editable="true" minWidth="150" prefWidth="258" text="Amount">
+        <TableColumn editable="false" minWidth="150" prefWidth="258" text="Amount">
           <cellValueFactory>
             <PropertyValueFactory property="itemAmount" />
           </cellValueFactory>
