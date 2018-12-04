@@ -3,17 +3,23 @@ package com.github.anthogis.shoppinglist;
 import com.dropbox.core.DbxAppInfo;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
-import com.dropbox.core.DbxWebAuthNoRedirect;
+import com.dropbox.core.DbxWebAuth;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.WriteMode;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Locale;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class DBoxInterface {
     private DbxClientV2 client;
@@ -22,11 +28,36 @@ public class DBoxInterface {
         client = null;
     }
 
-    public URI getAuthorizationLink() {
+    /**
+     * TODO Write JavaDoc
+     *
+     * @return
+     * @throws URISyntaxException
+     * @throws IOException
+     * @throws IndexOutOfBoundsException
+     */
+    public URI getAuthorizationLink()
+            throws URISyntaxException, IOException, IndexOutOfBoundsException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(
+                getClass().getResourceAsStream("super-secret-dropbox-key")));
+        List<String> authInfo = reader.lines().collect(Collectors.toList());
+        final String APP_KEY = authInfo.get(0);
+        final String APP_SECRET = authInfo.get(1);
 
-        return null;
+        DbxRequestConfig requestConfig = new DbxRequestConfig("antHogisShoppingList");
+        DbxAppInfo appInfo = new DbxAppInfo(APP_KEY, APP_SECRET);
+        DbxWebAuth auth = new DbxWebAuth(requestConfig, appInfo);
+        DbxWebAuth.Request authRequest = DbxWebAuth.newRequestBuilder().withNoRedirect().build();
+
+        return new URI(auth.authorize(authRequest));
     }
 
+    /**
+     * TODO Write JavaDoc
+     *
+     * @param ACCESS_TOKEN
+     * @throws DbxException
+     */
     public void login(String ACCESS_TOKEN) throws DbxException {
         DbxRequestConfig config = DbxRequestConfig.newBuilder("ShoppingListApp").build();
         DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
@@ -36,6 +67,14 @@ public class DBoxInterface {
 
     }
 
+    /**
+     * TODO Write JavaDoc
+     *
+     * @param fileName
+     * @param parserInterface
+     * @return
+     * @throws DBoxBadLoginException
+     */
     public boolean saveAndUpload(String fileName, ParserInterface parserInterface)
             throws DBoxBadLoginException {
         boolean successful = false;
@@ -63,7 +102,9 @@ public class DBoxInterface {
         return successful;
     }
 
-
+    /**
+     * TODO Write JavaDoc
+     */
     public class DBoxBadLoginException extends RuntimeException {
         public DBoxBadLoginException() {
             super("DbxClientV2 not established");
