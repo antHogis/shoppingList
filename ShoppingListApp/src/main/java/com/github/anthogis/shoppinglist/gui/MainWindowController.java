@@ -87,7 +87,6 @@ public class MainWindowController {
      * and the <code>fadeOutLabel</code> transition.</p>
      */
     public void initialize() {
-        System.out.println("Initalizing " + getClass().toString());
         parserInterface = new ParserInterface();
         dBoxInterface = new DBoxInterface();
 
@@ -112,8 +111,9 @@ public class MainWindowController {
      */
     public void openFileAction() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setSelectedExtensionFilter(
+        fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("JSON", "*.json"));
+        fileChooser.setInitialDirectory(new File("./"));
 
         File shoppingListFile = fileChooser.showOpenDialog(shoppingListTable.getScene().getWindow());
         if (shoppingListFile != null) {
