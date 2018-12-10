@@ -49,10 +49,14 @@ public class MainWindow extends Application {
         stage.show();
     }
 
+    /**
+     * Method for handling closing of the window, implementation of EventHandler<WindowEvent>.
+     *
+     * @param event the event that caused request to close window, not utilized in this method.
+     */
     private void closeEvent(WindowEvent event) {
         if (loader.getController() instanceof MainWindowController) {
-            MainWindowController controller = loader.getController();
-            controller.closeMainWindowAction();
+            ((MainWindowController) loader.getController()).closeMainWindowAction();
         } else {
             Platform.exit();
         }
