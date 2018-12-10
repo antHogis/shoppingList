@@ -23,7 +23,8 @@ public enum ActivityText {
     NO_LOGIN("Please login to Dropbox."),
     FILE_FAIL("File couldn't be opened"),
     FILE_MALFORMED("File is malformed"),
-    DB_AUTH_ERROR("Could not get link.");
+    DBOX_AUTH_ERROR("Could not get link."),
+    H2_LOGIN_ERROR("Could not access H2 database");
 
 
     String message;

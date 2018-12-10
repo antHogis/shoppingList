@@ -12,7 +12,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -20,8 +19,8 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
-import javafx.stage.WindowEvent;
 import javafx.util.Duration;
+import org.hibernate.service.spi.ServiceException;
 
 import java.awt.*;
 import java.io.File;
@@ -89,7 +88,7 @@ public class MainWindowController {
     /**
      * TODO Write javadoc
      */
-    private HibernateInterface hibernateInterface;
+    private Optional<HibernateInterface> hibernateInterface;
 
     /**
      * Lifecycle method. Called after @FXML annotated fields are populated.
@@ -100,7 +99,12 @@ public class MainWindowController {
     public void initialize() {
         parserInterface = new ParserInterface();
         dBoxInterface = new DBoxInterface();
-        hibernateInterface = new HibernateInterface();
+
+        try {
+            hibernateInterface = Optional.of(new HibernateInterface());
+        } catch (ServiceException e) {
+            hibernateInterface = Optional.empty();
+        }
 
         fadeOutLabel = new FadeTransition(Duration.millis(1500));
         fadeOutLabel.setNode(activityLabel);
@@ -182,9 +186,17 @@ public class MainWindowController {
 
     /**
      * Event called when <code>MenuItem saveToH2</code> is clicked.
+     *
+     * TODO Specify function
      */
     public void saveToH2Action() {
-        hibernateInterface.addValues(shoppingListTable.getItems());
+        if (shoppingListTable.getItems().isEmpty()) {
+            showMessage(ActivityText.NOTHING_TO_SAVE);
+        } else if (hibernateInterface.isPresent()) {
+            hibernateInterface.get().addValues(shoppingListTable.getItems());
+        } else {
+            showMessage(ActivityText.H2_LOGIN_ERROR);
+        }
     }
 
     /**
@@ -204,7 +216,7 @@ public class MainWindowController {
 
         Optional<ButtonType> result = closeAlert.showAndWait();
         if (result.get() == ButtonType.CLOSE) {
-            hibernateInterface.close();
+            hibernateInterface.ifPresent(HibernateInterface::close);
             Platform.exit();
         } else {
             closeAlert.close();
@@ -257,7 +269,7 @@ public class MainWindowController {
             desktop.browse(authorizationLink);
 
         } catch (NullPointerException | URISyntaxException e) {
-            showMessage(ActivityText.DB_AUTH_ERROR);
+            showMessage(ActivityText.DBOX_AUTH_ERROR);
 
         } catch (UnsupportedOperationException | IOException | SecurityException |
                 IllegalArgumentException e) {
