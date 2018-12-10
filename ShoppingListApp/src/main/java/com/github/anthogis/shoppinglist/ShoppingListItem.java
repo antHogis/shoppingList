@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * Template for an item in a shopping list.
@@ -28,17 +29,23 @@ public class ShoppingListItem {
     @Column(name = "id")
     private int id;
 
+    @Column(name = "itemName")
+    private String itemName;
+
+    @Column(name = "itemAmount")
+    private int itemAmount = 0;
+
     /**
      * The name of the item.
      */
-    @Column(name = "itemName")
-    private final SimpleStringProperty itemName = new SimpleStringProperty("");
+    @Transient
+    private final SimpleStringProperty itemNameProperty = new SimpleStringProperty("");
 
     /**
      * The amount of the item.
      */
-    @Column(name = "itemAmount")
-    private final SimpleStringProperty itemAmount = new SimpleStringProperty("");
+    @Transient
+    private final SimpleStringProperty itemAmountProperty = new SimpleStringProperty("");
 
     /**
      * The constructor for ShoppingListItem.
@@ -58,7 +65,7 @@ public class ShoppingListItem {
      *      * <p>The constructor for ShoppingListItem. Assigns empty Strings to the attributes of the ShoppingListItem.</p>
      */
     public ShoppingListItem() {
-        this("","");
+        this("","0");
     }
 
 
@@ -67,7 +74,7 @@ public class ShoppingListItem {
      * @return the name of the item.
      */
     public String getItemName() {
-        return itemName.get();
+        return itemNameProperty.get();
     }
 
     /**
@@ -75,7 +82,8 @@ public class ShoppingListItem {
      * @param itemName the name to set to the item.
      */
     public void setItemName(String itemName) {
-        this.itemName.set(itemName);
+        this.itemName = itemName;
+        this.itemNameProperty.set(itemName);
     }
 
     /**
@@ -83,7 +91,7 @@ public class ShoppingListItem {
      * @return the amount of the item.
      */
     public String getItemAmount() {
-        return itemAmount.get();
+        return itemAmountProperty.get();
     }
 
     /**
@@ -91,6 +99,7 @@ public class ShoppingListItem {
      * @param itemAmount the amount of the item to set.
      */
     public void setItemAmount(String itemAmount) {
-        this.itemAmount.set(itemAmount);
+        this.itemAmount = Integer.parseInt(itemAmount);
+        this.itemAmountProperty.set(itemAmount);
     }
 }

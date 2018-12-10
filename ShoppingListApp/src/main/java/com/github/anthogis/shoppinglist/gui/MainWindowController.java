@@ -2,6 +2,7 @@ package com.github.anthogis.shoppinglist.gui;
 
 import com.dropbox.core.DbxException;
 import com.github.anthogis.shoppinglist.DBoxInterface;
+import com.github.anthogis.shoppinglist.HibernateInterface;
 import com.github.anthogis.shoppinglist.ParserInterface;
 import com.github.anthogis.shoppinglist.ShoppingListItem;
 import com.github.anthogis.shoppinglist.ShoppingListMalformedException;
@@ -80,9 +81,14 @@ public class MainWindowController {
     private ParserInterface parserInterface;
 
     /**
-     * The interface to Dropbox.
+     * The interface to using the Dropbox API.
      */
     private DBoxInterface dBoxInterface;
+
+    /**
+     * TODO Write javadoc
+     */
+    private HibernateInterface hibernateInterface;
 
     /**
      * Lifecycle method. Called after @FXML annotated fields are populated.
@@ -93,6 +99,7 @@ public class MainWindowController {
     public void initialize() {
         parserInterface = new ParserInterface();
         dBoxInterface = new DBoxInterface();
+        hibernateInterface = new HibernateInterface();
 
         fadeOutLabel = new FadeTransition(Duration.millis(1500));
         fadeOutLabel.setNode(activityLabel);
