@@ -2,6 +2,11 @@ package com.github.anthogis.shoppinglist;
 
 import javafx.beans.property.SimpleStringProperty;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * Template for an item in a shopping list.
  *
@@ -14,14 +19,21 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class ShoppingListItem {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
     /**
      * The name of the item.
      */
+    @Column(name = "itemName")
     private final SimpleStringProperty itemName = new SimpleStringProperty("");
 
     /**
      * The amount of the item.
      */
+    @Column(name = "itemAmount")
     private final SimpleStringProperty itemAmount = new SimpleStringProperty("");
 
     /**
