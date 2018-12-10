@@ -20,6 +20,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 import java.awt.*;
@@ -108,6 +109,7 @@ public class MainWindowController {
         fadeOutLabel.setCycleCount(2);
         fadeOutLabel.setAutoReverse(true);
 
+        //Set key event handler for shoppingListTable
         shoppingListTable.setOnKeyPressed(this::tableKeyEventHandler);
 
         showMessage(ActivityText.WELCOME);
@@ -182,7 +184,7 @@ public class MainWindowController {
      * Event called when <code>MenuItem saveToH2</code> is clicked.
      */
     public void saveToH2Action() {
-        System.out.println("hoo kakkone");
+        hibernateInterface.addValues(shoppingListTable.getItems());
     }
 
     /**
@@ -192,7 +194,7 @@ public class MainWindowController {
      * that the player wants to close the application.</p>
      */
     public void closeMainWindowAction() {
-        Alert closeAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        Alert closeAlert = new Alert(Alert.AlertType.WARNING);
         closeAlert.setTitle("Warning!");
         closeAlert.setHeaderText("You are discarding unsaved changes");
         closeAlert.setContentText("If you close now, all unsaved changed will be discarded.\n" +
@@ -202,6 +204,7 @@ public class MainWindowController {
 
         Optional<ButtonType> result = closeAlert.showAndWait();
         if (result.get() == ButtonType.CLOSE) {
+            hibernateInterface.close();
             Platform.exit();
         } else {
             closeAlert.close();

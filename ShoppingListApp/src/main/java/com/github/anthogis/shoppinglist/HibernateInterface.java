@@ -31,4 +31,8 @@ public class HibernateInterface {
         session.close();
     }
 
+    public void close() {
+        sessionFactory.close();
+    }
+
 }
