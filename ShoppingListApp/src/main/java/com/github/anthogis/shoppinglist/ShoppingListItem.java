@@ -3,9 +3,11 @@ package com.github.anthogis.shoppinglist;
 import javafx.beans.property.SimpleStringProperty;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Template for an item in a shopping list.
@@ -17,6 +19,8 @@ import javax.persistence.Id;
  * @version 1.0
  * @since 1.0
  */
+@Entity
+@Table(name = "ShoppingList")
 public class ShoppingListItem {
 
     @Id
