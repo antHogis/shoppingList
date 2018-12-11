@@ -9,21 +9,32 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * TODO add javadoc
+ * Reader for json files created by ShoppingListApp
+ *
+ * <p>ShoppingListReader reads proprietary files created by utilizing ParserInterface, which utilizes the JsonParser API.
+ * Meant to be used efficiently to parse a File nad return a list of ShoppingListItems by initializing the ShoppingListReader,
+ * and calling the method getShoppingList.</p>
  */
 public class ShoppingListReader {
     /**
-     * TODO add javadoc
+     * The list of ShoppingListItems parsed from fileLines.
      */
     private List<ShoppingListItem> shoppingList;
 
     /**
-     * TODO add javadoc
+     * The lines of the file given to the constructor.
      */
     private List<String> fileLines;
 
     /**
-     * TODO add javadoc
+     * The constructor for ShoppingListReader.
+     *
+     * <p>The constructor for ShoppingListReader reads a given file, and calls method <code>parseLines</code> to
+     * parse ShoppingListItems from the file</p>
+     *
+     * @param file the file from which ShoppingListItems are parsed.
+     * @throws IOException if file could not be read.
+     * @throws ShoppingListMalformedException if file is not parsable.
      */
     public ShoppingListReader(File file) throws IOException, ShoppingListMalformedException {
         BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -35,7 +46,7 @@ public class ShoppingListReader {
     }
 
     /**
-     * TODO add javadoc
+     * Parses ShoppingListItems from fileLines and stores them in shoppingList.
      */
     private void parseLines() throws ShoppingListMalformedException {
         String productNameRegex = "\\s*\"productName\" : ";
@@ -74,7 +85,9 @@ public class ShoppingListReader {
     }
 
     /**
-     * TODO add javadoc
+     * Returns the list of ShoppingListItems
+     *
+     * @return the list of ShoppingListItems
      */
     public List<ShoppingListItem> getShoppingList() {
         return shoppingList;
