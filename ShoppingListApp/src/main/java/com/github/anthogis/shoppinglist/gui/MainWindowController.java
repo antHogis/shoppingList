@@ -41,7 +41,7 @@ import java.util.function.Consumer;
  * to save the shopping list, and informing the user of events occurring.</p>
  *
  * @author antHogis
- * @version 1.0
+ * @version 1.3
  * @since 1.0
  */
 public class MainWindowController {

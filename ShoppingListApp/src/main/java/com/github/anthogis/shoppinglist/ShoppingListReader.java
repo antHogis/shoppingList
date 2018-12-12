@@ -11,9 +11,13 @@ import java.util.stream.Collectors;
 /**
  * Reader for json files created by ShoppingListApp
  *
- * <p>ShoppingListReader reads proprietary files created by utilizing ParserInterface, which utilizes the JsonParser API.
+ * ShoppingListReader reads proprietary files created by utilizing ParserInterface, which utilizes the JsonParser API.
  * Meant to be used efficiently to parse a File nad return a list of ShoppingListItems by initializing the ShoppingListReader,
- * and calling the method getShoppingList.</p>
+ * and calling the method getShoppingList.
+ *
+ * @author antHogis
+ * @version 1.3
+ * @since 1.2
  */
 public class ShoppingListReader {
     /**

@@ -7,7 +7,7 @@ package com.github.anthogis.shoppinglist.gui;
  * quickly. These are meant to inform the user that an event occurred.</p>
  *
  * @author antHogis
- * @version 1.0
+ * @version 1.3
  * @since 1.0
  */
 public enum ActivityText {

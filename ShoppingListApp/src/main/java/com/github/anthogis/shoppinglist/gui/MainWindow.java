@@ -19,6 +19,10 @@ import java.io.IOException;
  *
  * <p>The main window of the application's GUI. Utilizes an FXML file for defining the Nodes in the Stage of
  * the application. The FXML file defines the class <code>MainWindowController</code> to handle the events of MainWindow</p>
+ *
+ * @author antHogis
+ * @version 1.3
+ * @since 1.0
  */
 public class MainWindow extends Application {
     private static final String WINDOW_TITLE = "Shopping List";
