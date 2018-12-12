@@ -12,8 +12,15 @@ import java.util.List;
  * ParserInterface establishes connectivity between <code>MainWindowController</code> and the JSON parser.
  *
  * <p>ParserInterface establishes connectivity between <code>MainWindowController</code> and the JSON parser.
- * ParserInterface holds a <code>JSONObject</code> containing <code>JSONAttribute</code>s, and writes the content of the
- * <code>JSONObject</code> to .json file using a <code>JSONWriter</code>.</p>
+ * ParserInterface holds a list of <code>JSONObject</code>s of <code>ShoppingListItem</code>s in shoppingList, which
+ * is added as an attribute to <code>JSONObject</code> shoppingListObject.</p>
+ *
+ * <p>This interface writes the contents of <code>shoppingListObject</code> to a .json file using a
+ * <code>JSONWriter</code>.</p>
+ *
+ * @author antHogis
+ * @version 1.3
+ * @since 1.0
  */
 public class ParserInterface {
     /**
@@ -26,6 +33,9 @@ public class ParserInterface {
      */
     private JSONObject shoppingListObject;
 
+    /**
+     * The list of JSONObjects of ShoppingListItems.
+     */
     private List<JSONObject> shoppingList;
 
     /**
@@ -46,7 +56,6 @@ public class ParserInterface {
         itemObject.addAttribute(new JSONAttribute("productName", item.getItemName()));
         itemObject.addAttribute(new JSONAttribute("productAmount", itemAmount));
         shoppingList.add(itemObject);
-        //shoppingListObject.addAttribute(new JSONAttribute<Integer>(item.getItemName(), itemAmount));
     }
 
     /**
