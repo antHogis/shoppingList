@@ -167,12 +167,12 @@ public class MainWindowController {
 
     /**
      * Event called when <code>MenuItem saveToJSON</code> is clicked. Uses method {@link #saveJson(Consumer)}
-     * to save the shopping list to json to DropBox by calling {@link com.github.anthogis.shoppinglist.DBoxInterface#saveAndUpload(String, ParserInterface)}.
+     * to save the shopping list to json to DropBox by calling {@link com.github.anthogis.shoppinglist.DBoxInterface#upload(String, ParserInterface)}.
      */
     public void saveToDropBoxAction() {
         saveJson(fileName -> {
             try {
-                if (dBoxInterface.saveAndUpload(fileName, parserInterface)) {
+                if (dBoxInterface.upload(fileName, parserInterface)) {
                     showMessage(ActivityText.SAVE_SUCCESSFUL);
                 } else {
                     showMessage(ActivityText.SAVE_FAILED);
