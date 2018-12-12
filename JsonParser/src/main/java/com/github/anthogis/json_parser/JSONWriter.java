@@ -51,7 +51,7 @@ public class JSONWriter {
     }
 
     /**
-     * Writes the JSON file.
+     * Writes the JSON file and closes the writer.
      *
      * @return true is the write was successful.
      */
@@ -67,6 +67,12 @@ public class JSONWriter {
             writeSuccessful = true;
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         return writeSuccessful;
