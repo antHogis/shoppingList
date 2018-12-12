@@ -9,26 +9,24 @@ import org.hibernate.service.spi.ServiceException;
 import java.util.List;
 
 /**
- * TODO write javadoc
+ * Interface to the Hibernate API.
+ *
+ * This class is an interface between ShoppingListApp and the Hibernate API. It enables storing ShoppingListItems to a
+ * configured database.
  */
 public class HibernateInterface {
 
     /**
-     * TODO write javadoc
-     */
-    private Configuration configuration;
-
-    /**
-     * TODO write javadoc
+     * A factory for creating sessions for hibernate database transactions.
      */
     private SessionFactory sessionFactory;
 
     /**
-     * TODO write javadoc
+     * Constructs an
      */
     public HibernateInterface() throws ServiceException {
         try {
-            configuration = new Configuration();
+            Configuration configuration = new Configuration();
             configuration.configure();
             configuration.addAnnotatedClass(ShoppingListItem.class);
 
