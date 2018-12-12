@@ -12,7 +12,11 @@ import java.util.List;
  * Interface to the Hibernate API.
  *
  * This class is an interface between ShoppingListApp and the Hibernate API. It enables storing ShoppingListItems to a
- * configured database.
+ * configured database. Depends on a configuration file, which is contains the properties on how database connections are established.
+ *
+ * @author antHogis
+ * @version 1.3
+ * @since 1.3
  */
 public class HibernateInterface {
 
@@ -22,7 +26,9 @@ public class HibernateInterface {
     private SessionFactory sessionFactory;
 
     /**
-     * Constructs an
+     * Constructs an interface to the Hibernate API.
+     *
+     * @throws ServiceException if any step in the configuration of sessionFactory fails.
      */
     public HibernateInterface() throws ServiceException {
         try {
@@ -37,7 +43,9 @@ public class HibernateInterface {
     }
 
     /**
-     * TODO write javadoc
+     * Inserts values of a list to a table in the database. The table is specified in the configuration of sessionFactory.
+     *
+     * @param listItems the list of value to insert.
      */
     public void addValues(List<ShoppingListItem> listItems) {
         Session session = sessionFactory.openSession();
@@ -52,7 +60,7 @@ public class HibernateInterface {
     }
 
     /**
-     * TODO write javadoc
+     * Closes sessionFactory (if it has been instantiated by the constructor).
      */
     public void close() {
         if (sessionFactory != null) sessionFactory.close();
