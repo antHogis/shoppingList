@@ -111,16 +111,13 @@ public class DBoxInterface {
     /**
      * Uploads a file to a Dropbox account.
      *
+     * Creates a temporary file, and uses a ParserInterface that writes json data to the file. The file is then uploaded
+     * to a Dropbox account with the given file name by using <code>client</code>.
      *
-     *
-     *
-     *
-     * TODO refactor method
-     *
-     * @param fileName
-     * @param parserInterface
-     * @return
-     * @throws DBoxBadLoginException
+     * @param fileName the name that the file will be uploaded as.
+     * @param parserInterface an interface that writes the json file, and also contains the data for the file.
+     * @return true if the upload was successful.
+     * @throws DBoxBadLoginException if client has not been initialized.
      */
     public boolean upload(String fileName, ParserInterface parserInterface)
             throws DBoxBadLoginException {
@@ -152,7 +149,7 @@ public class DBoxInterface {
     }
 
     /**
-     * TODO Write JavaDoc
+     * An exception thrown when the method upload is called before connection to an account has been established.
      */
     public class DBoxBadLoginException extends RuntimeException {
         public DBoxBadLoginException() {
@@ -161,7 +158,7 @@ public class DBoxInterface {
     }
 
     /**
-     * TODO Write JavaDoc
+     * An exception thrown when this class could not be constructed.
      */
     public class InternalFailiureException extends RuntimeException {
         public InternalFailiureException() {
