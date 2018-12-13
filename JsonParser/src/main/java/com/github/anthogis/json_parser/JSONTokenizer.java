@@ -21,6 +21,7 @@ public class JSONTokenizer {
         boolean putValue = false;
         boolean delimiterFound = false;
         boolean objectCloseFound = false;
+        boolean arrayCloseFound = false;
         StringBuilder value = new StringBuilder();
 
         final int zeroChar = 48;
@@ -33,9 +34,9 @@ public class JSONTokenizer {
                 System.out.print(currentChar);
 
                 if (currentChar == '{' && !storeString) {
-                    tokens.add(new Pair(JSONToken.OBJECT_BEGIN, ""));
+                    tokens.add(new Pair<>(JSONToken.OBJECT_BEGIN, ""));
                 } else if (currentChar == ':' && !storeString) {
-                    tokens.add(new Pair(JSONToken.ASSIGN, ""));
+                    tokens.add(new Pair<>(JSONToken.ASSIGN, ""));
                 } else if (currentChar >= zeroChar && currentChar <= nineChar) {
                     if (!storeString) {
                         storeNumber = true;
@@ -82,7 +83,6 @@ public class JSONTokenizer {
                                     throw new JSONParseException(i + 1, j + 1);
                                 }
                             }
-
                         } catch (IndexOutOfBoundsException e) {
                             throw new JSONParseException(i + 1, j + 1);
                         }
@@ -93,6 +93,11 @@ public class JSONTokenizer {
                 } else if (currentChar == '}') {
                     putValue = true;
                     objectCloseFound = true;
+                } else if (currentChar == ']') {
+                    putValue = true;
+                    arrayCloseFound = true;
+                } else if (currentChar == '[') {
+                    tokens.add(new Pair<>(JSONToken.ARRAY_BEGIN, ""));
                 } else if (!isIgnorableChar(currentChar)) {
                     //If character is unexpected, throw
                     throw new JSONParseException(i + 1, j + 1);
@@ -103,33 +108,35 @@ public class JSONTokenizer {
 
                     if (storeString) {
                         storeString = false;
-                        tokens.add(new Pair(JSONToken.STRING, value.toString()));
+                        tokens.add(new Pair<>(JSONToken.STRING, value.toString()));
                     } else if (storeNumber) {
                         storeNumber = false;
-                        tokens.add(new Pair(JSONToken.NUMBER, value.toString()));
+                        tokens.add(new Pair<>(JSONToken.NUMBER, value.toString()));
                     } else if (storeBoolean) {
                         storeBoolean = false;
-                        tokens.add(new Pair(JSONToken.BOOLEAN, value.toString()));
+                        tokens.add(new Pair<>(JSONToken.BOOLEAN, value.toString()));
                     } else if (storeNull) {
                         storeNull = false;
-                        tokens.add(new Pair(JSONToken.NULL, value.toString()));
+                        tokens.add(new Pair<>(JSONToken.NULL, value.toString()));
                     } else if (storeKey) {
                         storeKey = false;
-                        tokens.add(new Pair(JSONToken.KEY, value.toString()));
+                        tokens.add(new Pair<>(JSONToken.KEY, value.toString()));
                     }
 
 
                     if (delimiterFound) {
                         delimiterFound = false;
-                        tokens.add(new Pair(JSONToken.DELIMITER, ""));
+                        tokens.add(new Pair<>(JSONToken.DELIMITER, ""));
                     } else if (objectCloseFound) {
                         objectCloseFound = false;
-                        tokens.add(new Pair(JSONToken.OBJECT_END, ""));
+                        tokens.add(new Pair<>(JSONToken.OBJECT_END, ""));
+                    } else if (arrayCloseFound) {
+                        arrayCloseFound = false;
+                        tokens.add(new Pair<>(JSONToken.ARRAY_END, ""));
                     }
 
                     value = new StringBuilder();
                 }
-
             }
             System.out.println();
         }
@@ -141,14 +148,23 @@ public class JSONTokenizer {
     }
 
     private boolean expectKey() {
-        boolean isKey = false;
+        boolean expectKey = false;
 
         try {
             JSONToken lastToken = tokens.get(tokens.size() - 1).getKey();
-            isKey = lastToken == JSONToken.OBJECT_BEGIN || lastToken == JSONToken.DELIMITER;
+            expectKey = lastToken == JSONToken.OBJECT_BEGIN || lastToken == JSONToken.DELIMITER;
+
+            for (int i = tokens.size() - 1; i >= 0; i--) {
+                if (tokens.get(i).getKey() == JSONToken.ARRAY_BEGIN) {
+                    expectKey = false;
+                    break;
+                } else if (tokens.get(i).getKey() == JSONToken.ARRAY_END) {
+                    break;
+                }
+            }
         } catch (IndexOutOfBoundsException e) {}
 
-        return isKey;
+        return expectKey;
     }
 
     public ArrayList<Pair<JSONToken, String>> getTokens() {
