@@ -41,7 +41,9 @@ public class JSONReader {
         boolean insideArray = false;
 
         for (Pair<JSONToken, String> pair : tokenizer.getTokens()) {
-            System.out.println(pair.getKey().name());
+            System.out.println(pair.getValue().equals("") ?
+                    pair.getKey().name() :
+                    pair.getKey().name() + " | " + pair.getValue());
         }
 
         for (Pair<JSONToken, String> pair : tokenizer.getTokens()) {

@@ -54,20 +54,37 @@ public class JSONTokenizer {
                 } else if (Character.isLetter(currentChar)) {
                     if (storeString || storeKey) {
                         value.append(currentChar);
-                    } else if (j + 4 < currentLine.length()) {
-                        String nextFourChars = currentLine.substring(j, j + 4);
-                        if (nextFourChars.matches("true|fals")) {
-                            storeBoolean = true;
-                            putValue = true;
-                            value.append(nextFourChars);
-                            j += 4;
-                        } else if (nextFourChars.equals("null")) {
-                            storeNull = true;
-                            putValue = true;
-                            value.append(nextFourChars);
-                            j += 4;
-                        } else {
-                            throw new JSONParseException(i, j);
+                    } else {
+                        try {
+                            String nextChars = currentLine.substring(j, j + 4);
+
+                            if (nextChars.equals("true")) {
+                                storeBoolean = true;
+                                putValue = true;
+                                value.append(nextChars);
+                                j += 3;
+                            } else if (nextChars.equals("null") && !putValue) {
+                                storeNull = true;
+                                putValue = true;
+                                value.append(nextChars);
+                                j += 3;
+                            }
+
+                            if (!putValue) {
+                                nextChars = currentLine.substring(j, j + 5);
+
+                                if (nextChars.equals("false")) {
+                                    storeBoolean = true;
+                                    putValue = true;
+                                    value.append(nextChars);
+                                    j += 4;
+                                } else {
+                                    throw new JSONParseException(i + 1, j + 1);
+                                }
+                            }
+
+                        } catch (IndexOutOfBoundsException e) {
+                            throw new JSONParseException(i + 1, j + 1);
                         }
                     }
                 } else if (currentChar == ',') {
@@ -77,7 +94,8 @@ public class JSONTokenizer {
                     putValue = true;
                     objectCloseFound = true;
                 } else if (!isIgnorableChar(currentChar)) {
-                    throw new JSONParseException(i, j);
+                    //If character is unexpected, throw
+                    throw new JSONParseException(i + 1, j + 1);
                 }
 
                 if (putValue) {
