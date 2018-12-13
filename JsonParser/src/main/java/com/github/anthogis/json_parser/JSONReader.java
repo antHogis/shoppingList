@@ -10,22 +10,24 @@ import java.util.List;
 import static com.github.anthogis.json_parser.JSONToken.*;
 
 public class JSONReader {
-    private List<String> jsonLines;
-    private JSONObject object;
+    private JSONObject parsedObject;
 
     public JSONReader(String filePath) throws IOException, JSONParseException {
-        this.jsonLines = new ArrayList<>();
+        List<String> jsonLines = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new FileReader(filePath));
         String line = null;
-        //Store string from reader.readline() to line, check if null
         while ((line = reader.readLine()) != null) {
             jsonLines.add(line);
         }
         reader.close();
-        object = parseObject();
+        parsedObject = parseObject(jsonLines);
     }
 
-    private JSONObject parseObject() throws JSONParseException {
+    public JSONObject getParsedObject() {
+        return parsedObject;
+    }
+
+    private JSONObject parseObject(List<String> jsonLines) throws JSONParseException {
         JSONObject object = null;
         List<JSONToken> expectedTokens = new ArrayList();
         expectedTokens.add(OBJECT_BEGIN);
@@ -39,11 +41,26 @@ public class JSONReader {
         boolean insideArray = false;
 
         for (Pair<JSONToken, String> pair : tokenizer.getTokens()) {
+            System.out.println(pair.getKey().name());
+        }
+
+        for (Pair<JSONToken, String> pair : tokenizer.getTokens()) {
             JSONToken token = pair.getKey();
             String value = pair.getValue();
 
             if (!tokenIsExpected(token, expectedTokens)) {
-                throw new JSONParseException();
+                StringBuilder messageString = new StringBuilder();
+
+                messageString.append("Unexpected token! Expected: ");
+
+                for (JSONToken expectedToken : expectedTokens) {
+                    messageString.append(expectedToken.name()).append(", ");
+                }
+
+                messageString.delete(messageString.lastIndexOf(", "), messageString.length());
+                messageString.append(". Actual: ").append(token.name());
+
+                throw new JSONParseException(messageString.toString());
             }
 
             boolean addValue = false;

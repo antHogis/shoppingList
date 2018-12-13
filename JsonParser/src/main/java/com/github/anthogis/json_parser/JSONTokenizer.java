@@ -17,6 +17,7 @@ public class JSONTokenizer {
         boolean storeNumber = false;
         boolean storeBoolean = false;
         boolean storeNull = false;
+        boolean storeKey = false;
         boolean putValue = false;
         boolean delimiterFound = false;
         boolean objectCloseFound = false;
@@ -41,17 +42,21 @@ public class JSONTokenizer {
                     }
                     value.append(currentChar);
                 } else if (currentChar == '\"') {
-                    if (storeString) {
+                    if (expectKey() && !storeKey) {
+                        storeKey = true;
+                    } else if (storeKey) {
+                        putValue = true;
+                    } else if (storeString) {
                         putValue = true;
                     } else {
                         storeString = true;
                     }
                 } else if (Character.isLetter(currentChar)) {
-                    if (storeString) {
+                    if (storeString || storeKey) {
                         value.append(currentChar);
                     } else if (j + 4 < currentLine.length()) {
                         String nextFourChars = currentLine.substring(j, j + 4);
-                        if (nextFourChars.matches("true|false")) {
+                        if (nextFourChars.matches("true|fals")) {
                             storeBoolean = true;
                             putValue = true;
                             value.append(nextFourChars);
@@ -90,8 +95,10 @@ public class JSONTokenizer {
                     } else if (storeNull) {
                         storeNull = false;
                         tokens.add(new Pair(JSONToken.NULL, value.toString()));
+                    } else if (storeKey) {
+                        storeKey = false;
+                        tokens.add(new Pair(JSONToken.KEY, value.toString()));
                     }
-
 
 
                     if (delimiterFound) {
@@ -110,9 +117,20 @@ public class JSONTokenizer {
         }
     }
 
-    boolean isIgnorableChar(char c) {
+    private boolean isIgnorableChar(char c) {
         return c == '\b' || c == '\f' || c == '\n' || c == '\r'
                 || c == '\t' || c == ' ';
+    }
+
+    private boolean expectKey() {
+        boolean isKey = false;
+
+        try {
+            JSONToken lastToken = tokens.get(tokens.size() - 1).getKey();
+            isKey = lastToken == JSONToken.OBJECT_BEGIN || lastToken == JSONToken.DELIMITER;
+        } catch (IndexOutOfBoundsException e) {}
+
+        return isKey;
     }
 
     public ArrayList<Pair<JSONToken, String>> getTokens() {
