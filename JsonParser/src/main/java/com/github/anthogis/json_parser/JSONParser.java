@@ -9,10 +9,10 @@ import java.util.List;
 
 import static com.github.anthogis.json_parser.JSONToken.*;
 
-public class JSONReader {
+public class JSONParser {
     private JSONObject parsedObject;
 
-    public JSONReader(String filePath) throws IOException, JSONParseException {
+    public JSONParser(String filePath) throws IOException, JSONParseException {
         List<String> jsonLines = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new FileReader(filePath));
         String line = null;

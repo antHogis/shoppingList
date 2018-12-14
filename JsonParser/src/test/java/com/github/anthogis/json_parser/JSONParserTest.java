@@ -5,10 +5,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class JSONReaderTest {
+public class JSONParserTest {
     @Test
     public void test() throws Exception {
-        JSONReader jr = new JSONReader("test.json");
+        JSONParser jr = new JSONParser("test.json");
         JSONObject jo = jr.getParsedObject();
 
         jo.formatObject();
