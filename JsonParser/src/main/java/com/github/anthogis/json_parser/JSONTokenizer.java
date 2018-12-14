@@ -38,7 +38,6 @@ public class JSONTokenizer {
             String currentLine = data.get(i);
             for (int j = 0; j < currentLine.length(); j++) {
                 char currentChar = currentLine.charAt(j);
-                System.out.print(currentChar);
 
                 if (currentChar == '{' && !storeString) {
                     tokens.add(new Pair<>(JSONToken.OBJECT_BEGIN, ""));

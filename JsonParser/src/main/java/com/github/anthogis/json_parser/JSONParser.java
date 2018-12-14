@@ -27,40 +27,39 @@ public class JSONParser {
             jsonLines.add(line);
         }
         reader.close();
-        parsedObject = parseObject(jsonLines);
+
+        List<Pair<JSONToken, String>> jsonTokens
+                = new JSONTokenizer(jsonLines).tokenize().getTokens();
+        inspectTokenSyntax(jsonTokens);
+        parsedObject = parseObject(jsonTokens);
     }
 
     public JSONObject getParsedObject() {
         return parsedObject;
     }
 
-    private JSONObject parseObject(List<String> jsonLines) throws JSONParseException {
-        JSONObject object = null;
+    public void inspectTokenSyntax(List<Pair<JSONToken, String>> jsonTokens)
+            throws JSONParseException {
         List<JSONToken> expectedTokens = new ArrayList<>();
         expectedTokens.add(OBJECT_BEGIN);
 
-        JSONTokenizer tokenizer = new JSONTokenizer(jsonLines);
-
-        tokenizer.tokenize();
-
-        String key = "";
-        List<JSONAttribute> attributeList = new ArrayList<>();
         boolean insideArray = false;
 
-        for (Pair<JSONToken, String> pair : tokenizer.getTokens()) {
-            System.out.println(pair.getSecond().equals("") ?
-                    pair.getFirst().name() :
-                    pair.getFirst().name() + " | " + pair.getSecond());
+        for (int i = 0; i < jsonTokens.size(); i++) {
+            String token = jsonTokens.get(i).getSecond().equals("") ?
+                    jsonTokens.get(i).getFirst().name() :
+                    jsonTokens.get(i).getFirst().name() + " | " + jsonTokens.get(i).getSecond();
+            System.out.println(i + ". " + token);
         }
 
-        for (Pair<JSONToken, String> pair : tokenizer.getTokens()) {
-            JSONToken token = pair.getFirst();
-            String value = pair.getSecond();
+        mainLoop:
+        for (int i = 0; i < jsonTokens.size(); i++) {
+            JSONToken token = jsonTokens.get(i).getFirst();
 
             if (!tokenIsExpected(token, expectedTokens)) {
                 StringBuilder messageString = new StringBuilder();
 
-                messageString.append("Unexpected token! Expected: ");
+                messageString.append("Unexpected token (number " + i + ")! Expected: ");
 
                 for (JSONToken expectedToken : expectedTokens) {
                     messageString.append(expectedToken.name()).append(", ");
@@ -72,20 +71,78 @@ public class JSONParser {
                 throw new JSONParseException(messageString.toString());
             }
 
+            switch (token) {
+                case OBJECT_BEGIN:
+                    expectedTokens = expectKeyList();
+                    break;
+                case OBJECT_END:
+                    expectAfterValue(insideArray);
+                    break;
+                case KEY:
+                    expectedTokens = expectAssignList();
+                    break;
+                case ASSIGN:
+                    expectedTokens = expectValueList();
+                    break;
+                case DELIMITER:
+                    expectedTokens = expectAfterDelimiter(insideArray);
+                    break;
+                case ARRAY_BEGIN:
+                    insideArray = true;
+                    expectedTokens = expectValueList();
+                    break;
+                case ARRAY_END:
+                    expectAfterValue((insideArray = false));
+                    break;
+                case INTEGER:
+                case STRING:
+                case BOOLEAN:
+                case NULL:
+                    expectedTokens = expectAfterValue(insideArray);
+                    break;
+            }
+
+        }
+    }
+
+    private JSONObject parseObject(List<Pair<JSONToken, String>> jsonTokens)
+            throws JSONParseException {
+        JSONObject object = null;
+        List<JSONToken> expectedTokens = new ArrayList<>();
+        expectedTokens.add(OBJECT_BEGIN);
+
+        String key = "";
+        List<JSONAttribute> attributeList = new ArrayList<>();
+        boolean insideArray = false;
+        boolean isOuterObject = true;
+
+        for (int i = 0; i < jsonTokens.size(); i++) {
+            JSONToken token = jsonTokens.get(i).getFirst();
+            String value = jsonTokens.get(i).getSecond();
+
             boolean addValue = false;
             JSONAttribute attribute = null;
 
             switch (token) {
                 case OBJECT_BEGIN:
-                    object = new JSONObject();
-                    expectedTokens = expectKeyList();
+                    if (isOuterObject) {
+                        object = new JSONObject();
+                        isOuterObject = false;
+                    } else {
+                        int closeIndex = getObjectCloseIndex(jsonTokens, i);
+                        List<Pair<JSONToken, String>> nestedObjectTokens
+                                = jsonTokens.subList(i, closeIndex);
+                        object.addAttribute(new JSONAttribute<>(key,
+                                parseObject(nestedObjectTokens)));
+                        nestedObjectTokens.clear();
+                    }
                     break;
+                case OBJECT_END:
+                    return object;
                 case KEY:
                     key = value;
-                    expectedTokens = expectAssignList();
                     break;
                 case ASSIGN:
-                    expectedTokens = expectValueList();
                     break;
                 case INTEGER:
                     attribute = new JSONAttribute<>(key, Integer.parseInt(value));
@@ -104,11 +161,9 @@ public class JSONParser {
                     addValue = true;
                     break;
                 case DELIMITER:
-                    expectedTokens = expectAfterDelimiter(insideArray);
                     break;
                 case ARRAY_BEGIN:
                     insideArray = true;
-                    expectedTokens = expectValueList();
                     break;
                 case ARRAY_END:
                     insideArray = false;
@@ -125,7 +180,6 @@ public class JSONParser {
                 } else {
                     object.addAttribute(attribute);
                 }
-                expectedTokens = expectAfterValue(insideArray);
             }
         }
 
@@ -163,5 +217,26 @@ public class JSONParser {
 
     private List<JSONToken> expectAfterDelimiter(boolean insideArray) {
         return insideArray ? expectValueList() : Arrays.asList(KEY);
+    }
+
+    private int getObjectCloseIndex(List<Pair<JSONToken, String>> jsonTokens, int start) {
+        int closeIndex = -1;
+        int nestedObjects = 0;
+
+        for (int i = start + 1; i < jsonTokens.size(); i++) {
+            JSONToken token = jsonTokens.get(i).getFirst();
+            if (token == OBJECT_BEGIN) {
+                nestedObjects++;
+            }
+
+            if (token == OBJECT_END && nestedObjects > 0) {
+                nestedObjects--;
+            } else if (token == OBJECT_END) {
+                closeIndex = i;
+                break;
+            }
+        }
+
+        return closeIndex;
     }
 }

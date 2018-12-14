@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.List;
+
 @RunWith(JUnit4.class)
 public class JSONParserTest {
     @Test
@@ -16,7 +18,10 @@ public class JSONParserTest {
         for (JSONAttribute attribute : jo.getAttributes()) {
             System.out.println(attribute);
         }
+        List<String> jsonLines = new JSONFormatter(jo).getJsonDataLines();
 
-        System.out.println(jo.getNotation());
+        for (String line : jsonLines) {
+            System.out.println(line);
+        }
     }
 }
