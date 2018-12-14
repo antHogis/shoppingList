@@ -24,7 +24,7 @@ class JSONFormatter {
     private List<String> jsonDataLines;
 
     /**
-     * The constructor for JSONFormatter, also formats the notation of the given jsonObject.
+     * The constructor for JSONFormatter, also formats the notation of the given jsonObject by calling method formatData.
      * @param jsonObject the jsonObject.
      */
     public JSONFormatter(JSONObject jsonObject) {
