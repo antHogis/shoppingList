@@ -3,6 +3,13 @@ package com.github.anthogis.json_parser;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * TODO Write javaoc
+ *
+ * @author antHogis
+ * @version 1.3
+ * @since 1.2
+ */
 public class JSONTokenizer {
     List<String> data;
     ArrayList<Pair<JSONToken, String>> tokens;

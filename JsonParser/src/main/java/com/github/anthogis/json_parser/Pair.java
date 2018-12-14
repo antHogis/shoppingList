@@ -3,6 +3,9 @@ package com.github.anthogis.json_parser;
 /**
  * An object that holds two values.
  *
+ * @author antHogis
+ * @version 1.3
+ * @since 1.2
  * @param <K> the first value.
  * @param <V> the second value.
  */

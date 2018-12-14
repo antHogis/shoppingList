@@ -9,6 +9,13 @@ import java.util.List;
 
 import static com.github.anthogis.json_parser.JSONToken.*;
 
+/**
+ * TODO Write javadoc
+ *
+ * @author antHogis
+ * @version 1.3
+ * @since 1.2
+ */
 public class JSONParser {
     private JSONObject parsedObject;
 

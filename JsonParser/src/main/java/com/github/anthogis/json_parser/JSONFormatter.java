@@ -9,7 +9,7 @@ import java.util.List;
  * <p>JSONFormatter takes the json data from a JSONObject, and separates it into a List of lines with proper indentation.</p>
  *
  * @author antHogis
- * @version 1.0
+ * @version 1.3
  * @since 1.0
  */
 class JSONFormatter {

@@ -16,7 +16,7 @@ import java.util.List;
  * returns the JSONObject's notation as a list of lines.</p>
  *
  * @author antHogis
- * @version 1.0
+ * @version 1.3
  * @since 1.0
  */
 public class JSONWriter {

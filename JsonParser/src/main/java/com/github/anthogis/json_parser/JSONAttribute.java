@@ -10,7 +10,7 @@ import java.util.Collection;
  * @param <T> the type of the value of the JSONAttribute.
  *
  * @author antHogis
- * @version 1.0
+ * @version 1.3
  * @since 1.0
  * @see JSONObject
  */

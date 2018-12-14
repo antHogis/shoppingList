@@ -10,7 +10,7 @@ import java.util.List;
  * can form the JSON notation for the object on a single line.</p>
  *
  * @author antHogis
- * @version 1.0
+ * @version 1.3
  * @since 1.0
  */
 public class JSONObject {

@@ -2,6 +2,10 @@ package com.github.anthogis.json_parser;
 
 /**
  * An exception thrown if there's a syntax error in a parsed JSON file.
+ *
+ * @author antHogis
+ * @version 1.3
+ * @since 1.2
  */
 public class JSONParseException extends  RuntimeException {
 
