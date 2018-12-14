@@ -36,7 +36,7 @@ public class JSONParser {
 
     private JSONObject parseObject(List<String> jsonLines) throws JSONParseException {
         JSONObject object = null;
-        List<JSONToken> expectedTokens = new ArrayList();
+        List<JSONToken> expectedTokens = new ArrayList<>();
         expectedTokens.add(OBJECT_BEGIN);
 
         JSONTokenizer tokenizer = new JSONTokenizer(jsonLines);
@@ -114,7 +114,7 @@ public class JSONParser {
                     insideArray = false;
                     addValue = true;
 
-                    attribute = new JSONAttribute(key, attributeList);
+                    attribute = new JSONAttribute<>(key, attributeList);
                     attributeList = new ArrayList<>();
                     break;
             }
@@ -133,15 +133,15 @@ public class JSONParser {
     }
 
     private boolean tokenIsExpected(JSONToken actualToken, List<JSONToken> expectedTokens) {
-        boolean syntaxIsValid = false;
+        boolean actualIsExpected = false;
 
         for (JSONToken expectedToken : expectedTokens) {
             if (actualToken == expectedToken) {
-                syntaxIsValid = true;
+                actualIsExpected = true;
             }
         }
 
-        return syntaxIsValid;
+        return actualIsExpected;
     }
 
     private List<JSONToken> expectValueList() {
