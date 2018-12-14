@@ -158,14 +158,14 @@ public class JSONTokenizer {
         boolean expectKey = false;
 
         try {
-            JSONToken lastToken = tokens.get(tokens.size() - 1).getKey();
+            JSONToken lastToken = tokens.get(tokens.size() - 1).getFirst();
             expectKey = lastToken == JSONToken.OBJECT_BEGIN || lastToken == JSONToken.DELIMITER;
 
             for (int i = tokens.size() - 1; i >= 0; i--) {
-                if (tokens.get(i).getKey() == JSONToken.ARRAY_BEGIN) {
+                if (tokens.get(i).getFirst() == JSONToken.ARRAY_BEGIN) {
                     expectKey = false;
                     break;
-                } else if (tokens.get(i).getKey() == JSONToken.ARRAY_END) {
+                } else if (tokens.get(i).getFirst() == JSONToken.ARRAY_END) {
                     break;
                 }
             }

@@ -48,14 +48,14 @@ public class JSONParser {
         boolean insideArray = false;
 
         for (Pair<JSONToken, String> pair : tokenizer.getTokens()) {
-            System.out.println(pair.getValue().equals("") ?
-                    pair.getKey().name() :
-                    pair.getKey().name() + " | " + pair.getValue());
+            System.out.println(pair.getSecond().equals("") ?
+                    pair.getFirst().name() :
+                    pair.getFirst().name() + " | " + pair.getSecond());
         }
 
         for (Pair<JSONToken, String> pair : tokenizer.getTokens()) {
-            JSONToken token = pair.getKey();
-            String value = pair.getValue();
+            JSONToken token = pair.getFirst();
+            String value = pair.getSecond();
 
             if (!tokenIsExpected(token, expectedTokens)) {
                 StringBuilder messageString = new StringBuilder();

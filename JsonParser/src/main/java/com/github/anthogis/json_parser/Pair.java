@@ -6,22 +6,22 @@ package com.github.anthogis.json_parser;
  * @author antHogis
  * @version 1.3
  * @since 1.2
- * @param <K> the first value.
- * @param <V> the second value.
+ * @param <F> the first value.
+ * @param <S> the second value.
  */
-public class Pair<K, V> {
-    private K key;
-    private V value;
+public class Pair<F, S> {
+    private F first;
+    private S second;
 
     /**
      * Constructor of a pair of two values.
      *
-     * @param key the first value.
-     * @param value the second value.
+     * @param first the first value.
+     * @param second the second value.
      */
-    public Pair(K key, V value) {
-        this.value = value;
-        this.key = key;
+    public Pair(F first, S second) {
+        this.first = first;
+        this.second = second;
     }
 
     /**
@@ -29,8 +29,8 @@ public class Pair<K, V> {
      *
      * @return the first value.
      */
-    public K getKey() {
-        return key;
+    public F getFirst() {
+        return first;
     }
 
     /**
@@ -38,7 +38,7 @@ public class Pair<K, V> {
      *
      * @return the second value
      */
-    public V getValue() {
-        return value;
+    public S getSecond() {
+        return second;
     }
 }
