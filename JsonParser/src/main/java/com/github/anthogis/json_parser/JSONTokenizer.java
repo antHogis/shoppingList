@@ -19,7 +19,7 @@ public class JSONTokenizer {
         tokens = new ArrayList<>();
     }
 
-    public void tokenize() throws JSONParseException {
+    public JSONTokenizer tokenize() throws JSONParseException {
         boolean storeString = false;
         boolean storeNumber = false;
         boolean storeBoolean = false;
@@ -147,6 +147,8 @@ public class JSONTokenizer {
             }
             System.out.println();
         }
+
+        return this;
     }
 
     private boolean isIgnorableChar(char c) {
