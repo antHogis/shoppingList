@@ -118,7 +118,7 @@ public class JSONTokenizer {
                         tokens.add(new Pair<>(JSONToken.STRING, value.toString()));
                     } else if (storeNumber) {
                         storeNumber = false;
-                        tokens.add(new Pair<>(JSONToken.NUMBER, value.toString()));
+                        tokens.add(new Pair<>(JSONToken.INTEGER, value.toString()));
                     } else if (storeBoolean) {
                         storeBoolean = false;
                         tokens.add(new Pair<>(JSONToken.BOOLEAN, value.toString()));

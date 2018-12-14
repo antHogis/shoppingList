@@ -16,7 +16,7 @@ public enum JSONToken {
     KEY,
     DELIMITER,
     STRING,
-    NUMBER,
+    INTEGER,
     BOOLEAN,
     NULL
 }

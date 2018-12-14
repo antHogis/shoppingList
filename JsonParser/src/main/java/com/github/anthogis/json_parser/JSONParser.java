@@ -87,20 +87,20 @@ public class JSONParser {
                 case ASSIGN:
                     expectedTokens = expectValueList();
                     break;
-                case NUMBER:
-                    attribute = new JSONAttribute(key, Integer.parseInt(value));
+                case INTEGER:
+                    attribute = new JSONAttribute<>(key, Integer.parseInt(value));
                     addValue = true;
                     break;
                 case STRING:
-                    attribute = new JSONAttribute(key, value);
+                    attribute = new JSONAttribute<>(key, value);
                     addValue = true;
                     break;
                 case BOOLEAN:
-                    attribute = new JSONAttribute(key, Boolean.parseBoolean(value));
+                    attribute = new JSONAttribute<>(key, Boolean.parseBoolean(value));
                     addValue = true;
                     break;
                 case NULL:
-                    attribute = new JSONAttribute(key, null);
+                    attribute = new JSONAttribute<>(key, null);
                     addValue = true;
                     break;
                 case DELIMITER:
@@ -145,7 +145,7 @@ public class JSONParser {
     }
 
     private List<JSONToken> expectValueList() {
-        return Arrays.asList(OBJECT_BEGIN, NULL, BOOLEAN, NUMBER, STRING, ARRAY_BEGIN);
+        return Arrays.asList(OBJECT_BEGIN, NULL, BOOLEAN, INTEGER, STRING, ARRAY_BEGIN);
     }
 
     private List<JSONToken> expectAssignList() {
