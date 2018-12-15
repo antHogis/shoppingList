@@ -49,14 +49,18 @@ public class JSONTokenizer {
                     }
                     value.append(currentChar);
                 } else if (currentChar == '\"') {
-                    if (expectKey() && !storeKey) {
-                        storeKey = true;
-                    } else if (storeKey) {
-                        putValue = true;
-                    } else if (storeString) {
-                        putValue = true;
-                    } else {
-                        storeString = true;
+                    try {
+                        if (expectKey() && !storeKey) {
+                            storeKey = true;
+                        } else if (storeKey) {
+                            putValue = true;
+                        } else if (storeString) {
+                            putValue = true;
+                        } else {
+                            storeString = true;
+                        }
+                    } catch (IndexOutOfBoundsException e) {
+                        throw new JSONParseException(i + 1, j + 1);
                     }
                 } else if (Character.isLetter(currentChar)) {
                     if (storeString || storeKey) {
@@ -144,7 +148,6 @@ public class JSONTokenizer {
                     value = new StringBuilder();
                 }
             }
-            System.out.println();
         }
 
         return this;
@@ -155,24 +158,8 @@ public class JSONTokenizer {
                 || c == '\t' || c == ' ';
     }
 
-    private boolean expectKey() {
-        boolean expectKey = false;
-
-        try {
-            JSONToken lastToken = tokens.get(tokens.size() - 1).getFirst();
-            expectKey = lastToken == JSONToken.OBJECT_BEGIN || lastToken == JSONToken.DELIMITER;
-
-            for (int i = tokens.size() - 1; i >= 0; i--) {
-                if (tokens.get(i).getFirst() == JSONToken.ARRAY_BEGIN) {
-                    expectKey = false;
-                    break;
-                } else if (tokens.get(i).getFirst() == JSONToken.ARRAY_END) {
-                    break;
-                }
-            }
-        } catch (IndexOutOfBoundsException e) {}
-
-        return expectKey;
+    private boolean expectKey() throws IndexOutOfBoundsException {
+        return tokens.get(tokens.size() - 1).getFirst() != JSONToken.ASSIGN;
     }
 
     public ArrayList<Pair<JSONToken, String>> getTokens() {

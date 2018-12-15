@@ -132,8 +132,8 @@ public class JSONParser {
                         int closeIndex = getObjectCloseIndex(jsonTokens, i);
                         List<Pair<JSONToken, String>> nestedObjectTokens
                                 = jsonTokens.subList(i, closeIndex);
-                        object.addAttribute(new JSONAttribute<>(key,
-                                parseObject(nestedObjectTokens)));
+                        attribute = new JSONAttribute<>(key, parseObject(nestedObjectTokens));
+                        addValue = true;
                         nestedObjectTokens.clear();
                     }
                     break;
@@ -207,7 +207,7 @@ public class JSONParser {
     }
 
     private List<JSONToken> expectKeyList() {
-        return Arrays.asList(KEY);
+        return Arrays.asList(KEY, OBJECT_END);
     }
 
     private List<JSONToken> expectAfterValue(boolean insideArray)  {
@@ -239,4 +239,7 @@ public class JSONParser {
 
         return closeIndex;
     }
+
+
+
 }

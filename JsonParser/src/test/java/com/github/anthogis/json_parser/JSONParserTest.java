@@ -15,9 +15,6 @@ public class JSONParserTest {
 
         jo.formatObject();
 
-        for (JSONAttribute attribute : jo.getAttributes()) {
-            System.out.println(attribute);
-        }
         List<String> jsonLines = new JSONFormatter(jo).getJsonDataLines();
 
         for (String line : jsonLines) {
