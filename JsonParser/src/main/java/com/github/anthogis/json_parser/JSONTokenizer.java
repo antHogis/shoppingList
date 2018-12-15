@@ -60,7 +60,7 @@ public class JSONTokenizer {
                             storeString = true;
                         }
                     } catch (IndexOutOfBoundsException e) {
-                        throw new JSONParseException(i + 1, j + 1);
+                        throw  new JSONParseException(i + 1, j + 1);
                     }
                 } else if (Character.isLetter(currentChar)) {
                     if (storeString || storeKey) {
