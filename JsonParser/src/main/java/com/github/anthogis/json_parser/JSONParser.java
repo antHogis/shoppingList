@@ -40,11 +40,17 @@ public class JSONParser {
 
     public void inspectTokenSyntax(List<Pair<JSONToken, String>> jsonTokens)
             throws JSONParseException {
-        //For tokens that are expected next
         List<JSONToken> expectedTokens = new ArrayList<>();
         //For a structure of which is the active encapsulating token (ARRAY_BEGIN/OBJECT_BEGIN)
-        List<JSONToken> encapsulatorTokens = new ArrayList<>(jsonTokens.size());
+        List<JSONToken> encapsulatingTokens = new ArrayList<>(jsonTokens.size());
         expectedTokens.add(OBJECT_BEGIN);
+
+        for (int i = 0; i < jsonTokens.size(); i++) {
+            String token = jsonTokens.get(i).getSecond().equals("") ?
+                    jsonTokens.get(i).getFirst().name() :
+                    jsonTokens.get(i).getFirst().name() + " | " + jsonTokens.get(i).getSecond();
+            System.out.println(i + ". " + token);
+        }
 
         for (int i = 0; i < jsonTokens.size(); i++) {
             JSONToken token = jsonTokens.get(i).getFirst();
@@ -64,30 +70,20 @@ public class JSONParser {
                 throw new JSONParseException(messageString.toString());
             }
 
-            boolean insideArray = false;
+            boolean insideArray = isInsideArray(token, encapsulatingTokens);
 
-            if (token == OBJECT_BEGIN) {
-                encapsulatorTokens.add(OBJECT_BEGIN);
-            } else if (token == ARRAY_BEGIN) {
-                encapsulatorTokens.add(ARRAY_BEGIN);
-            } else if (token == OBJECT_END || token == ARRAY_END) {
-                encapsulatorTokens = encapsulatorTokens.subList(0, encapsulatorTokens.size() - 1);
-            }
-
-            if (encapsulatorTokens.size() > 0 &&
-                    encapsulatorTokens.get(encapsulatorTokens.size() - 1) == ARRAY_BEGIN) {
-                insideArray = true;
-            }
 
             //PRINT FOR DEBUG
             String tokenString = jsonTokens.get(i).getSecond().equals("") ?
                     token.name() : token.name() + " | " + jsonTokens.get(i).getSecond();
             System.out.printf("%d. %s: %b\n", i, tokenString, insideArray);
 
-
             switch (token) {
                 case OBJECT_BEGIN:
-                    expectedTokens = expectAfterObjectBegin();
+                    expectedTokens = expectKeyList();
+                    break;
+                case OBJECT_END:
+                    expectAfterValue(insideArray);
                     break;
                 case KEY:
                     expectedTokens = expectAssignList();
@@ -98,7 +94,13 @@ public class JSONParser {
                 case DELIMITER:
                     expectedTokens = expectAfterDelimiter(insideArray);
                     break;
-                case OBJECT_END:
+                case ARRAY_BEGIN:
+                    insideArray = true;
+                    expectedTokens = expectValueList();
+                    break;
+                case ARRAY_END:
+                    expectAfterValue((insideArray = false));
+                    break;
                 case INTEGER:
                 case STRING:
                 case BOOLEAN:
@@ -114,11 +116,11 @@ public class JSONParser {
             throws JSONParseException {
         JSONObject object = null;
         List<JSONToken> expectedTokens = new ArrayList<>();
+        List<JSONToken> encapsulatingTokens = new ArrayList<>();
         expectedTokens.add(OBJECT_BEGIN);
 
         String key = "";
         List<JSONAttribute> attributeList = new ArrayList<>();
-        boolean insideArray = false;
         boolean isOuterObject = true;
 
         for (int i = 0; i < jsonTokens.size(); i++) {
@@ -127,6 +129,8 @@ public class JSONParser {
 
             boolean addValue = false;
             JSONAttribute attribute = null;
+
+            boolean insideArray = isInsideArray(token, encapsulatingTokens);
 
             switch (token) {
                 case OBJECT_BEGIN:
@@ -137,8 +141,8 @@ public class JSONParser {
                         int closeIndex = getObjectCloseIndex(jsonTokens, i);
                         List<Pair<JSONToken, String>> nestedObjectTokens
                                 = jsonTokens.subList(i, closeIndex);
-                        object.addAttribute(new JSONAttribute<>(key,
-                                parseObject(nestedObjectTokens)));
+                        attribute = new JSONAttribute<>(key, parseObject(nestedObjectTokens));
+                        addValue = true;
                         nestedObjectTokens.clear();
                     }
                     break;
@@ -168,10 +172,8 @@ public class JSONParser {
                 case DELIMITER:
                     break;
                 case ARRAY_BEGIN:
-                    insideArray = true;
                     break;
                 case ARRAY_END:
-                    insideArray = false;
                     addValue = true;
 
                     attribute = new JSONAttribute<>(key, attributeList);
@@ -211,7 +213,7 @@ public class JSONParser {
         return Arrays.asList(ASSIGN);
     }
 
-    private List<JSONToken> expectAfterObjectBegin() {
+    private List<JSONToken> expectKeyList() {
         return Arrays.asList(KEY, OBJECT_END);
     }
 
@@ -243,5 +245,24 @@ public class JSONParser {
         }
 
         return closeIndex;
+    }
+
+    private boolean isInsideArray(JSONToken latestToken, List<JSONToken> encapsulatingTokens) {
+        boolean insideArray = false;
+
+        if (latestToken == OBJECT_BEGIN) {
+            encapsulatingTokens.add(OBJECT_BEGIN);
+        } else if (latestToken == ARRAY_BEGIN) {
+            encapsulatingTokens.add(ARRAY_BEGIN);
+        } else if (latestToken == OBJECT_END || latestToken == ARRAY_END) {
+            encapsulatingTokens.remove(encapsulatingTokens.size() - 1);
+        }
+
+        if (encapsulatingTokens.size() > 0 &&
+                encapsulatingTokens.get(encapsulatingTokens.size() - 1) == ARRAY_BEGIN) {
+            insideArray = true;
+        }
+
+        return insideArray;
     }
 }
