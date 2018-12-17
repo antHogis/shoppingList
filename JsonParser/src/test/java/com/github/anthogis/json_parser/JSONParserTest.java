@@ -10,7 +10,7 @@ import java.util.List;
 public class JSONParserTest {
     @Test
     public void test() throws Exception {
-        JSONParser jr = new JSONParser("test.json");
+        JSONParser jr = new JSONParser("test2.json");
         JSONObject jo = jr.getParsedObject();
 
         jo.formatObject();

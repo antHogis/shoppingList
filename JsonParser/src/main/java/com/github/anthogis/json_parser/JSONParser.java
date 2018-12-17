@@ -17,8 +17,18 @@ import static com.github.anthogis.json_parser.JSONToken.*;
  * @since 1.2
  */
 public class JSONParser {
+    /**
+     * TODO doc field
+     */
     private JSONObject parsedObject;
 
+    /**
+     * TODO doc constr
+     *
+     * @param filePath
+     * @throws IOException
+     * @throws JSONParseException
+     */
     public JSONParser(String filePath) throws IOException, JSONParseException {
         List<String> jsonLines = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new FileReader(filePath));
@@ -34,10 +44,20 @@ public class JSONParser {
         parsedObject = parseObject(jsonTokens);
     }
 
+    /**
+     * TODO doc method
+     * @return
+     */
     public JSONObject getParsedObject() {
         return parsedObject;
     }
 
+    /**
+     * TODO doc method
+     *
+     * @param jsonTokens
+     * @throws JSONParseException
+     */
     public void inspectTokenSyntax(List<Pair<JSONToken, String>> jsonTokens)
             throws JSONParseException {
         List<JSONToken> expectedTokens = new ArrayList<>();
@@ -95,11 +115,10 @@ public class JSONParser {
                     expectedTokens = expectAfterDelimiter(insideArray);
                     break;
                 case ARRAY_BEGIN:
-                    insideArray = true;
                     expectedTokens = expectValueList();
                     break;
                 case ARRAY_END:
-                    expectAfterValue((insideArray = false));
+                    expectedTokens = expectAfterValue(insideArray);
                     break;
                 case INTEGER:
                 case STRING:
@@ -112,6 +131,13 @@ public class JSONParser {
         }
     }
 
+    /**
+     * TODO doc method
+     *
+     * @param jsonTokens
+     * @return
+     * @throws JSONParseException
+     */
     private JSONObject parseObject(List<Pair<JSONToken, String>> jsonTokens)
             throws JSONParseException {
         JSONObject object = null;
@@ -193,6 +219,13 @@ public class JSONParser {
         return object;
     }
 
+    /**
+     * TODO doc method
+     *
+     * @param actualToken
+     * @param expectedTokens
+     * @return
+     */
     private boolean tokenIsExpected(JSONToken actualToken, List<JSONToken> expectedTokens) {
         boolean actualIsExpected = false;
 
@@ -205,27 +238,61 @@ public class JSONParser {
         return actualIsExpected;
     }
 
+    /**
+     * TODO doc method
+     *
+     * @return
+     */
     private List<JSONToken> expectValueList() {
         return Arrays.asList(OBJECT_BEGIN, NULL, BOOLEAN, INTEGER, STRING, ARRAY_BEGIN);
     }
 
+    /**
+     * TODO doc method
+     *
+     * @return
+     */
     private List<JSONToken> expectAssignList() {
         return Arrays.asList(ASSIGN);
     }
 
+    /**
+     * TODO doc method
+     *
+     * @return
+     */
     private List<JSONToken> expectKeyList() {
         return Arrays.asList(KEY, OBJECT_END);
     }
 
+    /**
+     * TODO doc method
+     *
+     * @param insideArray
+     * @return
+     */
     private List<JSONToken> expectAfterValue(boolean insideArray)  {
         return insideArray ? Arrays.asList(DELIMITER, ARRAY_END)
                 : Arrays.asList(DELIMITER, OBJECT_END);
     }
 
+    /**
+     * TODO doc method
+     *
+     * @param insideArray
+     * @return
+     */
     private List<JSONToken> expectAfterDelimiter(boolean insideArray) {
         return insideArray ? expectValueList() : Arrays.asList(KEY);
     }
 
+    /**
+     * TODO doc method
+     *
+     * @param jsonTokens
+     * @param start
+     * @return
+     */
     private int getObjectCloseIndex(List<Pair<JSONToken, String>> jsonTokens, int start) {
         int closeIndex = -1;
         int nestedObjects = 0;
@@ -247,6 +314,13 @@ public class JSONParser {
         return closeIndex;
     }
 
+    /**
+     * TODO doc method
+     *
+     * @param latestToken
+     * @param encapsulatingTokens
+     * @return
+     */
     private boolean isInsideArray(JSONToken latestToken, List<JSONToken> encapsulatingTokens) {
         boolean insideArray = false;
 
