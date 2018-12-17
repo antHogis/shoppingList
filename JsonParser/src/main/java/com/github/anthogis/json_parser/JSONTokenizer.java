@@ -4,21 +4,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO Write javaoc
+ * Creates {@link JSONToken}s from lines of JSON data.
  *
  * @author antHogis
  * @version 1.3
  * @since 1.2
  */
 public class JSONTokenizer {
+    /**
+     * Lines of JSON data given to tokenize.
+     */
     List<String> data;
+
+    /**
+     * List of pairs of tokens and values tokenized by this class.
+     */
     ArrayList<Pair<JSONToken, String>> tokens;
 
+    /**
+     * Constructs a JSONTokenizer that contains data to tokenize.
+     *
+     * @param data the data to tokenize.
+     */
     public JSONTokenizer(List<String> data) {
         this.data = data;
         tokens = new ArrayList<>();
     }
 
+    /**
+     * Tokenizes the json data.
+     *
+     * @return the instance of this JSONTokenizer.
+     * @throws JSONParseException if an error was encountered in the syntax of given data.
+     */
     public JSONTokenizer tokenize() throws JSONParseException {
         boolean storeString = false;
         boolean storeNumber = false;
@@ -160,24 +178,43 @@ public class JSONTokenizer {
         return this;
     }
 
+    /**
+     * Inspects if a character is an ignorable character.
+     *
+     * Inspects if a character is an ignorable character, like a whitespace or control character.
+     *
+     * @param c the character to inspect
+     * @return true if the inspected character can be ignored.
+     */
     private boolean isIgnorableChar(char c) {
         return c == '\b' || c == '\f' || c == '\n' || c == '\r'
                 || c == '\t' || c == ' ';
     }
 
+    /**
+     * Returns true if a KEY token should be expected next. Used to determine whether to store an encountered string as a key or value.
+     *
+     * @return true if a KEY token should be expected next.
+     * @throws IndexOutOfBoundsException if tokens is empty
+     */
     private boolean expectKey() throws IndexOutOfBoundsException {
         return tokens.get(tokens.size() - 1).getFirst() != JSONToken.ASSIGN
                 && !isInsideArray();
     }
 
+    /**
+     * Returns the list of tokens created from the given json data.
+     *
+     * @return the list of tokens created from the given json data.
+     */
     public ArrayList<Pair<JSONToken, String>> getTokens() {
         return tokens;
     }
 
     /**
-     * TODO doc method
+     * Returns true if the data encountered is within an array.
      *
-     * @return
+     * @return true if the data encountered is within an array.
      */
     private boolean isInsideArray() {
         int openobjects = 0; int openarrays = 0;
