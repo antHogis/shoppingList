@@ -31,11 +31,11 @@ class JSONArray implements JSONContainer {
     /**
      * Adds a JSONAttribute to values.
      *
-     * @param attribute the attribute to add
+     * @param value the attribute to add
      */
     @Override
-    public void add(JSONAttribute attribute) {
-        values.add(attribute);
+    public void add(JSONAttribute value) {
+        values.add(value);
     }
 
     /**

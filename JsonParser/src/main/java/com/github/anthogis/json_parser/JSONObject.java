@@ -35,11 +35,11 @@ public class JSONObject implements JSONContainer{
 
     /**
      * Adds a JSONAttribute to JSONObject's list of JSONAttributes.
-     * @param attribute the JSONAttribute to be added.
+     * @param value the JSONAttribute to be added.
      */
     @Override
-    public void add(JSONAttribute attribute) {
-        attributes.add(attribute);
+    public void add(JSONAttribute value) {
+        attributes.add(value);
     }
 
     /**
