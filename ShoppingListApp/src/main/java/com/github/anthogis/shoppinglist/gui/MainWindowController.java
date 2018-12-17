@@ -215,7 +215,7 @@ public class MainWindowController {
         closeAlert.getButtonTypes().setAll(ButtonType.CLOSE, ButtonType.CANCEL);
 
         Optional<ButtonType> result = closeAlert.showAndWait();
-        if (result.get() == ButtonType.CLOSE) {
+        if (result.isPresent() && result.get() == ButtonType.CLOSE) {
             hibernateInterface.ifPresent(HibernateInterface::close);
             Platform.exit();
         } else {

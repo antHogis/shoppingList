@@ -49,6 +49,7 @@ public class MainWindow extends Application {
 
         stage.setScene(new Scene(root, 800, 600));
         stage.setResizable(false);
+        //Platform.setImplicitExit(false);
         stage.setOnCloseRequest(this::closeEvent);
         stage.show();
     }
@@ -56,13 +57,10 @@ public class MainWindow extends Application {
     /**
      * Method for handling closing of the window, implementation of EventHandler<WindowEvent>.
      *
-     * @param event the event that caused request to close window, not utilized in this method.
+     * @param event the event that caused request to close window.
      */
     private void closeEvent(WindowEvent event) {
-        if (loader.getController() instanceof MainWindowController) {
-            ((MainWindowController) loader.getController()).closeMainWindowAction();
-        } else {
-            Platform.exit();
-        }
+        ((MainWindowController) loader.getController()).closeMainWindowAction();
+        event.consume();
     }
 }
