@@ -41,7 +41,7 @@ public class JSONParser {
         List<Pair<JSONToken, String>> jsonTokens
                 = new JSONTokenizer(jsonLines).tokenize().getTokens();
         inspectTokenSyntax(jsonTokens);
-        parsedObject = parseObject(jsonTokens);
+        parsedObject = (JSONObject) parseObject(jsonTokens, JSONObject.class);
     }
 
     /**
@@ -103,7 +103,7 @@ public class JSONParser {
                     expectedTokens = expectKeyList();
                     break;
                 case OBJECT_END:
-                    expectAfterValue(insideArray);
+                    expectedTokens = expectAfterValue(insideArray);
                     break;
                 case KEY:
                     expectedTokens = expectAssignList();
@@ -138,16 +138,23 @@ public class JSONParser {
      * @return
      * @throws JSONParseException
      */
-    private JSONObject parseObject(List<Pair<JSONToken, String>> jsonTokens)
+    private JSONContainer parseObject(List<Pair<JSONToken, String>> jsonTokens, Class<? extends JSONContainer> type)
             throws JSONParseException {
-        JSONObject object = null;
+        JSONContainer container = null;
         List<JSONToken> expectedTokens = new ArrayList<>();
         List<JSONToken> encapsulatingTokens = new ArrayList<>();
         expectedTokens.add(OBJECT_BEGIN);
 
         String key = "";
         List<JSONAttribute> attributeList = new ArrayList<>();
-        boolean isOuterObject = true;
+        boolean isOuterObject = false;
+        boolean isOuterArray = false;
+
+        if (type == JSONObject.class) {
+            isOuterObject = true;
+        } else if (type == JSONArray.class) {
+            isOuterArray = true;
+        }
 
         for (int i = 0; i < jsonTokens.size(); i++) {
             JSONToken token = jsonTokens.get(i).getFirst();
@@ -156,24 +163,22 @@ public class JSONParser {
             boolean addValue = false;
             JSONAttribute attribute = null;
 
-            boolean insideArray = isInsideArray(token, encapsulatingTokens);
-
             switch (token) {
                 case OBJECT_BEGIN:
                     if (isOuterObject) {
-                        object = new JSONObject();
+                        container = new JSONObject();
                         isOuterObject = false;
                     } else {
-                        int closeIndex = getObjectCloseIndex(jsonTokens, i);
+                        int closeIndex = getContainerCloseIndex(jsonTokens, i, JSONObject.class);
                         List<Pair<JSONToken, String>> nestedObjectTokens
                                 = jsonTokens.subList(i, closeIndex);
-                        attribute = new JSONAttribute<>(key, parseObject(nestedObjectTokens));
+                        attribute = new JSONAttribute<>(key, parseObject(nestedObjectTokens, JSONObject.class));
                         addValue = true;
                         nestedObjectTokens.clear();
                     }
                     break;
                 case OBJECT_END:
-                    return object;
+                    return container;
                 case KEY:
                     key = value;
                     break;
@@ -198,25 +203,29 @@ public class JSONParser {
                 case DELIMITER:
                     break;
                 case ARRAY_BEGIN:
+                    if (isOuterArray) {
+                        container = new JSONArray();
+                        isOuterArray = false;
+                    } else {
+                        int closeIndex = getContainerCloseIndex(jsonTokens, i, JSONArray.class);
+                        List<Pair<JSONToken, String>> nestedTokens
+                                = jsonTokens.subList(i, closeIndex);
+                        attribute = new JSONAttribute<>(key, parseObject(nestedTokens,
+                                JSONArray.class).getAttributes());
+                        addValue = true;
+                        nestedTokens.clear();
+                    }
                     break;
                 case ARRAY_END:
-                    addValue = true;
-
-                    attribute = new JSONAttribute<>(key, attributeList);
-                    attributeList = new ArrayList<>();
-                    break;
+                    return container;
             }
 
             if (addValue) {
-                if (insideArray) {
-                    attributeList.add(attribute);
-                } else {
-                    object.addAttribute(attribute);
-                }
+                container.add(attribute);
             }
         }
 
-        return object;
+        return container;
     }
 
     /**
@@ -293,19 +302,30 @@ public class JSONParser {
      * @param start
      * @return
      */
-    private int getObjectCloseIndex(List<Pair<JSONToken, String>> jsonTokens, int start) {
+    private int getContainerCloseIndex(List<Pair<JSONToken, String>> jsonTokens, int start,
+                                       Class<? extends JSONContainer> type) {
         int closeIndex = -1;
         int nestedObjects = 0;
+        JSONToken beginToken = null;
+        JSONToken endToken = null;
+
+        if (type == JSONObject.class) {
+            beginToken = OBJECT_BEGIN;
+            endToken = OBJECT_END;
+        } else if (type == JSONArray.class) {
+            beginToken = ARRAY_BEGIN;
+            endToken = ARRAY_END;
+        }
 
         for (int i = start + 1; i < jsonTokens.size(); i++) {
             JSONToken token = jsonTokens.get(i).getFirst();
-            if (token == OBJECT_BEGIN) {
+            if (token == beginToken) {
                 nestedObjects++;
             }
 
-            if (token == OBJECT_END && nestedObjects > 0) {
+            if (token == endToken && nestedObjects > 0) {
                 nestedObjects--;
-            } else if (token == OBJECT_END) {
+            } else if (token == endToken) {
                 closeIndex = i;
                 break;
             }
@@ -313,6 +333,7 @@ public class JSONParser {
 
         return closeIndex;
     }
+
 
     /**
      * TODO doc method
@@ -338,5 +359,26 @@ public class JSONParser {
         }
 
         return insideArray;
+    }
+
+    /**
+     * TODO
+     */
+    private class JSONArray implements JSONContainer {
+        List<JSONAttribute> attributes;
+
+        public JSONArray() {
+            attributes = new ArrayList<>();
+        }
+
+        @Override
+        public void add(JSONAttribute attribute) {
+            attributes.add(attribute);
+        }
+
+        @Override
+        public List<JSONAttribute> getAttributes() {
+            return attributes;
+        }
     }
 }

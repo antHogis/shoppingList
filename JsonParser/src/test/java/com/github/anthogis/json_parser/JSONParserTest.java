@@ -10,12 +10,14 @@ import java.util.List;
 public class JSONParserTest {
     @Test
     public void test() throws Exception {
-        JSONParser jr = new JSONParser("test2.json");
+        JSONParser jr = new JSONParser("test.json");
         JSONObject jo = jr.getParsedObject();
 
         jo.formatObject();
 
         List<String> jsonLines = new JSONFormatter(jo).getJsonDataLines();
+
+        new JSONWriter(jo, "writeTest", true).writeFile();
 
         for (String line : jsonLines) {
             System.out.println(line);

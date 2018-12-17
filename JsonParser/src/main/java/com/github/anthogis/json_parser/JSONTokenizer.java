@@ -38,25 +38,28 @@ public class JSONTokenizer {
             String currentLine = data.get(i);
             for (int j = 0; j < currentLine.length(); j++) {
                 char currentChar = currentLine.charAt(j);
+                System.out.print(currentChar);
 
                 if (currentChar == '{' && !storeString) {
                     tokens.add(new Pair<>(JSONToken.OBJECT_BEGIN, ""));
                 } else if (currentChar == ':' && !storeString) {
                     tokens.add(new Pair<>(JSONToken.ASSIGN, ""));
                 } else if (currentChar >= zeroChar && currentChar <= nineChar) {
-                    if (!storeString) {
+                    if (!storeString && !storeKey) {
                         storeNumber = true;
                     }
                     value.append(currentChar);
                 } else if (currentChar == '\"') {
                     try {
                         if (expectKey() && !storeKey) {
+                            System.out.print('$');
                             storeKey = true;
                         } else if (storeKey) {
                             putValue = true;
                         } else if (storeString) {
                             putValue = true;
                         } else {
+                            System.out.print('!');
                             storeString = true;
                         }
                     } catch (IndexOutOfBoundsException e) {
@@ -90,6 +93,9 @@ public class JSONTokenizer {
                                     value.append(nextChars);
                                     j += 4;
                                 } else {
+                                    for (Pair<JSONToken, String> token : tokens) {
+                                        System.out.println(token.getFirst().name());
+                                    }
                                     throw new JSONParseException(i + 1, j + 1);
                                 }
                             }
@@ -148,6 +154,7 @@ public class JSONTokenizer {
                     value = new StringBuilder();
                 }
             }
+            System.out.println();
         }
 
         return this;
@@ -159,10 +166,37 @@ public class JSONTokenizer {
     }
 
     private boolean expectKey() throws IndexOutOfBoundsException {
-        return tokens.get(tokens.size() - 1).getFirst() != JSONToken.ASSIGN;
+        return tokens.get(tokens.size() - 1).getFirst() != JSONToken.ASSIGN
+                && !isInsideArray();
     }
 
     public ArrayList<Pair<JSONToken, String>> getTokens() {
         return tokens;
+    }
+
+    /**
+     * TODO doc method
+     *
+     * @return
+     */
+    private boolean isInsideArray() {
+        int openobjects = 0; int openarrays = 0;
+
+        for (int i = tokens.size() - 1; i >= 0; i--) {
+            JSONToken token = tokens.get(i).getFirst();
+
+            if (token == JSONToken.OBJECT_BEGIN) openobjects++;
+            else if (token == JSONToken.OBJECT_END) openobjects--;
+            else if (token == JSONToken.ARRAY_BEGIN) openarrays++;
+            else if (token == JSONToken.ARRAY_END) openarrays--;
+
+            if (token == JSONToken.ARRAY_BEGIN && openarrays > 0) {
+                return true;
+            } else if (token == JSONToken.OBJECT_BEGIN && openobjects > 0) {
+                return false;
+            }
+        }
+
+        return false;
     }
 }

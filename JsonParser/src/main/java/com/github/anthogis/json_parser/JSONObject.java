@@ -13,7 +13,7 @@ import java.util.List;
  * @version 1.3
  * @since 1.0
  */
-public class JSONObject {
+public class JSONObject implements JSONContainer{
 
     /**
      * List of the attributes of this object.
@@ -37,7 +37,8 @@ public class JSONObject {
      * Adds a JSONAttribute to JSONObject's list of JSONAttributes.
      * @param attribute the JSONAttribute to be added.
      */
-    public void addAttribute(JSONAttribute attribute) {
+    @Override
+    public void add(JSONAttribute attribute) {
         attributes.add(attribute);
     }
 
@@ -62,6 +63,7 @@ public class JSONObject {
      * Returns the list of JSONAttributes.
      * @return the list of JSONAttributes.
      */
+    @Override
     public List<JSONAttribute> getAttributes() {
         return attributes;
     }

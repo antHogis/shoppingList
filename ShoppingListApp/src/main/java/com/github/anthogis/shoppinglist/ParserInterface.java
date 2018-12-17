@@ -53,8 +53,8 @@ public class ParserInterface {
     public void addShoppingItem(ShoppingListItem item) {
         int itemAmount = Integer.parseInt(item.getItemAmount());
         JSONObject itemObject = new JSONObject();
-        itemObject.addAttribute(new JSONAttribute("productName", item.getItemName()));
-        itemObject.addAttribute(new JSONAttribute("productAmount", itemAmount));
+        itemObject.add(new JSONAttribute("productName", item.getItemName()));
+        itemObject.add(new JSONAttribute("productAmount", itemAmount));
         shoppingList.add(itemObject);
     }
 
@@ -73,7 +73,7 @@ public class ParserInterface {
      */
     public boolean writeToJSON(String fileName, boolean addSuffix) {
         boolean writeSuccessful = false;
-        shoppingListObject.addAttribute(new JSONAttribute("list", shoppingList));
+        shoppingListObject.add(new JSONAttribute("list", shoppingList));
         shoppingListObject.formatObject();
 
         try {
