@@ -19,32 +19,32 @@ class JSONArray implements JSONContainer {
     /**
      * The list of JSONAttributes within the array.
      */
-    private List<JSONAttribute> attributes;
+    private List<JSONAttribute> values;
 
     /**
      * Constructs a JSONArray with a list of JSONAttributes.
      */
     public JSONArray() {
-        attributes = new ArrayList<>();
+        values = new ArrayList<>();
     }
 
     /**
-     * Adds a JSONAttribute to attributes.
+     * Adds a JSONAttribute to values.
      *
      * @param attribute the attribute to add
      */
     @Override
     public void add(JSONAttribute attribute) {
-        attributes.add(attribute);
+        values.add(attribute);
     }
 
     /**
-     * Returns the list of attributes
+     * Returns the list of values
      *
-     * @return the list of attributes
+     * @return the list of values
      */
     @Override
-    public List<JSONAttribute> getAttributes() {
-        return attributes;
+    public List<JSONAttribute> getValues() {
+        return values;
     }
 }

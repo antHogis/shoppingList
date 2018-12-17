@@ -17,5 +17,5 @@ public interface JSONContainer {
      * TODO
      * @return
      */
-    List<JSONAttribute> getAttributes();
+    List<JSONAttribute> getValues();
 }

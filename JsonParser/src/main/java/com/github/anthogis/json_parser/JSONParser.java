@@ -211,7 +211,7 @@ public class JSONParser {
                         List<Pair<JSONToken, String>> nestedTokens
                                 = jsonTokens.subList(i, closeIndex);
                         attribute = new JSONAttribute<>(key, parseObject(nestedTokens,
-                                JSONArray.class).getAttributes());
+                                JSONArray.class).getValues());
                         addValue = true;
                         nestedTokens.clear();
                     }

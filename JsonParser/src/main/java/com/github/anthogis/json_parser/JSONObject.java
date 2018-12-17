@@ -64,7 +64,7 @@ public class JSONObject implements JSONContainer{
      * @return the list of JSONAttributes.
      */
     @Override
-    public List<JSONAttribute> getAttributes() {
+    public List<JSONAttribute> getValues() {
         return attributes;
     }
 
