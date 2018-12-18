@@ -11,11 +11,28 @@ import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests JSONAttribute.
+ *
+ * @author antHogis
+ * @version 1.3
+ * @since 1.3
+ */
 @RunWith(JUnit4.class)
 public class JSONAttributeTest {
+    /**
+     * The attribute constructed.
+     */
     static JSONAttribute attribute;
+
+    /**
+     * The expected notation of attribute.
+     */
     static String expected;
 
+    /**
+     * Tests that notation for an integer attribute is formed properly.
+     */
     @Test
     public void testInteger() {
         attribute = new JSONAttribute<>("int", 3);
@@ -24,6 +41,9 @@ public class JSONAttributeTest {
         testHelper();
     }
 
+    /**
+     * Tests that notation for a float attribute is formed properly.
+     */
     @Test
     public void testFloat() {
         attribute = new JSONAttribute<>("float", 153.239401);
@@ -32,6 +52,9 @@ public class JSONAttributeTest {
         testHelper();
     }
 
+    /**
+     * Tests that notation for a string attribute is formed properly.
+     */
     @Test
     public void testString() {
         String testString = "test 123123 ^*[]}}{€ YEAS";
@@ -41,6 +64,9 @@ public class JSONAttributeTest {
         testHelper();
     }
 
+    /**
+     * Tests that notation for a boolean attribute is formed properly.
+     */
     @Test
     public void testBoolean() {
         attribute = new JSONAttribute<>("bool", true);
@@ -54,6 +80,9 @@ public class JSONAttributeTest {
         testHelper();
     }
 
+    /**
+     * Tests that notation for a null attribute is formed properly.
+     */
     @Test
     public void testNull() {
         attribute = new JSONAttribute<>("null", null);
@@ -62,6 +91,9 @@ public class JSONAttributeTest {
         testHelper();
     }
 
+    /**
+     * Tests that notation for a JSONObject attribute is formed properly.
+     */
     @Test
     public void testJSONObject() {
         JSONObject object = new JSONObject();
@@ -87,6 +119,9 @@ public class JSONAttributeTest {
         testHelper();
     }
 
+    /**
+     * Tests that notation for a collection attribute is formed properly.
+     */
     @Test
     public void testCollection() {
         attribute = new JSONAttribute<>("array", Arrays.asList("fsdfafd", 233, true, null));
@@ -99,6 +134,9 @@ public class JSONAttributeTest {
         testHelper();
     }
 
+    /**
+     * Tests that notation for a JSONAttribute attribute is formed properly.
+     */
     @Test
     public void testJSONAttribute() {
         attribute = new JSONAttribute<>("attribute value",
@@ -108,6 +146,9 @@ public class JSONAttributeTest {
         testHelper();
     }
 
+    /**
+     * Tests the getters of JSONAttribute.
+     */
     @Test
     public void testGetters() {
         String key = "key";
@@ -118,6 +159,11 @@ public class JSONAttributeTest {
         assertEquals(value, attribute.getValue());
     }
 
+    /**
+     * A helper method for running tests.
+     *
+     * Prints the values of expected and attributes notation, and asserts that they are equal.
+     */
     private void testHelper() {
         System.out.printf("Expected : %s\n", expected);
         System.out.printf("Actual   : %s\n", attribute.getNotation());

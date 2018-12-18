@@ -12,11 +12,34 @@ import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Tests JSONObject.
+ *
+ * @author antHogis
+ * @version 1.3
+ * @since 1.3
+ */
 @RunWith(JUnit4.class)
 public class JSONObjectTest {
+    /**
+     * The constructed object.
+     */
     static JSONObject object;
+
+    /**
+     * Contains the expected notation of object.
+     */
     static StringBuilder expected;
 
+    /**
+     * Helper method for running tests.
+     *
+     * <ul>
+     *     <li>Appends a }-symbol to the end of the expected notation.</li>
+     *     <li>Prints the expected and actual notation of object.</li>
+     *     <li>Asserts that the actual notation of object is equal to the expected string.</li>
+     * </ul>
+     */
     private void runTest() {
         expected.append('}');
         String objectNotation = object.getNotation();
@@ -25,12 +48,18 @@ public class JSONObjectTest {
         assertEquals(expected.toString(), objectNotation);
     }
 
+    /**
+     * Initializes test objects, runs before every test method.
+     */
     @Before
     public void initObject() {
         object = new JSONObject();
         expected = new StringBuilder().append('{');
     }
 
+    /**
+     * Tests the add and getter methods of JSONObject.
+     */
     @Test
     public void testAddAndGet() {
         JSONAttribute attribute = new JSONAttribute<>("blaze it", 420);
@@ -39,11 +68,17 @@ public class JSONObjectTest {
         assertEquals(attribute, object.getValues().get(0));
     }
 
+    /**
+     * Tests the notation of an empty object.
+     */
     @Test
     public void testEmpty() {
         runTest();
     }
 
+    /**
+     * Tests the notation of an object with a single value.
+     */
     @Test
     public void testWithSingleValue() {
         object.add(new JSONAttribute<>("int", 234));
@@ -52,6 +87,9 @@ public class JSONObjectTest {
         runTest();
     }
 
+    /**
+     * Tests the notation of an object with multiple values.
+     */
     @Test
     public void testWithMultipleValues() {
         object.add(new JSONAttribute<>("string", "skrrt dab on 'em haters"));
@@ -66,6 +104,9 @@ public class JSONObjectTest {
         runTest();
     }
 
+    /**
+     * Test the notation of an object with nested objects.
+     */
     @Test
     public void testNestedObject() {
         JSONObject nested = new JSONObject();
@@ -79,6 +120,9 @@ public class JSONObjectTest {
         runTest();
     }
 
+    /**
+     * Tests the notation of an object with an array.
+     */
     @Test
     public void testCollection() {
         JSONObject nested = new JSONObject();

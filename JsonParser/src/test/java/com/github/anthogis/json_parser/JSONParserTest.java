@@ -18,6 +18,13 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Tests class JSONParser.
+ *
+ * @author antHogis
+ * @version 1.3
+ * @since 1.3
+ */
 @RunWith(JUnit4.class)
 public class JSONParserTest {
 

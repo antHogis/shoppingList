@@ -24,6 +24,13 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Tests JSONWriter
+ *
+ * @author antHogis
+ * @version 1.3
+ * @since 1.3
+ */
 @RunWith(JUnit4.class)
 public class JSONWriterTest {
     static JSONObject object;
