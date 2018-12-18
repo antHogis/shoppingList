@@ -95,6 +95,11 @@ public class JSONFormatter {
         return jsonDataLines;
     }
 
+    /**
+     * Check if the character at the given index in jsonData is an unescaped double quote.
+     * @param index the index of the character to inspect.
+     * @return true if the character is an unescaped double quote.
+     */
     private boolean unescapedQuoteFound(int index) {
         boolean found = false;
 
