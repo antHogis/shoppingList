@@ -1,4 +1,6 @@
-package com.github.anthogis.json_parser;
+package com.github.anthogis.json_parser.api;
+
+import com.github.anthogis.json_parser.utils.JSONFormatter;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;

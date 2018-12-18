@@ -1,4 +1,4 @@
-package com.github.anthogis.json_parser;
+package com.github.anthogis.json_parser.utils;
 
 /**
  * An exception thrown if there's a syntax error in a parsed JSON file.

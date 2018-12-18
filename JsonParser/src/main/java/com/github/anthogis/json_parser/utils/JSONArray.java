@@ -1,4 +1,7 @@
-package com.github.anthogis.json_parser;
+package com.github.anthogis.json_parser.utils;
+
+import com.github.anthogis.json_parser.api.JSONAttribute;
+import com.github.anthogis.json_parser.api.JSONParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,14 +10,14 @@ import java.util.List;
  * A representation of an array in JSON notation.
  *
  * This class represents an array in JSON notation, but is intended for internal use only. It is meant to be used
- * in conjunction with {@link com.github.anthogis.json_parser.JSONParser}, to allow parsing to be done by the same
+ * in conjunction with {@link JSONParser}, to allow parsing to be done by the same
  * method recursively for both arrays and objects.
  *
  * @author antHogis
  * @version 1.3
  * @since 1.3
  */
-class JSONArray implements JSONContainer {
+public class JSONArray implements JSONContainer {
 
     /**
      * The list of JSONAttributes within the array.

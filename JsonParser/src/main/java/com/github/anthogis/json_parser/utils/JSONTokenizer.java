@@ -1,4 +1,4 @@
-package com.github.anthogis.json_parser;
+package com.github.anthogis.json_parser.utils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,6 @@
-package com.github.anthogis.json_parser;
+package com.github.anthogis.json_parser.utils;
+
+import com.github.anthogis.json_parser.api.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.List;
  * @version 1.3
  * @since 1.0
  */
-class JSONFormatter {
+public class JSONFormatter {
     /**
      * The JSON data given to JSONFormatter.
      */

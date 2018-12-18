@@ -1,4 +1,4 @@
-package com.github.anthogis.json_parser;
+package com.github.anthogis.json_parser.api;
 
 import java.util.Collection;
 

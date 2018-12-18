@@ -1,4 +1,6 @@
-package com.github.anthogis.json_parser;
+package com.github.anthogis.json_parser.utils;
+
+import com.github.anthogis.json_parser.api.JSONParser;
 
 /**
  * Tokens for parsing JSON.

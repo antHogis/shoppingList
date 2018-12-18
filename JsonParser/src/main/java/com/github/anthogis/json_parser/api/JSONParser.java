@@ -1,4 +1,11 @@
-package com.github.anthogis.json_parser;
+package com.github.anthogis.json_parser.api;
+
+import com.github.anthogis.json_parser.utils.JSONArray;
+import com.github.anthogis.json_parser.utils.JSONContainer;
+import com.github.anthogis.json_parser.utils.JSONParseException;
+import com.github.anthogis.json_parser.utils.JSONToken;
+import com.github.anthogis.json_parser.utils.JSONTokenizer;
+import com.github.anthogis.json_parser.utils.Pair;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -7,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.github.anthogis.json_parser.JSONToken.*;
+import static com.github.anthogis.json_parser.utils.JSONToken.*;
 
 /**
  * Parses a JSON file.

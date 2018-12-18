@@ -1,8 +1,8 @@
 package com.github.anthogis.shoppinglist;
 
-import com.github.anthogis.json_parser.JSONAttribute;
-import com.github.anthogis.json_parser.JSONObject;
-import com.github.anthogis.json_parser.JSONWriter;
+import com.github.anthogis.json_parser.api.JSONAttribute;
+import com.github.anthogis.json_parser.api.JSONObject;
+import com.github.anthogis.json_parser.api.JSONWriter;
 
 import java.io.IOException;
 import java.util.ArrayList;

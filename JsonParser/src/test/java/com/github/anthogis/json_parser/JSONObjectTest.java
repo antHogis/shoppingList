@@ -1,5 +1,7 @@
 package com.github.anthogis.json_parser;
 
+import com.github.anthogis.json_parser.api.JSONAttribute;
+import com.github.anthogis.json_parser.api.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;

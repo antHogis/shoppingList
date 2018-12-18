@@ -1,4 +1,6 @@
-package com.github.anthogis.json_parser;
+package com.github.anthogis.json_parser.api;
+
+import com.github.anthogis.json_parser.utils.JSONContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,7 @@ import java.util.List;
  * @version 1.3
  * @since 1.0
  */
-public class JSONObject implements JSONContainer{
+public class JSONObject implements JSONContainer {
 
     /**
      * List of the attributes of this object.
