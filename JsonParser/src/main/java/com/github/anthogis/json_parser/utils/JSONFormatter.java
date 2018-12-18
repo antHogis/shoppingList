@@ -49,10 +49,12 @@ public class JSONFormatter {
 
             line.append(currentChar);
 
+            if (i + 2 < jsonData.length() && jsonData.substring(i, i + 2).matches("\\{}|\\[]")) {
+                line.append(jsonData.charAt(i + 1));
+                i++;
+            } else
             if (currentChar == '{' || currentChar == '[') {
                 indents++;
-                createNewLine = true;
-            } else if (currentChar == '}') {
                 createNewLine = true;
             } else if (currentChar == ',') {
                 createNewLine = true;
@@ -63,6 +65,8 @@ public class JSONFormatter {
                     indents--;
                     createNewLine = true;
                 }
+            } else {
+                createNewLine = true;
             }
 
             if (createNewLine) {
