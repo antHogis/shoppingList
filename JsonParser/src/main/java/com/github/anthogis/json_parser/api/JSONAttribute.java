@@ -99,7 +99,7 @@ public class JSONAttribute<T> {
      * Returns the value of the attribute.
      * @return the value of the attribute.
      */
-    private T getValue() {
+    public T getValue() {
         return value;
     }
 
