@@ -3,6 +3,7 @@ package com.github.anthogis.json_parser;
 import com.github.anthogis.json_parser.api.JSONObject;
 import com.github.anthogis.json_parser.api.JSONParser;
 import com.github.anthogis.json_parser.api.JSONWriter;
+import com.github.anthogis.json_parser.utils.JSONContainer;
 import com.github.anthogis.json_parser.utils.JSONParseException;
 import org.junit.Test;
 
@@ -61,11 +62,11 @@ public class JSONParserTest {
     public void parseWriteEquals() throws IOException {
         System.out.println("TEST PARSE WRITE EQUALS");
 
-        String inputFile = "testIn2.json";
+        String inputFile = "testIn1.json";
         String outputFile = "testOut1.json";
 
-        JSONObject jo = (JSONObject) new JSONParser(inputFile).getParsedContainer();
-        new JSONWriter(jo, outputFile, true).writeFile();
+        JSONContainer jc = new JSONParser(inputFile).getParsedContainer();
+        new JSONWriter(jc, outputFile, true).writeFile();
 
         assertTrue(Arrays.equals(Files.readAllBytes(Paths.get(inputFile)),
                 Files.readAllBytes(Paths.get(outputFile))));

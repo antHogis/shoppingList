@@ -58,6 +58,13 @@ public class JSONArray implements JSONContainer {
 
         notationBuilder.append('[');
 
+        for (JSONAttribute attribute : values) {
+            notationBuilder.append(attribute.getNotation()).append(',');
+        }
+
+        if (notationBuilder.charAt(notationBuilder.length() - 1) == ',') {
+            notationBuilder.deleteCharAt(notationBuilder.length() - 1);
+        }
         notationBuilder.append(']');
 
         return notationBuilder.toString();

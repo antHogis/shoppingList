@@ -1,5 +1,7 @@
 package com.github.anthogis.json_parser.api;
 
+import com.github.anthogis.json_parser.utils.JSONContainer;
+
 import java.util.Collection;
 
 /**
@@ -61,8 +63,8 @@ public class JSONAttribute<T> {
                 }
             }
             notationBuilder.append(']');
-        } else if (value instanceof JSONObject) {
-            notationBuilder.append(((JSONObject) value).getNotation());
+        } else if (value instanceof JSONContainer) {
+            notationBuilder.append(((JSONContainer) value).getNotation());
         } else if (value == null) {
             notationBuilder.append("null");
         } else if (value instanceof Number || value instanceof Boolean) {

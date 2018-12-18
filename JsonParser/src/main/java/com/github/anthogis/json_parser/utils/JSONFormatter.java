@@ -26,11 +26,11 @@ public class JSONFormatter {
     private List<String> jsonDataLines;
 
     /**
-     * The constructor for JSONFormatter, also formats the notation of the given jsonObject by calling method formatData.
-     * @param jsonObject the jsonObject.
+     * The constructor for JSONFormatter, also formats the notation of the given jsonContainer by calling method formatData.
+     * @param jsonContainer the jsonContainer.
      */
-    public JSONFormatter(JSONObject jsonObject) {
-        this.jsonData = jsonObject.getNotation();
+    public JSONFormatter(JSONContainer jsonContainer) {
+        this.jsonData = jsonContainer.getNotation();
         formatData();
     }
 

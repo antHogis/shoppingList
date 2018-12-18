@@ -1,5 +1,6 @@
 package com.github.anthogis.json_parser.api;
 
+import com.github.anthogis.json_parser.utils.JSONContainer;
 import com.github.anthogis.json_parser.utils.JSONFormatter;
 
 import java.io.BufferedWriter;
@@ -39,12 +40,12 @@ public class JSONWriter {
      * returns a list of lines. The Writer writer is intialized as well, and is given the filename String from arguments,
      * which is used as the filename when writing the file.</p>
      *
-     * @param jsonObject the JSONObject to write to a JSON file.
+     * @param jsonContainer the JSONObject to write to a JSON file.
      * @param fileName the name of the JSON file.
      * @throws IOException if writer's construction fails
      */
-    public JSONWriter(JSONObject jsonObject, String fileName, boolean addSuffix) throws IOException {
-        jsonLines = new JSONFormatter(jsonObject).getJsonDataLines();
+    public JSONWriter(JSONContainer jsonContainer, String fileName, boolean addSuffix) throws IOException {
+        jsonLines = new JSONFormatter(jsonContainer).getJsonDataLines();
 
         fileName = addSuffix && !fileName.endsWith(".json") ? fileName + ".json" : fileName;
 

@@ -81,7 +81,7 @@ public class JSONObjectTest {
     @Test
     public void testWithSingleValue() {
         object.add(new JSONAttribute<>("int", 234));
-        expected.append('"').append("int").append("\" : ").append(234);
+        expected.append('"').append("int").append("\": ").append(234);
 
         runTest();
     }
@@ -92,13 +92,13 @@ public class JSONObjectTest {
     @Test
     public void testWithMultipleValues() {
         object.add(new JSONAttribute<>("string", "skrrt dab on 'em haters"));
-        expected.append('"').append("string").append("\" : ").append("\"skrrt dab on 'em haters\"");
+        expected.append('"').append("string").append("\": ").append("\"skrrt dab on 'em haters\"");
 
         object.add(new JSONAttribute<>("bool", false));
-        expected.append(",\"").append("bool").append("\" : ").append("false");
+        expected.append(",\"").append("bool").append("\": ").append("false");
 
         object.add(new JSONAttribute<>("int", -234));
-        expected.append(',').append('"').append("int").append("\" : ").append(-234);
+        expected.append(',').append('"').append("int").append("\": ").append(-234);
 
         runTest();
     }
@@ -113,8 +113,8 @@ public class JSONObjectTest {
         nested.add(new JSONAttribute<>("key", "value"));
         object.add(new JSONAttribute<>("nested", nested));
 
-        expected.append("\"nested\" : ").append('{').append("\"nested nested\" : {}")
-                .append(',').append("\"key\" : \"value\"").append('}');
+        expected.append("\"nested\": ").append('{').append("\"nested nested\": {}")
+                .append(',').append("\"key\": \"value\"").append('}');
 
         runTest();
     }
@@ -130,9 +130,9 @@ public class JSONObjectTest {
 
         object.add(new JSONAttribute<>("array",
                 Arrays.asList("fsdfafd", 233, true, null, nested)));
-        expected.append("\"array\" : [").append("\"fsdfafd\"").append(',').append(233).append(',').append("true")
-                .append(',').append("null").append(',').append("{\"nested nested\" : {},")
-                .append("\"int\" : ").append(420).append('}').append(']');
+        expected.append("\"array\": [").append("\"fsdfafd\"").append(',').append(233).append(',').append("true")
+                .append(',').append("null").append(',').append("{\"nested nested\": {},")
+                .append("\"int\": ").append(420).append('}').append(']');
 
         runTest();
     }

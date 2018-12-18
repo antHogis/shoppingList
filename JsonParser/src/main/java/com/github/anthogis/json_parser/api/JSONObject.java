@@ -47,7 +47,7 @@ public class JSONObject implements JSONContainer {
 
         builder.append('{');
         for (JSONAttribute attribute : attributes) {
-            builder.append('"').append(attribute.getKeyWord()).append("\" : ")
+            builder.append('"').append(attribute.getKeyWord()).append("\": ")
                     .append(attribute.getNotation()).append(',');
         }
 

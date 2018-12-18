@@ -49,7 +49,7 @@ public class JSONParser {
         List<Pair<JSONToken, String>> jsonTokens
                 = new JSONTokenizer(jsonLines).tokenize().getTokens();
         inspectTokenSyntax(jsonTokens);
-        parsedContainer = parseContainer(jsonTokens, JSONObject.class);
+        parsedContainer = parseContainer(jsonTokens);
     }
 
     /**
@@ -150,22 +150,18 @@ public class JSONParser {
      * Parses a {@link JSONContainer} from a list of pairs of JSONTokens and values.
      *
      * @param jsonTokens the pairs of JSONTokens and values.
-     * @param type the type of JSONContainer that is parsed.
      * @return the container of values.
      */
-    private JSONContainer parseContainer(List<Pair<JSONToken, String>> jsonTokens,
-                                         Class<? extends JSONContainer> type) {
+    private JSONContainer parseContainer(List<Pair<JSONToken, String>> jsonTokens) {
         JSONContainer container = null;
-        List<JSONToken> expectedTokens = new ArrayList<>();
-        expectedTokens.add(OBJECT_BEGIN);
 
         String key = "";
         boolean isOuterObject = false;
         boolean isOuterArray = false;
 
-        if (type == JSONObject.class) {
+        if (jsonTokens.get(0).getFirst() == OBJECT_BEGIN) {
             isOuterObject = true;
-        } else if (type == JSONArray.class) {
+        } else if (jsonTokens.get(0).getFirst() == ARRAY_BEGIN) {
             isOuterArray = true;
         }
 
@@ -185,7 +181,7 @@ public class JSONParser {
                         int closeIndex = getContainerCloseIndex(jsonTokens, i, JSONObject.class);
                         List<Pair<JSONToken, String>> nestedObjectTokens
                                 = jsonTokens.subList(i, closeIndex);
-                        attribute = new JSONAttribute<>(key, parseContainer(nestedObjectTokens, JSONObject.class));
+                        attribute = new JSONAttribute<>(key, parseContainer(nestedObjectTokens));
                         addValue = true;
                         nestedObjectTokens.clear();
                     }
@@ -227,8 +223,7 @@ public class JSONParser {
                         int closeIndex = getContainerCloseIndex(jsonTokens, i, JSONArray.class);
                         List<Pair<JSONToken, String>> nestedTokens
                                 = jsonTokens.subList(i, closeIndex);
-                        attribute = new JSONAttribute<>(key, parseContainer(nestedTokens,
-                                JSONArray.class).getValues());
+                        attribute = new JSONAttribute<>(key, parseContainer(nestedTokens).getValues());
                         addValue = true;
                         nestedTokens.clear();
                     }

@@ -53,8 +53,8 @@ public class ShoppingListReader {
      * Parses ShoppingListItems from fileLines and stores them in shoppingList.
      */
     private void parseLines() throws ShoppingListMalformedException {
-        String productNameRegex = "\\s*\"productName\" : ";
-        String productAmountRegex = "\\s*\"productAmount\" : ";
+        String productNameRegex = "\\s*\"productName\": ";
+        String productAmountRegex = "\\s*\"productAmount\": ";
 
         try {
             for (int i = 0; i < fileLines.size(); i++) {

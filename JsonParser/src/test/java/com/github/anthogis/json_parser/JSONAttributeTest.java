@@ -106,11 +106,11 @@ public class JSONAttributeTest {
 
         StringBuilder expectationBuilder = new StringBuilder();
         expectationBuilder.append("{");
-        expectationBuilder.append("\"int\" : ").append(23).append(',');
-        expectationBuilder.append("\"array\" : [").append("\"fsdfafd\"").append(',').append(233)
+        expectationBuilder.append("\"int\": ").append(23).append(',');
+        expectationBuilder.append("\"array\": [").append("\"fsdfafd\"").append(',').append(233)
                 .append(',').append("true").append(',').append("null").append("],");
-        expectationBuilder.append("\"nested object\" : {");
-        expectationBuilder.append("\"nested int\" : ").append(1414).append('}');
+        expectationBuilder.append("\"nested object\": {");
+        expectationBuilder.append("\"nested int\": ").append(1414).append('}');
         expectationBuilder.append('}');
 
         expected = expectationBuilder.toString();
