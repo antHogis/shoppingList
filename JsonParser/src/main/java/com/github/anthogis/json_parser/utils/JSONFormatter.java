@@ -42,40 +42,48 @@ public class JSONFormatter {
         final String indent = "    ";
         StringBuilder line = new StringBuilder();
         int indents = 0;
+        boolean insideString = false;
 
         for (int i = 0; i < jsonData.length(); i++) {
             char currentChar = jsonData.charAt(i);
             boolean createNewLine = false;
 
+            if (unescapedQuoteFound(i)) {
+                insideString = !insideString;
+            }
+
             line.append(currentChar);
 
-            if (i + 2 < jsonData.length() && jsonData.substring(i, i + 2).matches("\\{}|\\[]")) {
-                line.append(jsonData.charAt(i + 1));
-                i++;
-            } else
-            if (currentChar == '{' || currentChar == '[') {
-                indents++;
-                createNewLine = true;
-            } else if (currentChar == ',') {
-                createNewLine = true;
-            }
-
-            if (i < jsonData.length() - 1) {
-                if (jsonData.charAt(i + 1) == '}' || jsonData.charAt(i + 1) == ']') {
-                    indents--;
+            if (!insideString) {
+                if (i + 2 < jsonData.length() && jsonData.substring(i, i + 2).matches("\\{}|\\[]")) {
+                    line.append(jsonData.charAt(i + 1));
+                    i++;
+                } else
+                if (currentChar == '{' || currentChar == '[') {
+                    indents++;
+                    createNewLine = true;
+                } else if (currentChar == ',') {
                     createNewLine = true;
                 }
-            } else {
-                createNewLine = true;
-            }
 
-            if (createNewLine) {
-                jsonDataLines.add(line.toString());
-                line = new StringBuilder();
-                for (int j = 0; j < indents; j++) {
-                    line.append(indent);
+                if (i < jsonData.length() - 1) {
+                    if (jsonData.charAt(i + 1) == '}' || jsonData.charAt(i + 1) == ']') {
+                        indents--;
+                        createNewLine = true;
+                    }
+                } else {
+                    createNewLine = true;
+                }
+
+                if (createNewLine) {
+                    jsonDataLines.add(line.toString());
+                    line = new StringBuilder();
+                    for (int j = 0; j < indents; j++) {
+                        line.append(indent);
+                    }
                 }
             }
+
         }
     }
 
@@ -85,5 +93,23 @@ public class JSONFormatter {
      */
     public List<String> getJsonDataLines() {
         return jsonDataLines;
+    }
+
+    private boolean unescapedQuoteFound(int index) {
+        boolean found = false;
+
+        if (jsonData.charAt(index) == '"') {
+            found = true;
+
+            for (index = index - 1; index >= 0; index--) {
+                if (jsonData.charAt(index) == '\\') {
+                    found = !found;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return found;
     }
 }
