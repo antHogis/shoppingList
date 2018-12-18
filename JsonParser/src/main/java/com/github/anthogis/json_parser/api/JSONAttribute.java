@@ -40,7 +40,7 @@ public class JSONAttribute<T> {
      */
     public JSONAttribute(String keyWord, T value) {
         this.value = value;
-        this.keyWord = keyWord;
+        this.keyWord = escapeQuotes(keyWord);
         notation = '"' + keyWord + "\" : " + constructNotation(value);
     }
 
@@ -70,7 +70,7 @@ public class JSONAttribute<T> {
         } else if (value instanceof JSONAttribute) {
             notationBuilder.append(constructNotation(((JSONAttribute) value).getValue()));
         } else {
-            notationBuilder.append('"').append(value.toString()).append('"');
+            notationBuilder.append('"').append(escapeQuotes(value.toString())).append('"');
         }
 
         return notationBuilder.toString();
@@ -122,5 +122,16 @@ public class JSONAttribute<T> {
         }
 
         return equals;
+    }
+
+    private String escapeQuotes(String input) {
+        for (int i = 0; i < input.length(); i++) {
+            if (input.charAt(i) == '"' ||input.charAt(i) == '\\') {
+                input = input.substring(0, i) + '\\' + input.substring(i);
+                i++;
+            }
+        }
+
+        return input;
     }
 }

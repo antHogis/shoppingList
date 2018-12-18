@@ -57,6 +57,7 @@ public class JSONTokenizer {
             for (int j = 0; j < currentLine.length(); j++) {
                 char currentChar = currentLine.charAt(j);
 
+
                 if (currentChar == '{' && !storeString) {
                     tokens.add(new Pair<>(JSONToken.OBJECT_BEGIN, ""));
                 } else if (currentChar == ':' && !storeString) {
@@ -70,10 +71,23 @@ public class JSONTokenizer {
                     try {
                         if (expectKey() && !storeKey) {
                             storeKey = true;
-                        } else if (storeKey) {
-                            putValue = true;
-                        } else if (storeString) {
-                            putValue = true;
+                        } else if (storeKey ||storeString) {
+                            if (value.charAt(value.length() - 1) == '\\') {
+                                try {
+                                    if (value.charAt(value.length() - 2) == '\\') {
+                                        putValue = true;
+                                    } else {
+                                        value.deleteCharAt(value.length() - 1);
+                                        value.append(currentChar);
+                                    }
+                                } catch (IndexOutOfBoundsException e) {
+                                    value.deleteCharAt(value.length() - 1);
+                                    value.append(currentChar);
+                                }
+
+                            } else {
+                                putValue = true;
+                            }
                         } else {
                             storeString = true;
                         }
@@ -149,7 +163,9 @@ public class JSONTokenizer {
 
                     if (storeString) {
                         storeString = false;
-                        tokens.add(new Pair<>(JSONToken.STRING, value.toString()));
+
+                        String valueString = value.toString().replace("\\\\", "\\");
+                        tokens.add(new Pair<>(JSONToken.STRING, valueString));
                     } else if (storeNumber) {
                         storeNumber = false;
                         if (value.toString().contains(".")) {
@@ -165,7 +181,8 @@ public class JSONTokenizer {
                         tokens.add(new Pair<>(JSONToken.NULL, value.toString()));
                     } else if (storeKey) {
                         storeKey = false;
-                        tokens.add(new Pair<>(JSONToken.KEY, value.toString()));
+                        String valueString = value.toString().replace("\\\\", "\\");
+                        tokens.add(new Pair<>(JSONToken.KEY, valueString));
                     }
 
 
@@ -183,6 +200,7 @@ public class JSONTokenizer {
                     value = new StringBuilder();
                 }
             }
+
         }
 
         return this;
