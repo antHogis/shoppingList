@@ -128,6 +128,8 @@ public class JSONParser {
                     break;
                 case ARRAY_BEGIN:
                     expectedTokens = expectValueList();
+                    expectedTokens = new ArrayList<>(expectedTokens);
+                    expectedTokens.add(ARRAY_END);
                     break;
                 case ARRAY_END:
                     expectedTokens = expectAfterValue(insideArray);
