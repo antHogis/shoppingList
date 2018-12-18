@@ -120,7 +120,7 @@ public class JSONAttributeTest {
 
     private void testHelper() {
         System.out.printf("Expected : %s\n", expected);
-        System.out.printf("Actual : %s\n", attribute.getNotation());
+        System.out.printf("Actual   : %s\n", attribute.getNotation());
 
         assertEquals(expected, attribute.getNotation());
     }
