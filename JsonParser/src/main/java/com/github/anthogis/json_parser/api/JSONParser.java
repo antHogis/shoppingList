@@ -202,7 +202,7 @@ public class JSONParser {
                     addValue = true;
                     break;
                 case FLOAT:
-                    attribute = new JSONAttribute<>(key, Float.parseFloat(value));
+                    attribute = new JSONAttribute<>(key, Double.parseDouble(value));
                     addValue = true;
                     break;
                 case STRING:
