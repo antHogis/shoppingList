@@ -124,6 +124,12 @@ public class JSONAttribute<T> {
         return equals;
     }
 
+    /**
+     * Adds escape chars in front of chars in a string that need to be escaped for JSON.
+     *
+     * @param input the String to inspect for escape characters.
+     * @return the input string with characters escaped as needed.
+     */
     private String escapeQuotes(String input) {
         for (int i = 0; i < input.length(); i++) {
             if (input.charAt(i) == '"' ||input.charAt(i) == '\\') {
