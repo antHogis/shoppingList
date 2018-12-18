@@ -18,7 +18,6 @@ import static org.junit.Assert.*;
  * @version 1.3
  * @since 1.3
  */
-@RunWith(JUnit4.class)
 public class JSONAttributeTest {
     /**
      * The attribute constructed.

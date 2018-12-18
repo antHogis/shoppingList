@@ -25,7 +25,6 @@ import static com.github.anthogis.json_parser.utils.JSONToken.*;
  * @version 1.3
  * @since 1.3
  */
-@RunWith(JUnit4.class)
 public class JSONTokenizerTest {
     static JSONObject object;
     static List<Pair<JSONToken, String>> actualTokens;

@@ -19,7 +19,6 @@ import static org.junit.Assert.assertEquals;
  * @version 1.3
  * @since 1.3
  */
-@RunWith(JUnit4.class)
 public class JSONObjectTest {
     /**
      * The constructed object.
