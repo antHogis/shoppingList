@@ -99,11 +99,7 @@ public class MainWindowController {
         parserInterface = new ParserInterface();
         dBoxInterface = new DBoxInterface();
 
-        try {
-            hibernateInterface = Optional.of(new HibernateInterface());
-        } catch (ServiceException e) {
-            hibernateInterface = Optional.empty();
-        }
+        logInToH2Action();
 
         shoppingListSaved = false;
 
@@ -253,6 +249,16 @@ public class MainWindowController {
                 }
 
             });
+        }
+    }
+
+    public void logInToH2Action() {
+        try {
+            if (hibernateInterface == null || !hibernateInterface.isPresent()) {
+                hibernateInterface = Optional.of(new HibernateInterface());
+            }
+        } catch (ServiceException e) {
+            hibernateInterface = Optional.empty();
         }
     }
 
