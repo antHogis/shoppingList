@@ -1,4 +1,4 @@
-package com.github.anthogis.shoppinglist.gui;
+package com.github.anthogis.shoppinglist;
 
 /**
  * ActivityText contains messages that are intended for info prompts.

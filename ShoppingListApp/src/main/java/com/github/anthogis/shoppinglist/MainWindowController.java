@@ -1,12 +1,6 @@
-package com.github.anthogis.shoppinglist.gui;
+package com.github.anthogis.shoppinglist;
 
 import com.dropbox.core.DbxException;
-import com.github.anthogis.shoppinglist.DBoxInterface;
-import com.github.anthogis.shoppinglist.HibernateInterface;
-import com.github.anthogis.shoppinglist.ParserInterface;
-import com.github.anthogis.shoppinglist.ShoppingListItem;
-import com.github.anthogis.shoppinglist.ShoppingListMalformedException;
-import com.github.anthogis.shoppinglist.ShoppingListReader;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;

@@ -1,8 +1,7 @@
-package com.github.anthogis.shoppinglist.gui;
+package com.github.anthogis.shoppinglist;
 
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,7 +10,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
-import javax.sound.midi.ControllerEventListener;
 import java.io.IOException;
 
 /**
