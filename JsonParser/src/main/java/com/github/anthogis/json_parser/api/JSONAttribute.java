@@ -110,4 +110,18 @@ public class JSONAttribute<T> {
     public String getKeyWord() {
         return keyWord;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean equals;
+
+        if (obj instanceof JSONAttribute) {
+            equals = this.value.equals(((JSONAttribute) obj).getValue())
+                    && this.keyWord.equals(((JSONAttribute) obj).getKeyWord());
+        } else {
+            equals = super.equals(obj);
+        }
+
+        return equals;
+    }
 }
