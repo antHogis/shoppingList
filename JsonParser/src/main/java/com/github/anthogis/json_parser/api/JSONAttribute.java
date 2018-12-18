@@ -46,9 +46,7 @@ public class JSONAttribute<T> {
 
         if (value instanceof Collection) {
             notationBuilder.append('[');
-            if (((Collection) value).isEmpty()) {
-                notationBuilder.append(' ');
-            } else {
+            if (!((Collection) value).isEmpty()) {
                 for (Object o : ((Collection) value)) {
                     notationBuilder.append(constructNotation(o)).append(',');
                 }
@@ -91,6 +89,10 @@ public class JSONAttribute<T> {
         return notation;
     }
 
+    /**
+     * Returns the value of the attribute.
+     * @return the value of the attribute.
+     */
     private T getValue() {
         return value;
     }
