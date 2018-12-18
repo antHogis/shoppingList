@@ -74,12 +74,14 @@ public class JSONParser {
         List<JSONToken> containerTokens = new ArrayList<>(jsonTokens.size());
         expectedTokens.add(OBJECT_BEGIN);
 
+        /* For debugging
         for (int i = 0; i < jsonTokens.size(); i++) {
             String token = jsonTokens.get(i).getSecond().equals("") ?
                     jsonTokens.get(i).getFirst().name() :
                     jsonTokens.get(i).getFirst().name() + " | " + jsonTokens.get(i).getSecond();
             System.out.println(i + ". " + token);
         }
+        */
 
         for (int i = 0; i < jsonTokens.size(); i++) {
             JSONToken token = jsonTokens.get(i).getFirst();
@@ -101,11 +103,12 @@ public class JSONParser {
 
             boolean insideArray = isInsideArray(token, containerTokens);
 
-
+            /*
             //PRINT FOR DEBUG
             String tokenString = jsonTokens.get(i).getSecond().equals("") ?
                     token.name() : token.name() + " | " + jsonTokens.get(i).getSecond();
             System.out.printf("%d. %s: %b\n", i, tokenString, insideArray);
+            */
 
             switch (token) {
                 case OBJECT_BEGIN:
