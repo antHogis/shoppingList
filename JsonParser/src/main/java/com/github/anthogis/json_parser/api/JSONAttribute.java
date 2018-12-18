@@ -63,7 +63,9 @@ public class JSONAttribute<T> {
         } else if (value == null) {
             notationBuilder.append("null");
         } else if (value instanceof Number || value instanceof Boolean) {
-            notationBuilder.append(value.toString());
+            notationBuilder.append(value);
+        } else if (value instanceof JSONAttribute) {
+            notationBuilder.append(constructNotation(((JSONAttribute) value).getValue()));
         } else {
             notationBuilder.append('"').append(value.toString()).append('"');
         }
@@ -87,5 +89,9 @@ public class JSONAttribute<T> {
     public String toString() {
         notation = constructNotation(value);
         return notation;
+    }
+
+    private T getValue() {
+        return value;
     }
 }
