@@ -23,16 +23,10 @@ public class JSONObject implements JSONContainer {
     private final List<JSONAttribute> attributes;
 
     /**
-     * The JSON notation of this object.
-     */
-    private String notation;
-
-    /**
      * The constructor for JSONObject.
      */
     public JSONObject() {
         this.attributes = new ArrayList<>();
-        this.notation = "";
     }
 
     /**
@@ -47,7 +41,7 @@ public class JSONObject implements JSONContainer {
     /**
      * Creates the JSON notation for this JSONObject.
      */
-    public void formatObject() {
+    private String constructNotation() {
         StringBuilder builder = new StringBuilder();
 
         builder.append('{');
@@ -61,7 +55,7 @@ public class JSONObject implements JSONContainer {
 
         builder.append('}');
 
-        notation = builder.toString();
+        return builder.toString();
     }
 
     /**
@@ -74,11 +68,10 @@ public class JSONObject implements JSONContainer {
     }
 
     /**
-     * Creates the notation through formatObject and returns it.
+     * Creates the notation through constructNotation and returns it.
      * @return the JSON notation.
      */
     public String getNotation() {
-        formatObject();
-        return notation;
+        return constructNotation();
     }
 }

@@ -74,7 +74,6 @@ public class ParserInterface {
     public boolean writeToJSON(String fileName, boolean addSuffix) {
         boolean writeSuccessful = false;
         shoppingListObject.add(new JSONAttribute("list", shoppingList));
-        shoppingListObject.formatObject();
 
         try {
             jsonWriter = new JSONWriter(shoppingListObject, fileName, addSuffix);

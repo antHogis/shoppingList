@@ -19,10 +19,10 @@ public class JSONObjectTest {
 
     private void runTest() {
         expected.append('}');
-        object.formatObject();
+        String objectNotation = object.getNotation();
         System.out.println("Expected : " + expected.toString());
-        System.out.println("Actual   : " + object.getNotation());
-        assertEquals(expected.toString(), object.getNotation());
+        System.out.println("Actual   : " + objectNotation);
+        assertEquals(expected.toString(), objectNotation);
     }
 
     @Before

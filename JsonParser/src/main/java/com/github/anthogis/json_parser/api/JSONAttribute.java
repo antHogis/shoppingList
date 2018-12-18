@@ -62,7 +62,6 @@ public class JSONAttribute<T> {
             }
             notationBuilder.append(']');
         } else if (value instanceof JSONObject) {
-            ((JSONObject) value).formatObject();
             notationBuilder.append(((JSONObject) value).getNotation());
         } else if (value == null) {
             notationBuilder.append("null");

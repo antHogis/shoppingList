@@ -30,7 +30,6 @@ public class JSONFormatterTest {
         nested.add(new JSONAttribute<>("nested nested", nestedNested));
         object.add(new JSONAttribute<>("nested", nested));
 
-        object.formatObject();
         formattedObject = new JSONFormatter(object).getJsonDataLines();
 
         for (String line : formattedObject) {

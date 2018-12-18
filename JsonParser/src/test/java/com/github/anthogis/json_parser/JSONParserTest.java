@@ -34,8 +34,6 @@ public class JSONParserTest {
         JSONParser jr = new JSONParser(inputFile);
         JSONObject jo = jr.getParsedObject();
 
-        jo.formatObject();
-
         List<String> jsonLines = new JSONFormatter(jo).getJsonDataLines();
 
         new JSONWriter(jo, outputFile, true).writeFile();
