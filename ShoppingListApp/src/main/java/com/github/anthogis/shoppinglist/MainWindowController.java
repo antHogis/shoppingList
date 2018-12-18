@@ -85,6 +85,11 @@ public class MainWindowController {
     private Optional<HibernateInterface> hibernateInterface;
 
     /**
+     * Indiciates if the shopping list has been saved.
+     */
+    private boolean shoppingListSaved;
+
+    /**
      * Lifecycle method. Called after @FXML annotated fields are populated.
      *
      * <p>Lifecycle method. Called after @FXML annotated fields are populated. Initializes <code>parserInterface</code>
@@ -99,6 +104,8 @@ public class MainWindowController {
         } catch (ServiceException e) {
             hibernateInterface = Optional.empty();
         }
+
+        shoppingListSaved = false;
 
         fadeOutLabel = new FadeTransition(Duration.millis(1500));
         fadeOutLabel.setNode(activityLabel);
@@ -134,6 +141,7 @@ public class MainWindowController {
                 List<ShoppingListItem> shoppingList
                         = new ShoppingListReader(shoppingListFile).getShoppingList();
                 shoppingListTable.getItems().addAll(shoppingList);
+                shoppingListSaved = true;
             } catch (IOException e) {
                 showMessage(ActivityText.FILE_FAIL);
             } catch (ShoppingListMalformedException e) {
@@ -153,6 +161,7 @@ public class MainWindowController {
         saveJson(fileName -> {
             if (parserInterface.writeToJSON(fileName, true)) {
                 showMessage(ActivityText.SAVE_SUCCESSFUL);
+                shoppingListSaved = true;
             } else {
                 showMessage(ActivityText.SAVE_FAILED);
             }
@@ -168,6 +177,7 @@ public class MainWindowController {
             try {
                 if (dBoxInterface.upload(fileName, parserInterface)) {
                     showMessage(ActivityText.SAVE_SUCCESSFUL);
+                    shoppingListSaved = true;
                 } else {
                     showMessage(ActivityText.SAVE_FAILED);
                 }
@@ -189,6 +199,7 @@ public class MainWindowController {
         } else if (hibernateInterface.isPresent()) {
             hibernateInterface.get().addValues(shoppingListTable.getItems());
             showMessage(ActivityText.SAVE_SUCCESSFUL);
+            shoppingListSaved = true;
         } else {
             showMessage(ActivityText.H2_LOGIN_ERROR);
         }
@@ -208,13 +219,17 @@ public class MainWindowController {
                 "Close anyway?");
 
         closeAlert.getButtonTypes().setAll(ButtonType.CLOSE, ButtonType.CANCEL);
-
-        Optional<ButtonType> result = closeAlert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.CLOSE) {
+        if (shoppingListSaved || shoppingListTable.getItems().isEmpty()) {
             hibernateInterface.ifPresent(HibernateInterface::close);
             Platform.exit();
         } else {
-            closeAlert.close();
+            Optional<ButtonType> result = closeAlert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.CLOSE) {
+                hibernateInterface.ifPresent(HibernateInterface::close);
+                Platform.exit();
+            } else {
+                closeAlert.close();
+            }
         }
     }
 
@@ -296,6 +311,7 @@ public class MainWindowController {
 
             ShoppingListItem shoppingListItem = new ShoppingListItem(itemText, amountText);
             shoppingListTable.getItems().add(shoppingListItem);
+            shoppingListSaved = false;
         } else {
             showMessage(ActivityText.INVALID_INPUT);
         }
