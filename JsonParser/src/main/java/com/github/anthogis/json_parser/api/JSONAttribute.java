@@ -21,6 +21,11 @@ public class JSONAttribute<T> {
     private final T value;
 
     /**
+     * The keyword of the attribute.
+     */
+    private final String keyWord;
+
+    /**
      * The <i>JS Object Notation</i> of the attribute.
      */
     private String notation;
@@ -35,6 +40,7 @@ public class JSONAttribute<T> {
      */
     public JSONAttribute(String keyWord, T value) {
         this.value = value;
+        this.keyWord = keyWord;
         notation = '"' + keyWord + "\" : " + constructNotation(value);
     }
 
@@ -95,5 +101,13 @@ public class JSONAttribute<T> {
      */
     private T getValue() {
         return value;
+    }
+
+    /**
+     * Returns the keyword of the attribute.
+     * @return the keyword of the attribute.
+     */
+    public String getKeyWord() {
+        return keyWord;
     }
 }
