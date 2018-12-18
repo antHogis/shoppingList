@@ -120,6 +120,14 @@ public class JSONTokenizer {
                     }
                 } else if (storeNumber && currentChar == '.') {
                     value.append(currentChar);
+                } else if (currentChar == '-' && !(storeString || storeKey || storeNumber)){
+                    if (currentLine.length() > j + 1
+                            && Character.isDigit(currentLine.charAt(j + 1))) {
+                        storeNumber = true;
+                        value.append(currentChar);
+                    } else {
+                        throw new JSONParseException(i + 1, j + 1);
+                    }
                 } else if (currentChar == ',') {
                     putValue = true;
                     delimiterFound = true;
