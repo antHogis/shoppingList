@@ -118,7 +118,7 @@ public class JSONParserTest {
      */
     @Test
     public void testParsedValuesAndKeys() throws IOException {
-        JSONObject jo = new JSONParser("testIn1.json").getParsedObject();
+        JSONObject jo = new JSONParser("testIn2.json").getParsedObject();
 
         assertEquals(2.2, jo.getValues().get(0).getValue());
         assertEquals(false, jo.getValues().get(3).getValue());
