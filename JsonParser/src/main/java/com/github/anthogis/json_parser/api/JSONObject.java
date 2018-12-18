@@ -4,6 +4,7 @@ import com.github.anthogis.json_parser.utils.JSONContainer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * An object that can be passed to JSONWriter to create a JSON file.
@@ -65,6 +66,23 @@ public class JSONObject implements JSONContainer {
     @Override
     public List<JSONAttribute> getValues() {
         return attributes;
+    }
+
+
+    /**
+     * Returns a JSONAttribute with the given key, if found.
+     * @param key the key of the JSONAttribute
+     * @return the JSONAttribute with the key.
+     * @throws NoSuchElementException if no attribute was found with the key.
+     */
+    public JSONAttribute getAttribute(String key) throws NoSuchElementException {
+        for (JSONAttribute attribute : attributes) {
+            if (attribute.getKeyWord().equals(key)) {
+                return attribute;
+            }
+        }
+
+        throw new NoSuchElementException("No attribute found with key:" + key);
     }
 
     /**
