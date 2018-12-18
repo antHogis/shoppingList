@@ -56,7 +56,6 @@ public class JSONTokenizer {
             String currentLine = data.get(i);
             for (int j = 0; j < currentLine.length(); j++) {
                 char currentChar = currentLine.charAt(j);
-                System.out.print(currentChar);
 
                 if (currentChar == '{' && !storeString) {
                     tokens.add(new Pair<>(JSONToken.OBJECT_BEGIN, ""));
@@ -70,20 +69,18 @@ public class JSONTokenizer {
                 } else if (currentChar == '\"') {
                     try {
                         if (expectKey() && !storeKey) {
-                            System.out.print('$');
                             storeKey = true;
                         } else if (storeKey) {
                             putValue = true;
                         } else if (storeString) {
                             putValue = true;
                         } else {
-                            System.out.print('!');
                             storeString = true;
                         }
                     } catch (IndexOutOfBoundsException e) {
                         throw  new JSONParseException(i + 1, j + 1);
                     }
-                } else if (Character.isLetter(currentChar)) {
+                } else if (Character.isLetter(currentChar) || storeString || storeKey) {
                     if (storeString || storeKey) {
                         value.append(currentChar);
                     } else {
@@ -121,6 +118,8 @@ public class JSONTokenizer {
                             throw new JSONParseException(i + 1, j + 1);
                         }
                     }
+                } else if (storeNumber && currentChar == '.') {
+                    value.append(currentChar);
                 } else if (currentChar == ',') {
                     putValue = true;
                     delimiterFound = true;
@@ -145,7 +144,11 @@ public class JSONTokenizer {
                         tokens.add(new Pair<>(JSONToken.STRING, value.toString()));
                     } else if (storeNumber) {
                         storeNumber = false;
-                        tokens.add(new Pair<>(JSONToken.INTEGER, value.toString()));
+                        if (value.toString().contains(".")) {
+                            tokens.add(new Pair<>(JSONToken.FLOAT, value.toString()));
+                        } else {
+                            tokens.add(new Pair<>(JSONToken.INTEGER, value.toString()));
+                        }
                     } else if (storeBoolean) {
                         storeBoolean = false;
                         tokens.add(new Pair<>(JSONToken.BOOLEAN, value.toString()));
@@ -172,7 +175,6 @@ public class JSONTokenizer {
                     value = new StringBuilder();
                 }
             }
-            System.out.println();
         }
 
         return this;

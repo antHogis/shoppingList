@@ -133,6 +133,7 @@ public class JSONParser {
                     expectedTokens = expectAfterValue(insideArray);
                     break;
                 case INTEGER:
+                case FLOAT:
                 case STRING:
                 case BOOLEAN:
                 case NULL:
@@ -196,6 +197,10 @@ public class JSONParser {
                     break;
                 case INTEGER:
                     attribute = new JSONAttribute<>(key, Integer.parseInt(value));
+                    addValue = true;
+                    break;
+                case FLOAT:
+                    attribute = new JSONAttribute<>(key, Float.parseFloat(value));
                     addValue = true;
                     break;
                 case STRING:
@@ -263,7 +268,7 @@ public class JSONParser {
      * @return a list of tokens expected when a value should be encountered.
      */
     private List<JSONToken> expectValueList() {
-        return Arrays.asList(OBJECT_BEGIN, NULL, BOOLEAN, INTEGER, STRING, ARRAY_BEGIN);
+        return Arrays.asList(OBJECT_BEGIN, NULL, BOOLEAN, INTEGER, STRING, ARRAY_BEGIN, FLOAT);
     }
 
     /**

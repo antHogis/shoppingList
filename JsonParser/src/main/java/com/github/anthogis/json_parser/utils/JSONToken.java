@@ -58,6 +58,11 @@ public enum JSONToken {
     INTEGER,
 
     /**
+     * Token for a floating point value.
+     */
+    FLOAT,
+
+    /**
      * Token for a boolean value.
      */
     BOOLEAN,
