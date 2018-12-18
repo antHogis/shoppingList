@@ -10,7 +10,9 @@ import java.util.List;
 import static com.github.anthogis.json_parser.JSONToken.*;
 
 /**
- * TODO Write javadoc
+ * Parses a JSON file.
+ *
+ * Creates a structure of {@link JSONAttribute}s within a {@link JSONObject} from a JSON file.
  *
  * @author antHogis
  * @version 1.3
@@ -18,21 +20,21 @@ import static com.github.anthogis.json_parser.JSONToken.*;
  */
 public class JSONParser {
     /**
-     * TODO doc field
+     * The object parsed from a JSON file.
      */
     private JSONObject parsedObject;
 
     /**
-     * TODO doc constr
+     * Constructs a JSONParser, which parses JSON data from a given file.
      *
-     * @param filePath
-     * @throws IOException
-     * @throws JSONParseException
+     * @param filePath the filepath/name of the JSON file to parse.
+     * @throws IOException if the JSON file could not be read.
+     * @throws JSONParseException if the syntax of the given JSON file contains errors.
      */
     public JSONParser(String filePath) throws IOException, JSONParseException {
         List<String> jsonLines = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new FileReader(filePath));
-        String line = null;
+        String line;
         while ((line = reader.readLine()) != null) {
             jsonLines.add(line);
         }
@@ -41,28 +43,28 @@ public class JSONParser {
         List<Pair<JSONToken, String>> jsonTokens
                 = new JSONTokenizer(jsonLines).tokenize().getTokens();
         inspectTokenSyntax(jsonTokens);
-        parsedObject = (JSONObject) parseObject(jsonTokens, JSONObject.class);
+        parsedObject = (JSONObject) parseContainer(jsonTokens, JSONObject.class);
     }
 
     /**
-     * TODO doc method
-     * @return
+     * Returns the object parsed from the JSON file.
+     * @return the object parsed from the JSON file.
      */
     public JSONObject getParsedObject() {
         return parsedObject;
     }
 
     /**
-     * TODO doc method
+     * Verifies that the syntax of a list of JSONTokens is in order.
      *
-     * @param jsonTokens
-     * @throws JSONParseException
+     * @param jsonTokens the list of JSONTokens to inspect.
+     * @throws JSONParseException if the syntax of the JSONTokens is not in order.
      */
-    public void inspectTokenSyntax(List<Pair<JSONToken, String>> jsonTokens)
+    private void inspectTokenSyntax(List<Pair<JSONToken, String>> jsonTokens)
             throws JSONParseException {
         List<JSONToken> expectedTokens = new ArrayList<>();
         //For a structure of which is the active encapsulating token (ARRAY_BEGIN/OBJECT_BEGIN)
-        List<JSONToken> encapsulatingTokens = new ArrayList<>(jsonTokens.size());
+        List<JSONToken> containerTokens = new ArrayList<>(jsonTokens.size());
         expectedTokens.add(OBJECT_BEGIN);
 
         for (int i = 0; i < jsonTokens.size(); i++) {
@@ -90,7 +92,7 @@ public class JSONParser {
                 throw new JSONParseException(messageString.toString());
             }
 
-            boolean insideArray = isInsideArray(token, encapsulatingTokens);
+            boolean insideArray = isInsideArray(token, containerTokens);
 
 
             //PRINT FOR DEBUG
@@ -132,21 +134,19 @@ public class JSONParser {
     }
 
     /**
-     * TODO doc method
+     * Parses a {@link JSONContainer} from a list of pairs of JSONTokens and values.
      *
-     * @param jsonTokens
-     * @return
-     * @throws JSONParseException
+     * @param jsonTokens the pairs of JSONTokens and values.
+     * @param type the type of JSONContainer that is parsed.
+     * @return the container of values.
      */
-    private JSONContainer parseObject(List<Pair<JSONToken, String>> jsonTokens, Class<? extends JSONContainer> type)
-            throws JSONParseException {
+    private JSONContainer parseContainer(List<Pair<JSONToken, String>> jsonTokens,
+                                         Class<? extends JSONContainer> type) {
         JSONContainer container = null;
         List<JSONToken> expectedTokens = new ArrayList<>();
-        List<JSONToken> encapsulatingTokens = new ArrayList<>();
         expectedTokens.add(OBJECT_BEGIN);
 
         String key = "";
-        List<JSONAttribute> attributeList = new ArrayList<>();
         boolean isOuterObject = false;
         boolean isOuterArray = false;
 
@@ -172,7 +172,7 @@ public class JSONParser {
                         int closeIndex = getContainerCloseIndex(jsonTokens, i, JSONObject.class);
                         List<Pair<JSONToken, String>> nestedObjectTokens
                                 = jsonTokens.subList(i, closeIndex);
-                        attribute = new JSONAttribute<>(key, parseObject(nestedObjectTokens, JSONObject.class));
+                        attribute = new JSONAttribute<>(key, parseContainer(nestedObjectTokens, JSONObject.class));
                         addValue = true;
                         nestedObjectTokens.clear();
                     }
@@ -210,7 +210,7 @@ public class JSONParser {
                         int closeIndex = getContainerCloseIndex(jsonTokens, i, JSONArray.class);
                         List<Pair<JSONToken, String>> nestedTokens
                                 = jsonTokens.subList(i, closeIndex);
-                        attribute = new JSONAttribute<>(key, parseObject(nestedTokens,
+                        attribute = new JSONAttribute<>(key, parseContainer(nestedTokens,
                                 JSONArray.class).getValues());
                         addValue = true;
                         nestedTokens.clear();
@@ -229,18 +229,18 @@ public class JSONParser {
     }
 
     /**
-     * TODO doc method
+     * Checks if a token is found in a list of tokens.
      *
-     * @param actualToken
-     * @param expectedTokens
-     * @return
+     * @param actualToken the token that is compared to values of the list.
+     * @param expectedTokens the list of tokens that actualToken is expected to be found from.
+     * @return true if actualToken was found from the list of expectedTokens.
      */
     private boolean tokenIsExpected(JSONToken actualToken, List<JSONToken> expectedTokens) {
         boolean actualIsExpected = false;
 
         for (JSONToken expectedToken : expectedTokens) {
             if (actualToken == expectedToken) {
-                actualIsExpected = true;
+                actualIsExpected = true; break;
             }
         }
 
@@ -248,37 +248,37 @@ public class JSONParser {
     }
 
     /**
-     * TODO doc method
+     * Returns a list of tokens expected when a value should be encountered.
      *
-     * @return
+     * @return a list of tokens expected when a value should be encountered.
      */
     private List<JSONToken> expectValueList() {
         return Arrays.asList(OBJECT_BEGIN, NULL, BOOLEAN, INTEGER, STRING, ARRAY_BEGIN);
     }
 
     /**
-     * TODO doc method
+     * Returns a list of tokens expected when a value should be assigned.
      *
-     * @return
+     * @return a list of tokens expected when a value should be assigned.
      */
     private List<JSONToken> expectAssignList() {
         return Arrays.asList(ASSIGN);
     }
 
     /**
-     * TODO doc method
+     * Returns a list of tokens expected when a key should be encountered.
      *
-     * @return
+     * @return a list of tokens expected when a key should be encountered.
      */
     private List<JSONToken> expectKeyList() {
         return Arrays.asList(KEY, OBJECT_END);
     }
 
     /**
-     * TODO doc method
+     * Returns a list of tokens expected after a value.
      *
-     * @param insideArray
-     * @return
+     * @param insideArray whether the value was within an array or not.
+     * @return a list of tokens expected after a value.
      */
     private List<JSONToken> expectAfterValue(boolean insideArray)  {
         return insideArray ? Arrays.asList(DELIMITER, ARRAY_END)
@@ -286,21 +286,22 @@ public class JSONParser {
     }
 
     /**
-     * TODO doc method
+     * Returns a list of tokens expected after a delimiter.
      *
-     * @param insideArray
-     * @return
+     * @param insideArray whether the delimiter was within an array or not.
+     * @return a list of tokens expected after a delimiter.
      */
     private List<JSONToken> expectAfterDelimiter(boolean insideArray) {
         return insideArray ? expectValueList() : Arrays.asList(KEY);
     }
 
     /**
-     * TODO doc method
+     * Returns the index of the corresponding closing token of a container.
      *
-     * @param jsonTokens
-     * @param start
-     * @return
+     * @param jsonTokens the list of tokens to search the index of the closing token.
+     * @param start the index of the opening token.
+     * @param type the type of Container (JSONArray or JSONObject)
+     * @return the index of the closing token of a container.
      */
     private int getContainerCloseIndex(List<Pair<JSONToken, String>> jsonTokens, int start,
                                        Class<? extends JSONContainer> type) {
@@ -334,27 +335,31 @@ public class JSONParser {
         return closeIndex;
     }
 
-
     /**
-     * TODO doc method
+     * Returns true if the current position in the list of tokens is contained within an array.
      *
-     * @param latestToken
-     * @param encapsulatingTokens
-     * @return
+     * Takes the latest produced token, and checks if it is significant in changing the context of the current position
+     * in tokens. Modifies the list of container tokens if it is, then checks if the last token in containerTokens
+     * signifies that the current position is within an array.
+     *
+     *
+     * @param latestToken the token that was produced last
+     * @param containerTokens the list of tokens that signify containers opening or closing.
+     * @return true if the current position in the list of tokens is contained within an array.
      */
-    private boolean isInsideArray(JSONToken latestToken, List<JSONToken> encapsulatingTokens) {
+    private boolean isInsideArray(JSONToken latestToken, List<JSONToken> containerTokens) {
         boolean insideArray = false;
 
         if (latestToken == OBJECT_BEGIN) {
-            encapsulatingTokens.add(OBJECT_BEGIN);
+            containerTokens.add(OBJECT_BEGIN);
         } else if (latestToken == ARRAY_BEGIN) {
-            encapsulatingTokens.add(ARRAY_BEGIN);
+            containerTokens.add(ARRAY_BEGIN);
         } else if (latestToken == OBJECT_END || latestToken == ARRAY_END) {
-            encapsulatingTokens.remove(encapsulatingTokens.size() - 1);
+            containerTokens.remove(containerTokens.size() - 1);
         }
 
-        if (encapsulatingTokens.size() > 0 &&
-                encapsulatingTokens.get(encapsulatingTokens.size() - 1) == ARRAY_BEGIN) {
+        if (containerTokens.size() > 0 &&
+                containerTokens.get(containerTokens.size() - 1) == ARRAY_BEGIN) {
             insideArray = true;
         }
 
