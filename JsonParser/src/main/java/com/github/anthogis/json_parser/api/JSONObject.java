@@ -74,10 +74,11 @@ public class JSONObject implements JSONContainer {
     }
 
     /**
-     * Returns the JSON notation of this JSONObject.
+     * Creates the notation through formatObject and returns it.
      * @return the JSON notation.
      */
     public String getNotation() {
+        formatObject();
         return notation;
     }
 }
