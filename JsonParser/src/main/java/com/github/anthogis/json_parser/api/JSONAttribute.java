@@ -52,7 +52,9 @@ public class JSONAttribute<T> {
                 for (Object o : ((Collection) value)) {
                     notationBuilder.append(constructNotation(o)).append(',');
                 }
-                notationBuilder.deleteCharAt(notationBuilder.length() - 1);
+                if (notationBuilder.charAt(notationBuilder.length() - 1) == ',') {
+                    notationBuilder.deleteCharAt(notationBuilder.length() - 1);
+                }
             }
             notationBuilder.append(']');
         } else if (value instanceof JSONObject) {

@@ -1,5 +1,6 @@
 package com.github.anthogis.json_parser;
 
+import com.github.anthogis.json_parser.api.JSONAttribute;
 import com.github.anthogis.json_parser.api.JSONObject;
 import com.github.anthogis.json_parser.api.JSONParser;
 import com.github.anthogis.json_parser.api.JSONWriter;
@@ -8,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(JUnit4.class)
@@ -26,5 +28,20 @@ public class JSONParserTest {
         for (String line : jsonLines) {
             System.out.println(line);
         }
+
+        jo = new JSONObject();
+        ArrayList<Object> arr = new ArrayList();
+        arr.add(new JSONObject());
+        arr.add(2);
+        jo.add(new JSONAttribute<>("arr", arr));
+
+        jo.formatObject();
+
+        jsonLines = new JSONFormatter(jo).getJsonDataLines();
+
+        for (String line : jsonLines) {
+            System.out.println(line);
+        }
+
     }
 }

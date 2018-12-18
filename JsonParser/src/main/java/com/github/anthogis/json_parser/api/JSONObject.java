@@ -55,7 +55,10 @@ public class JSONObject implements JSONContainer {
             builder.append(attribute.getNotation()).append(',');
         }
 
-        builder.deleteCharAt(builder.length() - 1);
+        if (builder.charAt(builder.length() - 1) == ',') {
+            builder.deleteCharAt(builder.length() - 1);
+        }
+
         builder.append('}');
 
         notation = builder.toString();
