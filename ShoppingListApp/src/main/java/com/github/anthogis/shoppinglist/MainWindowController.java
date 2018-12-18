@@ -80,7 +80,7 @@ public class MainWindowController {
     private DBoxInterface dBoxInterface;
 
     /**
-     * TODO Write javadoc
+     * The interface to the Hibernate API.
      */
     private Optional<HibernateInterface> hibernateInterface;
 
@@ -181,13 +181,14 @@ public class MainWindowController {
     /**
      * Event called when <code>MenuItem saveToH2</code> is clicked.
      *
-     * TODO Specify function
+     * Saves contents of shoppingListTable to a database through HibernateInterface.
      */
     public void saveToH2Action() {
         if (shoppingListTable.getItems().isEmpty()) {
             showMessage(ActivityText.NOTHING_TO_SAVE);
         } else if (hibernateInterface.isPresent()) {
             hibernateInterface.get().addValues(shoppingListTable.getItems());
+            showMessage(ActivityText.SAVE_SUCCESSFUL);
         } else {
             showMessage(ActivityText.H2_LOGIN_ERROR);
         }
@@ -252,7 +253,10 @@ public class MainWindowController {
     }
 
     /**
-     * TODO write JAVADOC
+     * Event called when <code>Get Dropbox Token</code> is clicked.
+     *
+     * Produces a link that allows the user to authorize this app in his/her dropbox. If possible, the link is opened
+     * in the browser. Otherwise it's showed in an alert.
      */
     public void dropboxTokenAction() {
         URI authorizationLink = null;
