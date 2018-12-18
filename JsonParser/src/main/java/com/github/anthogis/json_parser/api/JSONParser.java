@@ -1,6 +1,5 @@
 package com.github.anthogis.json_parser.api;
 
-import com.github.anthogis.json_parser.utils.JSONArray;
 import com.github.anthogis.json_parser.utils.JSONContainer;
 import com.github.anthogis.json_parser.utils.JSONParseException;
 import com.github.anthogis.json_parser.utils.JSONToken;
@@ -29,7 +28,7 @@ public class JSONParser {
     /**
      * The object parsed from a JSON file.
      */
-    private JSONObject parsedObject;
+    private JSONContainer parsedContainer;
 
     /**
      * Constructs a JSONParser, which parses JSON data from a given file.
@@ -50,15 +49,15 @@ public class JSONParser {
         List<Pair<JSONToken, String>> jsonTokens
                 = new JSONTokenizer(jsonLines).tokenize().getTokens();
         inspectTokenSyntax(jsonTokens);
-        parsedObject = (JSONObject) parseContainer(jsonTokens, JSONObject.class);
+        parsedContainer = parseContainer(jsonTokens, JSONObject.class);
     }
 
     /**
      * Returns the object parsed from the JSON file.
      * @return the object parsed from the JSON file.
      */
-    public JSONObject getParsedObject() {
-        return parsedObject;
+    public JSONContainer getParsedContainer() {
+        return parsedContainer;
     }
 
     /**
@@ -73,6 +72,7 @@ public class JSONParser {
         //For a structure of which is the active encapsulating token (ARRAY_BEGIN/OBJECT_BEGIN)
         List<JSONToken> containerTokens = new ArrayList<>(jsonTokens.size());
         expectedTokens.add(OBJECT_BEGIN);
+        expectedTokens.add(ARRAY_BEGIN);
 
         /* For debugging
         for (int i = 0; i < jsonTokens.size(); i++) {

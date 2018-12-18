@@ -24,4 +24,10 @@ public interface JSONContainer {
      * @return the list of values.
      */
     List<JSONAttribute> getValues();
+
+    /**
+     * Returns the JSON notation of this container.
+     * @return the JSON notation of this container.
+     */
+    String getNotation();
 }

@@ -41,7 +41,7 @@ public class JSONAttribute<T> {
     public JSONAttribute(String keyWord, T value) {
         this.value = value;
         this.keyWord = escapeQuotes(keyWord);
-        notation = '"' + keyWord + "\" : " + constructNotation(value);
+        notation = constructNotation(value);
     }
 
     /**

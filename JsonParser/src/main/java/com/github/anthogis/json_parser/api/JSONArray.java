@@ -51,4 +51,15 @@ public class JSONArray implements JSONContainer {
     public List<JSONAttribute> getValues() {
         return values;
     }
+
+    @Override
+    public String getNotation() {
+        StringBuilder notationBuilder = new StringBuilder();
+
+        notationBuilder.append('[');
+
+        notationBuilder.append(']');
+
+        return notationBuilder.toString();
+    }
 }

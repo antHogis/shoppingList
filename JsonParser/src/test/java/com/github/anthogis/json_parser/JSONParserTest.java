@@ -1,20 +1,16 @@
 package com.github.anthogis.json_parser;
 
-import com.github.anthogis.json_parser.api.JSONAttribute;
 import com.github.anthogis.json_parser.api.JSONObject;
 import com.github.anthogis.json_parser.api.JSONParser;
 import com.github.anthogis.json_parser.api.JSONWriter;
 import com.github.anthogis.json_parser.utils.JSONParseException;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -65,10 +61,10 @@ public class JSONParserTest {
     public void parseWriteEquals() throws IOException {
         System.out.println("TEST PARSE WRITE EQUALS");
 
-        String inputFile = "testIn1.json";
+        String inputFile = "testIn2.json";
         String outputFile = "testOut1.json";
 
-        JSONObject jo = new JSONParser(inputFile).getParsedObject();
+        JSONObject jo = (JSONObject) new JSONParser(inputFile).getParsedContainer();
         new JSONWriter(jo, outputFile, true).writeFile();
 
         assertTrue(Arrays.equals(Files.readAllBytes(Paths.get(inputFile)),
@@ -118,7 +114,7 @@ public class JSONParserTest {
      */
     @Test
     public void testParsedValuesAndKeys() throws IOException {
-        JSONObject jo = new JSONParser("testIn2.json").getParsedObject();
+        JSONObject jo = (JSONObject) new JSONParser("testIn2.json").getParsedContainer();
 
         assertEquals(2.2, jo.getValues().get(0).getValue());
         assertEquals(false, jo.getValues().get(3).getValue());

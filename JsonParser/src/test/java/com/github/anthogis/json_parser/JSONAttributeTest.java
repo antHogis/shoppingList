@@ -35,7 +35,7 @@ public class JSONAttributeTest {
     @Test
     public void testInteger() {
         attribute = new JSONAttribute<>("int", 3);
-        expected = "\"int\" : 3";
+        expected = "3";
 
         testHelper();
     }
@@ -46,7 +46,7 @@ public class JSONAttributeTest {
     @Test
     public void testFloat() {
         attribute = new JSONAttribute<>("float", 153.239401);
-        expected = "\"float\" : 153.239401";
+        expected = "153.239401";
 
         testHelper();
     }
@@ -58,7 +58,7 @@ public class JSONAttributeTest {
     public void testString() {
         String testString = "test 123123 ^*[]}}{€ YEAS";
         attribute = new JSONAttribute<>("string", testString);
-        expected = "\"string\" : \"" + testString + '\"';
+        expected = "\"" + testString + '\"';
 
         testHelper();
     }
@@ -69,12 +69,12 @@ public class JSONAttributeTest {
     @Test
     public void testBoolean() {
         attribute = new JSONAttribute<>("bool", true);
-        expected = "\"bool\" : true";
+        expected = "true";
 
         testHelper();
 
         attribute = new JSONAttribute<>("bool", false);
-        expected = "\"bool\" : false";
+        expected = "false";
 
         testHelper();
     }
@@ -85,7 +85,7 @@ public class JSONAttributeTest {
     @Test
     public void testNull() {
         attribute = new JSONAttribute<>("null", null);
-        expected = "\"null\" : null";
+        expected = "null";
 
         testHelper();
     }
@@ -105,7 +105,7 @@ public class JSONAttributeTest {
         attribute = new JSONAttribute<>("object", object);
 
         StringBuilder expectationBuilder = new StringBuilder();
-        expectationBuilder.append("\"object\" : {");
+        expectationBuilder.append("{");
         expectationBuilder.append("\"int\" : ").append(23).append(',');
         expectationBuilder.append("\"array\" : [").append("\"fsdfafd\"").append(',').append(233)
                 .append(',').append("true").append(',').append("null").append("],");
@@ -126,7 +126,7 @@ public class JSONAttributeTest {
         attribute = new JSONAttribute<>("array", Arrays.asList("fsdfafd", 233, true, null));
 
         StringBuilder expectationBuilder = new StringBuilder()
-                .append("\"array\" : [").append("\"fsdfafd\"").append(',').append(233)
+                .append("[").append("\"fsdfafd\"").append(',').append(233)
                 .append(',').append("true").append(',').append("null").append(']');
         expected = expectationBuilder.toString();
 
@@ -140,7 +140,7 @@ public class JSONAttributeTest {
     public void testJSONAttribute() {
         attribute = new JSONAttribute<>("attribute value",
                 new JSONAttribute<>("irrelevant", 2345));
-        expected = "\"attribute value\" : " + 2345;
+        expected = "2345";
 
         testHelper();
     }
