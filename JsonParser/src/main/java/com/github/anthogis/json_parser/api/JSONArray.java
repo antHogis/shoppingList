@@ -1,7 +1,8 @@
-package com.github.anthogis.json_parser.utils;
+package com.github.anthogis.json_parser.api;
 
 import com.github.anthogis.json_parser.api.JSONAttribute;
 import com.github.anthogis.json_parser.api.JSONParser;
+import com.github.anthogis.json_parser.utils.JSONContainer;
 
 import java.util.ArrayList;
 import java.util.List;
