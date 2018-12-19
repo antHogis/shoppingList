@@ -194,7 +194,7 @@ public class JSONParser {
                 case ASSIGN:
                     break;
                 case INTEGER:
-                    attribute = new JSONAttribute<>(key, Integer.parseInt(value));
+                    attribute = new JSONAttribute<>(key, Long.parseLong(value));
                     addValue = true;
                     break;
                 case FLOAT:

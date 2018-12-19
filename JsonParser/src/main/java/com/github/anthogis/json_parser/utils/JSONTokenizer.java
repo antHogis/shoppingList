@@ -97,6 +97,8 @@ public class JSONTokenizer {
                 } else if (Character.isLetter(currentChar) || storeString || storeKey) {
                     if (storeString || storeKey) {
                         value.append(currentChar);
+                    } else if (storeNumber && (currentChar == 'e' ||currentChar == 'E')) {
+                        value.append(currentChar);
                     } else {
                         try {
                             String nextChars = currentLine.substring(j, j + 4);

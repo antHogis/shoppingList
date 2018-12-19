@@ -119,7 +119,7 @@ public class JSONParserTest {
 
         assertEquals(2.2, jo.getValues().get(0).getValue());
         assertEquals(false, jo.getValues().get(3).getValue());
-        int testNestedInt = ((int) ((JSONObject) jo.getAttribute("testNested")
+        long testNestedInt = ((long) ((JSONObject) jo.getAttribute("testNested")
                 .getValue()).getAttribute("testNestedInt").getValue());
         assertEquals(2, testNestedInt);
     }
