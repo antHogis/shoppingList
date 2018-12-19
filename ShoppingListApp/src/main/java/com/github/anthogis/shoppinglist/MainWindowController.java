@@ -252,6 +252,9 @@ public class MainWindowController {
         }
     }
 
+    /**
+     * Enables connectivity with H2 database
+     */
     public void logInToH2Action() {
         try {
             if (hibernateInterface == null || !hibernateInterface.isPresent()) {
