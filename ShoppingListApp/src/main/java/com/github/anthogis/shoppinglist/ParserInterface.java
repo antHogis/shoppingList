@@ -69,6 +69,7 @@ public class ParserInterface {
     /**
      * Writes shoppingListObject to a .json file using JSONWriter.
      * @param fileName the name of the .json file.
+     * @param addSuffix whether ".json" should be appended to the end of the filename or not.
      * @return true if the write was successful.
      */
     public boolean writeToJSON(String fileName, boolean addSuffix) {

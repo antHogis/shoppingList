@@ -48,6 +48,9 @@ public class JSONAttribute<T> {
 
     /**
      * Constructs the notation of JSONAttribute according to the data type of <code>value</code>.
+     *
+     * @param value the value to construct the notation for.
+     * @return a string for the notation of the attribute.
      */
     private String constructNotation(Object value) {
         StringBuilder notationBuilder = new StringBuilder();

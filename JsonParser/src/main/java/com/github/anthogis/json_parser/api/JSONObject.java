@@ -41,6 +41,8 @@ public class JSONObject implements JSONContainer {
 
     /**
      * Creates the JSON notation for this JSONObject.
+     *
+     * @return the json notation constructed.
      */
     private String constructNotation() {
         StringBuilder builder = new StringBuilder();

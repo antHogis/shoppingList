@@ -51,8 +51,8 @@ public class ShoppingListItem {
      * The constructor for ShoppingListItem.
      *
      * <p>The constructor for ShoppingListItem. Assigns the argument values to the attributes of the ShoppingListItem.</p>
-     * @param itemName
-     * @param itemAmount
+     * @param itemName the name of the item.
+     * @param itemAmount the amount of the item.
      */
     public ShoppingListItem(String itemName, String itemAmount) {
         setItemName(itemName);

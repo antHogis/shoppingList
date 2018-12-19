@@ -42,6 +42,7 @@ public class JSONWriter {
      *
      * @param jsonContainer the JSONObject to write to a JSON file.
      * @param fileName the name of the JSON file.
+     * @param addSuffix whether of not ".json" should be appended to the end of the filename.
      * @throws IOException if writer's construction fails
      */
     public JSONWriter(JSONContainer jsonContainer, String fileName, boolean addSuffix) throws IOException {

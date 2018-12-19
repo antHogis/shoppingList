@@ -53,7 +53,7 @@ public class MainWindow extends Application {
     }
 
     /**
-     * Method for handling closing of the window, implementation of EventHandler<WindowEvent>.
+     * Method for handling closing of the window, implementation of {@link javafx.event.EventHandler}.
      *
      * @param event the event that caused request to close window.
      */

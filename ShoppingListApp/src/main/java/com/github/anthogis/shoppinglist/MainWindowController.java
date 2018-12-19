@@ -329,6 +329,8 @@ public class MainWindowController {
 
     /**
      * Helper method for saving JSON files.
+     *
+     * @param consumer the action to launch to save the file.
      */
     private void saveJson(Consumer<String> consumer) {
         if (shoppingListTable.getItems().size() > 0) {
@@ -374,7 +376,7 @@ public class MainWindowController {
      * Removes selected row from <code>shoppingListTable</code> when called if delete is pressed.
      *
      * <p>Helper method for method setOnKeyPressed of object shoppingListTable, meant to be used as a method
-     * reference implementation of EventHandler<KeyEvent>. If shoppingListTable has input
+     * reference implementation of {@link javafx.event.EventHandler}. If shoppingListTable has input
      * focus, a row in the table is selected, and the delete key is pressed, then the selected row of
      * shoppingListTable is deleted.</p>
      *

@@ -36,7 +36,9 @@ public class JSONWriterTest {
     static String fileName;
 
     /**
-     * Initializes values for testing.
+     * Initializes values for testing, writes a test json.
+     *
+     * @throws IOException if the file could not be written.
      */
     @BeforeClass
     public static void initTest() throws IOException {

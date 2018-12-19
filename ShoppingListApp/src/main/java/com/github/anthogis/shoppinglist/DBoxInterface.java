@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  *     <li>using an access token to enable access to an account.</li>
  *     <li>storing files to a folder in the account.</li>
  * </ul>
- * </p>
+ *
  *
  * @author antHogis
  * @version 1.3

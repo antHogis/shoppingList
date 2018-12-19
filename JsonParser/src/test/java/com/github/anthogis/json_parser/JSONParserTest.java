@@ -101,7 +101,7 @@ public class JSONParserTest {
 
     /**
      * Test that parser throws exception if file starts with something else than whitespace or '{'
-     * @throws IOException
+     * @throws IOException if a test file could not be read.
      */
     @Test
     public void testInvalidSyntax() throws IOException {
