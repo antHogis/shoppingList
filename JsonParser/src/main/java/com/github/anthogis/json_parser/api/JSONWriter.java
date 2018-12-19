@@ -1,4 +1,7 @@
-package com.github.anthogis.json_parser;
+package com.github.anthogis.json_parser.api;
+
+import com.github.anthogis.json_parser.utils.JSONContainer;
+import com.github.anthogis.json_parser.utils.JSONFormatter;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
@@ -16,7 +19,7 @@ import java.util.List;
  * returns the JSONObject's notation as a list of lines.</p>
  *
  * @author antHogis
- * @version 1.0
+ * @version 1.3
  * @since 1.0
  */
 public class JSONWriter {
@@ -37,12 +40,13 @@ public class JSONWriter {
      * returns a list of lines. The Writer writer is intialized as well, and is given the filename String from arguments,
      * which is used as the filename when writing the file.</p>
      *
-     * @param jsonObject the JSONObject to write to a JSON file.
+     * @param jsonContainer the JSONObject to write to a JSON file.
      * @param fileName the name of the JSON file.
+     * @param addSuffix whether of not ".json" should be appended to the end of the filename.
      * @throws IOException if writer's construction fails
      */
-    public JSONWriter(JSONObject jsonObject, String fileName, boolean addSuffix) throws IOException {
-        jsonLines = new JSONFormatter(jsonObject).getJsonDataLines();
+    public JSONWriter(JSONContainer jsonContainer, String fileName, boolean addSuffix) throws IOException {
+        jsonLines = new JSONFormatter(jsonContainer).getJsonDataLines();
 
         fileName = addSuffix && !fileName.endsWith(".json") ? fileName + ".json" : fileName;
 
@@ -51,7 +55,7 @@ public class JSONWriter {
     }
 
     /**
-     * Writes the JSON file.
+     * Writes the JSON file and closes the writer.
      *
      * @return true is the write was successful.
      */
@@ -67,6 +71,12 @@ public class JSONWriter {
             writeSuccessful = true;
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         return writeSuccessful;

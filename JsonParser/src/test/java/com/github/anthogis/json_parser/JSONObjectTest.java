@@ -1,63 +1,139 @@
 package com.github.anthogis.json_parser;
 
-import com.github.anthogis.json_parser.JSONAttribute;
-
-import static org.junit.Assert.*;
-
-import com.github.anthogis.json_parser.JSONObject;
-import com.github.anthogis.json_parser.JSONWriter;
+import com.github.anthogis.json_parser.api.JSONAttribute;
+import com.github.anthogis.json_parser.api.JSONObject;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.AbstractList;
+import java.util.Arrays;
 
-@RunWith(JUnit4.class)
+import static org.junit.Assert.assertEquals;
+
+/**
+ * Tests JSONObject.
+ *
+ * @author antHogis
+ * @version 1.3
+ * @since 1.3
+ */
 public class JSONObjectTest {
-    static JSONObject testObjectOne;
-    static JSONObject testObjectTwo;
+    /**
+     * The constructed object.
+     */
+    static JSONObject object;
 
-    @BeforeClass
-    public static void init() {
-        testObjectTwo = new JSONObject();
-        testObjectTwo.getAttributes().add(new JSONAttribute<Integer>("fsds", 12));
-        testObjectTwo.getAttributes().add(new JSONAttribute<Boolean>("boolean", true));
-        ArrayList<String> al = new ArrayList<>();
-        al.add("derp1");
-        al.add("derp2");
-        al.add("derp3");
-        ArrayList<Integer> al2 = new ArrayList<>();
-        testObjectTwo.getAttributes().add(new JSONAttribute<List>("list", al));
-        testObjectTwo.getAttributes().add(new JSONAttribute<List>("list 2", al2));
-        testObjectTwo.getAttributes().add(new JSONAttribute<String>("strink", null));
+    /**
+     * Contains the expected notation of object.
+     */
+    static StringBuilder expected;
 
-        testObjectOne = new JSONObject();
-        testObjectOne.getAttributes().add(new JSONAttribute<Integer>("fsds", 12));
-        testObjectOne.getAttributes().add(new JSONAttribute<Boolean>("boolean", true));
-        testObjectOne.getAttributes().add(new JSONAttribute<List>("list", al));
-        testObjectOne.getAttributes().add(new JSONAttribute<List>("list 2", al2));
-        testObjectOne.getAttributes().add(new JSONAttribute<String>("strink", null));
-        testObjectOne.getAttributes().add(new JSONAttribute<JSONObject>("object", testObjectTwo));
-        testObjectOne.formatObject();
+    /**
+     * Helper method for running tests.
+     *
+     * <ul>
+     *     <li>Appends a }-symbol to the end of the expected notation.</li>
+     *     <li>Prints the expected and actual notation of object.</li>
+     *     <li>Asserts that the actual notation of object is equal to the expected string.</li>
+     * </ul>
+     */
+    private void runTest() {
+        expected.append('}');
+        String objectNotation = object.getNotation();
+        System.out.println("Expected : " + expected.toString());
+        System.out.println("Actual   : " + objectNotation);
+        assertEquals(expected.toString(), objectNotation);
     }
 
-    @Test
-    public void testNotation() {
-        System.out.println(testObjectOne.getNotation());
-        //assertTrue(testObjectOne.getNotation().equals("{\"fsds\" : 12,\"very gay\" : true}"));
+    /**
+     * Initializes test objects, runs before every test method.
+     */
+    @Before
+    public void initObject() {
+        object = new JSONObject();
+        expected = new StringBuilder().append('{');
     }
 
-
+    /**
+     * Tests the add and getter methods of JSONObject.
+     */
     @Test
-    public void testWriter() throws IOException {
-        //JSONWriter jsonWriter = new JSONWriter(testObjectOne, "test");
-        //assertTrue(jsonWriter.writeFile());
+    public void testAddAndGet() {
+        JSONAttribute attribute = new JSONAttribute<>("blaze it", 420);
+        object.add(attribute);
+        assertEquals(1, object.getValues().size());
+        assertEquals(attribute, object.getValues().get(0));
+    }
+
+    /**
+     * Tests the notation of an empty object.
+     */
+    @Test
+    public void testEmpty() {
+        runTest();
+    }
+
+    /**
+     * Tests the notation of an object with a single value.
+     */
+    @Test
+    public void testWithSingleValue() {
+        object.add(new JSONAttribute<>("int", 234));
+        expected.append('"').append("int").append("\": ").append(234);
+
+        runTest();
+    }
+
+    /**
+     * Tests the notation of an object with multiple values.
+     */
+    @Test
+    public void testWithMultipleValues() {
+        object.add(new JSONAttribute<>("string", "skrrt dab on 'em haters"));
+        expected.append('"').append("string").append("\": ").append("\"skrrt dab on 'em haters\"");
+
+        object.add(new JSONAttribute<>("bool", false));
+        expected.append(",\"").append("bool").append("\": ").append("false");
+
+        object.add(new JSONAttribute<>("int", -234));
+        expected.append(',').append('"').append("int").append("\": ").append(-234);
+
+        runTest();
+    }
+
+    /**
+     * Test the notation of an object with nested objects.
+     */
+    @Test
+    public void testNestedObject() {
+        JSONObject nested = new JSONObject();
+        nested.add(new JSONAttribute<>("nested nested", new JSONObject()));
+        nested.add(new JSONAttribute<>("key", "value"));
+        object.add(new JSONAttribute<>("nested", nested));
+
+        expected.append("\"nested\": ").append('{').append("\"nested nested\": {}")
+                .append(',').append("\"key\": \"value\"").append('}');
+
+        runTest();
+    }
+
+    /**
+     * Tests the notation of an object with an array.
+     */
+    @Test
+    public void testCollection() {
+        JSONObject nested = new JSONObject();
+        nested.add(new JSONAttribute<>("nested nested", new JSONObject()));
+        nested.add(new JSONAttribute<>("int", 420));
+
+        object.add(new JSONAttribute<>("array",
+                Arrays.asList("fsdfafd", 233, true, null, nested)));
+        expected.append("\"array\": [").append("\"fsdfafd\"").append(',').append(233).append(',').append("true")
+                .append(',').append("null").append(',').append("{\"nested nested\": {},")
+                .append("\"int\": ").append(420).append('}').append(']');
+
+        runTest();
     }
 }

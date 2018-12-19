@@ -1,4 +1,4 @@
-package com.github.anthogis.shoppinglist.gui;
+package com.github.anthogis.shoppinglist;
 
 /**
  * ActivityText contains messages that are intended for info prompts.
@@ -7,7 +7,7 @@ package com.github.anthogis.shoppinglist.gui;
  * quickly. These are meant to inform the user that an event occurred.</p>
  *
  * @author antHogis
- * @version 1.0
+ * @version 1.3
  * @since 1.0
  */
 public enum ActivityText {
@@ -23,7 +23,8 @@ public enum ActivityText {
     NO_LOGIN("Please login to Dropbox."),
     FILE_FAIL("File couldn't be opened"),
     FILE_MALFORMED("File is malformed"),
-    DB_AUTH_ERROR("Could not get link.");
+    DBOX_AUTH_ERROR("Could not get link."),
+    H2_LOGIN_ERROR("Could not access H2 database");
 
 
     String message;

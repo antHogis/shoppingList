@@ -4,7 +4,7 @@
     <groupId>com.github.anthogis</groupId>
     <artifactId>ShoppingList</artifactId>
     <packaging>pom</packaging>
-    <version>1.2</version>
+    <version>1.3</version>
     <modules>
         <module>ShoppingListApp</module>
         <module>JsonParser</module>

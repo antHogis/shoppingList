@@ -1,6 +1,5 @@
 package com.github.anthogis.shoppinglist;
 
-import com.github.anthogis.shoppinglist.gui.MainWindow;
 import javafx.application.Application;
 
 /**
@@ -9,7 +8,7 @@ import javafx.application.Application;
  * <p>The main class of the application. Launches MainWindow.</p>
  *
  * @author antHogis
- * @version 1.0
+ * @version 1.3
  * @since 1.0
  */
 public class App {

@@ -1,17 +1,11 @@
-package com.github.anthogis.shoppinglist.gui;
+package com.github.anthogis.shoppinglist;
 
 import com.dropbox.core.DbxException;
-import com.github.anthogis.shoppinglist.DBoxInterface;
-import com.github.anthogis.shoppinglist.ParserInterface;
-import com.github.anthogis.shoppinglist.ShoppingListItem;
-import com.github.anthogis.shoppinglist.ShoppingListMalformedException;
-import com.github.anthogis.shoppinglist.ShoppingListReader;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -20,6 +14,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
+import org.hibernate.service.spi.ServiceException;
 
 import java.awt.*;
 import java.io.File;
@@ -40,7 +35,7 @@ import java.util.function.Consumer;
  * to save the shopping list, and informing the user of events occurring.</p>
  *
  * @author antHogis
- * @version 1.0
+ * @version 1.3
  * @since 1.0
  */
 public class MainWindowController {
@@ -80,9 +75,19 @@ public class MainWindowController {
     private ParserInterface parserInterface;
 
     /**
-     * The interface to Dropbox.
+     * The interface to using the Dropbox API.
      */
     private DBoxInterface dBoxInterface;
+
+    /**
+     * The interface to the Hibernate API.
+     */
+    private Optional<HibernateInterface> hibernateInterface;
+
+    /**
+     * Indiciates if the shopping list has been saved.
+     */
+    private boolean shoppingListSaved;
 
     /**
      * Lifecycle method. Called after @FXML annotated fields are populated.
@@ -94,6 +99,10 @@ public class MainWindowController {
         parserInterface = new ParserInterface();
         dBoxInterface = new DBoxInterface();
 
+        logInToH2Action();
+
+        shoppingListSaved = false;
+
         fadeOutLabel = new FadeTransition(Duration.millis(1500));
         fadeOutLabel.setNode(activityLabel);
         fadeOutLabel.setFromValue(0.0);
@@ -101,6 +110,7 @@ public class MainWindowController {
         fadeOutLabel.setCycleCount(2);
         fadeOutLabel.setAutoReverse(true);
 
+        //Set key event handler for shoppingListTable
         shoppingListTable.setOnKeyPressed(this::tableKeyEventHandler);
 
         showMessage(ActivityText.WELCOME);
@@ -127,6 +137,7 @@ public class MainWindowController {
                 List<ShoppingListItem> shoppingList
                         = new ShoppingListReader(shoppingListFile).getShoppingList();
                 shoppingListTable.getItems().addAll(shoppingList);
+                shoppingListSaved = true;
             } catch (IOException e) {
                 showMessage(ActivityText.FILE_FAIL);
             } catch (ShoppingListMalformedException e) {
@@ -146,6 +157,7 @@ public class MainWindowController {
         saveJson(fileName -> {
             if (parserInterface.writeToJSON(fileName, true)) {
                 showMessage(ActivityText.SAVE_SUCCESSFUL);
+                shoppingListSaved = true;
             } else {
                 showMessage(ActivityText.SAVE_FAILED);
             }
@@ -154,13 +166,14 @@ public class MainWindowController {
 
     /**
      * Event called when <code>MenuItem saveToJSON</code> is clicked. Uses method {@link #saveJson(Consumer)}
-     * to save the shopping list to json to DropBox by calling {@link com.github.anthogis.shoppinglist.DBoxInterface#saveAndUpload(String, ParserInterface)}.
+     * to save the shopping list to json to DropBox by calling {@link com.github.anthogis.shoppinglist.DBoxInterface#upload(String, ParserInterface)}.
      */
     public void saveToDropBoxAction() {
         saveJson(fileName -> {
             try {
-                if (dBoxInterface.saveAndUpload(fileName, parserInterface)) {
+                if (dBoxInterface.upload(fileName, parserInterface)) {
                     showMessage(ActivityText.SAVE_SUCCESSFUL);
+                    shoppingListSaved = true;
                 } else {
                     showMessage(ActivityText.SAVE_FAILED);
                 }
@@ -173,9 +186,19 @@ public class MainWindowController {
 
     /**
      * Event called when <code>MenuItem saveToH2</code> is clicked.
+     *
+     * Saves contents of shoppingListTable to a database through HibernateInterface.
      */
     public void saveToH2Action() {
-        System.out.println("hoo kakkone");
+        if (shoppingListTable.getItems().isEmpty()) {
+            showMessage(ActivityText.NOTHING_TO_SAVE);
+        } else if (hibernateInterface.isPresent()) {
+            hibernateInterface.get().addValues(shoppingListTable.getItems());
+            showMessage(ActivityText.SAVE_SUCCESSFUL);
+            shoppingListSaved = true;
+        } else {
+            showMessage(ActivityText.H2_LOGIN_ERROR);
+        }
     }
 
     /**
@@ -185,19 +208,24 @@ public class MainWindowController {
      * that the player wants to close the application.</p>
      */
     public void closeMainWindowAction() {
-        Alert closeAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        Alert closeAlert = new Alert(Alert.AlertType.WARNING);
         closeAlert.setTitle("Warning!");
         closeAlert.setHeaderText("You are discarding unsaved changes");
         closeAlert.setContentText("If you close now, all unsaved changed will be discarded.\n" +
                 "Close anyway?");
 
         closeAlert.getButtonTypes().setAll(ButtonType.CLOSE, ButtonType.CANCEL);
-
-        Optional<ButtonType> result = closeAlert.showAndWait();
-        if (result.get() == ButtonType.CLOSE) {
+        if (shoppingListSaved || shoppingListTable.getItems().isEmpty()) {
+            hibernateInterface.ifPresent(HibernateInterface::close);
             Platform.exit();
         } else {
-            closeAlert.close();
+            Optional<ButtonType> result = closeAlert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.CLOSE) {
+                hibernateInterface.ifPresent(HibernateInterface::close);
+                Platform.exit();
+            } else {
+                closeAlert.close();
+            }
         }
     }
 
@@ -225,6 +253,20 @@ public class MainWindowController {
     }
 
     /**
+     * Enables connectivity with H2 database
+     */
+    public void logInToH2Action() {
+        try {
+            if (hibernateInterface == null || !hibernateInterface.isPresent()) {
+                hibernateInterface = Optional.of(new HibernateInterface());
+            }
+        } catch (ServiceException e) {
+            hibernateInterface = Optional.empty();
+            showMessage(ActivityText.H2_LOGIN_ERROR);
+        }
+    }
+
+    /**
      * Event called when <code>MenuItem clearTable</code> is clicked.
      *
      * <p>Event called when <code>MenuItem clearTable</code> is clicked. Deletes all items in the
@@ -236,7 +278,10 @@ public class MainWindowController {
     }
 
     /**
-     * TODO write JAVADOC
+     * Event called when <code>Get Dropbox Token</code> is clicked.
+     *
+     * Produces a link that allows the user to authorize this app in his/her dropbox. If possible, the link is opened
+     * in the browser. Otherwise it's showed in an alert.
      */
     public void dropboxTokenAction() {
         URI authorizationLink = null;
@@ -247,7 +292,7 @@ public class MainWindowController {
             desktop.browse(authorizationLink);
 
         } catch (NullPointerException | URISyntaxException e) {
-            showMessage(ActivityText.DB_AUTH_ERROR);
+            showMessage(ActivityText.DBOX_AUTH_ERROR);
 
         } catch (UnsupportedOperationException | IOException | SecurityException |
                 IllegalArgumentException e) {
@@ -276,6 +321,7 @@ public class MainWindowController {
 
             ShoppingListItem shoppingListItem = new ShoppingListItem(itemText, amountText);
             shoppingListTable.getItems().add(shoppingListItem);
+            shoppingListSaved = false;
         } else {
             showMessage(ActivityText.INVALID_INPUT);
         }
@@ -283,6 +329,8 @@ public class MainWindowController {
 
     /**
      * Helper method for saving JSON files.
+     *
+     * @param consumer the action to launch to save the file.
      */
     private void saveJson(Consumer<String> consumer) {
         if (shoppingListTable.getItems().size() > 0) {
@@ -328,7 +376,7 @@ public class MainWindowController {
      * Removes selected row from <code>shoppingListTable</code> when called if delete is pressed.
      *
      * <p>Helper method for method setOnKeyPressed of object shoppingListTable, meant to be used as a method
-     * reference implementation of EventHandler<KeyEvent>. If shoppingListTable has input
+     * reference implementation of {@link javafx.event.EventHandler}. If shoppingListTable has input
      * focus, a row in the table is selected, and the delete key is pressed, then the selected row of
      * shoppingListTable is deleted.</p>
      *

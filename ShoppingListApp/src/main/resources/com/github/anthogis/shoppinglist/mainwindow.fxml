@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.anthogis.shoppinglist.gui.MainWindowController">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.anthogis.shoppinglist.MainWindowController">
   <top>
     <MenuBar BorderPane.alignment="CENTER">
       <menus>
@@ -31,12 +31,12 @@
         <Menu mnemonicParsing="false" text="Edit">
           <items>
             <MenuItem mnemonicParsing="false" onAction="#logInToDropBoxAction" text="Log in to DropBox" />
+                  <MenuItem mnemonicParsing="false" onAction="#logInToH2Action" text="Log in to H2" />
             <MenuItem mnemonicParsing="false" onAction="#clearTableAction" text="Clear Table" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
           <items>
-            <MenuItem mnemonicParsing="false" text="About" />
                   <MenuItem mnemonicParsing="false" onAction="#dropboxTokenAction" text="Get Dropbox Token" />
           </items>
         </Menu>
