@@ -259,6 +259,7 @@ public class MainWindowController {
             }
         } catch (ServiceException e) {
             hibernateInterface = Optional.empty();
+            showMessage(ActivityText.H2_LOGIN_ERROR);
         }
     }
 
